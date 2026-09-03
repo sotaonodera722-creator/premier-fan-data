@@ -1,11 +1,13 @@
 import teamsJson from "@/data/teams.json";
 import playersJson from "@/data/players.json";
 import matchesJson from "@/data/matches.json";
-import type { Team, Player, MatchesFile, Match, MatchResultLetter } from "@/lib/types";
+import lineupsJson from "@/data/lineups.json";
+import type { Team, Player, MatchesFile, Match, MatchResultLetter, LineupsFile, MatchLineup } from "@/lib/types";
 
 const teams = teamsJson as Team[];
 const players = playersJson as Player[];
 const matchesFile = matchesJson as MatchesFile;
+const lineupsFile = lineupsJson as LineupsFile;
 
 export function getTeams(): Team[] {
   return teams;
@@ -88,4 +90,16 @@ export function getUpcomingFixtures(teamId: number, limit = 5): Match[] {
   return getMatchesForTeam(teamId)
     .filter((m) => !m.played)
     .slice(0, limit);
+}
+
+export function getMatchById(id: number): Match | undefined {
+  return matchesFile.matches.find((m) => m.id === id);
+}
+
+export function getMatchLineup(matchId: number): MatchLineup | undefined {
+  return lineupsFile.lineups[String(matchId)];
+}
+
+export function getMatchIdsWithLineups(): number[] {
+  return Object.values(lineupsFile.lineups).map((l) => l.matchId);
 }

@@ -7,6 +7,7 @@ import {
   getRecentResults,
   getUpcomingFixtures,
   getForm,
+  getMatchLineup,
 } from "@/lib/data";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
@@ -146,6 +147,7 @@ export default async function TeamDetailPage({
                 const gf = isHome ? m.homeGoals! : m.awayGoals!;
                 const ga = isHome ? m.awayGoals! : m.homeGoals!;
                 const result = gf > ga ? "W" : gf < ga ? "L" : "D";
+                const hasLineup = Boolean(getMatchLineup(m.id));
                 return (
                   <div key={m.id} className="flex items-center gap-3 px-4 py-3">
                     <span className="w-9 text-xs text-muted">第{m.matchday}節</span>
@@ -161,6 +163,14 @@ export default async function TeamDetailPage({
                       {gf} - {ga}
                     </span>
                     <FormPills form={[result]} />
+                    {hasLineup && (
+                      <Link
+                        href={`/matches/${m.id}`}
+                        className="rounded-md border border-border px-2 py-1 text-[10px] font-medium text-accent-2 transition hover:bg-surface"
+                      >
+                        スタメン
+                      </Link>
+                    )}
                   </div>
                 );
               })}

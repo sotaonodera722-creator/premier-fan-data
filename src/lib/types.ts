@@ -63,3 +63,31 @@ export interface MatchesFile {
   };
   matches: Match[];
 }
+
+export interface LineupPlayer {
+  id: number;
+  name: string;
+  number: number;
+  position: string;
+}
+
+export interface TeamLineup {
+  teamId: number;
+  formation: string;
+  startXI: LineupPlayer[][];
+  substitutes: LineupPlayer[];
+}
+
+export interface MatchLineup {
+  matchId: number;
+  homeTeam: TeamLineup;
+  awayTeam: TeamLineup;
+}
+
+export interface LineupsFile {
+  meta: {
+    source: string;
+    lastUpdated: string;
+  };
+  lineups: Record<string, MatchLineup>;
+}
