@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #05070d;
+  --background-alt: #0b0f1a;
+  --surface: #0f1420;
+  --surface-2: #141a2b;
+  --border: #212a3f;
+  --foreground: #eef2ff;
+  --muted: #8892a8;
+  --accent: #39ff88;
+  --accent-2: #22d3ee;
+  --accent-warm: #fb923c;
+  --danger: #f43f5e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-warm: var(--accent-warm);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 90% -10%, rgba(57, 255, 136, 0.08), transparent 60%),
+    radial-gradient(1000px 500px at -10% 10%, rgba(34, 211, 238, 0.08), transparent 55%),
+    var(--background);
+  color: var(--foreground);
+}
+
+.pitch-lines {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  border: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
