@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getMatchById, getMatchLineup, getMatchIdsWithLineups, getTeamById } from "@/lib/data";
+import { getMatchById, getMatchLineup, getMatchIdsWithLineups, getTeamById, getHeadToHead } from "@/lib/data";
 import TeamBadge from "@/components/TeamBadge";
 import MatchFormation from "@/components/MatchFormation";
 import MatchTimeline from "@/components/MatchTimeline";
 import MatchStats from "@/components/MatchStats";
+import MatchHeadToHead from "@/components/MatchHeadToHead";
 import SectionHeading from "@/components/SectionHeading";
 import type { LineupPlayer } from "@/lib/types";
 
@@ -28,6 +29,7 @@ export default async function MatchDetailPage({
   if (!homeTeam || !awayTeam) notFound();
 
   const date = new Date(match.utcDate);
+  const h2h = getHeadToHead(homeTeam.id, awayTeam.id);
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
@@ -52,17 +54,17 @@ export default async function MatchDetailPage({
         </Link>
       </div>
 
-      {lineup.events && lineup.events.length > 0 && (
-        <section className="mt-10">
-          <SectionHeading eyebrow="Timeline" title="タイムライン" />
-          <MatchTimeline events={lineup.events} homeTeamId={homeTeam.id} />
-        </section>
-      )}
-
       {lineup.statistics && (
         <section className="mt-10">
           <SectionHeading eyebrow="Stats" title="トップ統計" />
           <MatchStats statistics={lineup.statistics} homeTeam={homeTeam} awayTeam={awayTeam} />
+        </section>
+      )}
+
+      {lineup.events && lineup.events.length > 0 && (
+        <section className="mt-10">
+          <SectionHeading eyebrow="Timeline" title="タイムライン" />
+          <MatchTimeline events={lineup.events} homeTeamId={homeTeam.id} />
         </section>
       )}
 
@@ -75,6 +77,13 @@ export default async function MatchDetailPage({
         <SubstitutesList title={`${awayTeam.shortName} · 控え選手`} players={lineup.awayTeam.substitutes} />
         <SubstitutesList title={`${homeTeam.shortName} · 控え選手`} players={lineup.homeTeam.substitutes} />
       </section>
+
+      {h2h && h2h.numberOfMatches > 0 && (
+        <section className="mt-10">
+          <SectionHeading eyebrow="History" title="対戦成績" />
+          <MatchHeadToHead homeTeam={homeTeam} awayTeam={awayTeam} excludeUtcDate={match.utcDate} />
+        </section>
+      )}
 
       <p className="mt-10 text-center text-xs text-muted">Lineup data by Highlightly</p>
     </div>
