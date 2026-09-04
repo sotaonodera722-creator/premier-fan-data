@@ -3,26 +3,40 @@ import type { Player, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
 
+export type RankingEntry = { player: Player; value: number };
+
 export default function PlayerRankingList({
   eyebrow,
   title,
-  players,
+  entries,
   teamById,
-  statKey,
-  statLabel,
+  emptyLabel,
+  valueSuffix,
+  moreHref,
 }: {
   eyebrow: string;
   title: string;
-  players: Player[];
+  entries: RankingEntry[];
   teamById: Record<number, Team>;
-  statKey: "goals" | "assists";
-  statLabel: string;
+  emptyLabel: string;
+  valueSuffix?: string;
+  moreHref?: string;
 }) {
   return (
     <div>
-      <SectionHeading eyebrow={eyebrow} title={title} />
+      <SectionHeading
+        eyebrow={eyebrow}
+        title={title}
+        action={
+          moreHref && (
+            <Link href={moreHref} className="text-sm font-medium text-accent-2 hover:underline">
+              もっと見る →
+            </Link>
+          )
+        }
+      />
       <div className="glass divide-y divide-border rounded-xl">
-        {players.map((p, i) => {
+        {entries.map(({ player: p, value }, i) => {
           const team = teamById[p.teamId];
           return (
             <Link
@@ -39,14 +53,13 @@ export default function PlayerRankingList({
                 <p className="truncate text-xs text-muted">{team?.name}</p>
               </div>
               <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
-                {p[statKey]}
+                {value}
+                {valueSuffix && <span className="ml-0.5 text-xs font-medium text-muted">{valueSuffix}</span>}
               </span>
             </Link>
           );
         })}
-        {players.length === 0 && (
-          <p className="p-4 text-sm text-muted">{statLabel}のデータがまだありません。</p>
-        )}
+        {entries.length === 0 && <p className="p-4 text-sm text-muted">{emptyLabel}のデータがまだありません。</p>}
       </div>
     </div>
   );
