@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #05070d;
-  --background-alt: #0b0f1a;
-  --surface: #0f1420;
-  --surface-2: #141a2b;
-  --border: #212a3f;
-  --foreground: #eef2ff;
-  --muted: #8892a8;
-  --accent: #39ff88;
-  --accent-2: #22d3ee;
-  --accent-warm: #fb923c;
-  --danger: #f43f5e;
+  --background: #0a0710;
+  --background-alt: #120b1c;
+  --surface: #170f24;
+  --surface-2: #1e1530;
+  --border: #33253f;
+  --foreground: #f4f0f8;
+  --muted: #9c8fac;
+  --accent: #a259ec;
+  --accent-2: #e0b039;
+  --accent-warm: #e0b039;
+  --danger: #e2415a;
 }
 
 @theme inline {
@@ -35,10 +35,7 @@
 }
 
 body {
-  background:
-    radial-gradient(1200px 600px at 90% -10%, rgba(57, 255, 136, 0.08), transparent 60%),
-    radial-gradient(1000px 500px at -10% 10%, rgba(34, 211, 238, 0.08), transparent 55%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
 }
 
@@ -49,17 +46,15 @@ body {
   background-size: 42px 42px;
 }
 
+/* Flat "ticket" panel — no blur, no translucency. A solid surface with a crisp edge,
+   closer to a scoreboard graphic than a glassmorphic dashboard card. */
 .glass {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  background: var(--surface);
   border: 1px solid var(--border);
-  backdrop-filter: blur(6px);
 }
 
 .text-gradient {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--accent-2);
 }
 
 ::-webkit-scrollbar {

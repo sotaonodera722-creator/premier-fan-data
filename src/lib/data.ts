@@ -117,6 +117,18 @@ export function getMatchIdsWithLineups(): number[] {
   return Object.values(lineupsFile.lineups).map((l) => l.matchId);
 }
 
+// The most recently completed matchday's results, across every team — used for the
+// homepage "latest scores" ticket strip.
+export function getLatestResults(limit = 8): Match[] {
+  const finished = matchesFile.matches.filter((m) => m.played);
+  if (finished.length === 0) return [];
+  const latestMatchday = Math.max(...finished.map((m) => m.matchday));
+  return finished
+    .filter((m) => m.matchday === latestMatchday)
+    .sort((a, b) => new Date(b.utcDate).getTime() - new Date(a.utcDate).getTime())
+    .slice(0, limit);
+}
+
 function h2hKey(a: number, b: number): string {
   return [a, b].sort((x, y) => x - y).join("-");
 }

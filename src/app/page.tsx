@@ -6,6 +6,8 @@ import {
   getForm,
   getJapanesePlayers,
   getTeams,
+  getLatestResults,
+  getMatchIdsWithLineups,
 } from "@/lib/data";
 import TeamBadge from "@/components/TeamBadge";
 import FormPills from "@/components/FormPills";
@@ -20,6 +22,8 @@ export default function Home() {
   const matchday = getCurrentMatchday();
   const jpPlayers = getJapanesePlayers();
   const teamById = Object.fromEntries(getTeams().map((t) => [t.id, t]));
+  const latestResults = getLatestResults(8);
+  const lineupMatchIds = new Set(getMatchIdsWithLineups());
 
   const withRecord = standings.filter((t) => t.record);
   const totalGoals = withRecord.reduce((s, t) => s + (t.record?.goalsFor ?? 0), 0);
@@ -29,40 +33,65 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-      <section className="relative overflow-hidden rounded-2xl border border-border py-14 sm:py-20">
-        <div
-          className="absolute inset-0 -z-10 opacity-70"
-          style={{
-            background:
-              "radial-gradient(700px 320px at 15% 0%, rgba(57,255,136,0.14), transparent 60%), radial-gradient(700px 320px at 85% 100%, rgba(34,211,238,0.14), transparent 60%)",
-          }}
-        />
-        <div className="px-6 sm:px-12">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-accent-2">
-            Premier League · Matchday {matchday}
-          </p>
-          <h1 className="max-w-2xl font-[family-name:var(--font-display)] text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-            プレミアリーグを、<br />
-            <span className="text-gradient">日本語でもっと身近に。</span>
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            全20クラブの順位・成績と選手データ、そしてプレミアリーグで戦う日本人選手たちの活躍をまとめたデータベースです。
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link
-              href="/teams"
-              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:brightness-110"
-            >
-              チーム一覧を見る
-            </Link>
-            <Link
-              href="/players"
-              className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-surface"
-            >
-              選手名鑑を見る
-            </Link>
-          </div>
+      <section className="border-b border-border pb-8 pt-8 sm:pt-12">
+        <div className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 bg-accent-2" />
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-accent-2">
+            Matchday {matchday}
+          </span>
         </div>
+        <h1 className="mt-3 max-w-2xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl">
+          プレミアリーグを、
+          <br />
+          <span className="text-accent">日本語でもっと身近に。</span>
+        </h1>
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+          全20クラブの順位・成績と選手データ、そしてプレミアリーグで戦う日本人選手たちの活躍をまとめたデータベースです。
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/teams"
+            className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:brightness-110"
+          >
+            チーム一覧を見る
+          </Link>
+          <Link
+            href="/players"
+            className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-surface"
+          >
+            選手名鑑を見る
+          </Link>
+        </div>
+
+        {latestResults.length > 0 && (
+          <div className="mt-8">
+            <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              第{latestResults[0].matchday}節 結果
+            </p>
+            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+              {latestResults.map((m) => {
+                const home = teamById[m.homeTeamId];
+                const away = teamById[m.awayTeamId];
+                const Ticket = (
+                  <div className="flex shrink-0 items-center gap-2.5 border border-border bg-surface px-3.5 py-2.5">
+                    <TeamBadge team={home} size={22} />
+                    <span className="font-[family-name:var(--font-display)] text-sm font-bold text-foreground">
+                      {m.homeGoals} - {m.awayGoals}
+                    </span>
+                    <TeamBadge team={away} size={22} />
+                  </div>
+                );
+                return lineupMatchIds.has(m.id) ? (
+                  <Link key={m.id} href={`/matches/${m.id}`} className="shrink-0 transition hover:border-accent-2">
+                    {Ticket}
+                  </Link>
+                ) : (
+                  <div key={m.id}>{Ticket}</div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </section>
 
       <section className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -58,7 +58,7 @@ export default async function TeamDetailPage({
               {team.name}
             </h1>
             {jpPlayers.length > 0 && (
-              <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-accent-2/40 bg-accent-2/10 px-3 py-1 text-xs font-medium text-accent-2">
+              <p className="mt-2 inline-flex items-center gap-1.5 border border-accent-2/50 px-3 py-1 text-xs font-medium text-accent-2">
                 🇯🇵 日本人選手 {jpPlayers.length}名在籍
               </p>
             )}
