@@ -30,3 +30,42 @@ const FALLBACK_COLOR = "#9a9a9a";
 export function getTeamColor(teamId: number): string {
   return TEAM_COLORS[teamId] ?? FALLBACK_COLOR;
 }
+
+// Picks black or white text for legibility on top of a given team color,
+// via relative luminance (WCAG-style approximation).
+export function getContrastText(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return luminance > 0.6 ? "#14120f" : "#ffffff";
+}
+
+// Perceptual-ish distance between two hex colors ("redmean" approximation).
+// Used to detect kit clashes (e.g. Brighton navy vs Chelsea navy) since we only
+// track one real color per club, not the actual home/away kit worn on the day.
+function colorDistance(hexA: string, hexB: string): number {
+  const a = {
+    r: parseInt(hexA.slice(1, 3), 16),
+    g: parseInt(hexA.slice(3, 5), 16),
+    b: parseInt(hexA.slice(5, 7), 16),
+  };
+  const b = {
+    r: parseInt(hexB.slice(1, 3), 16),
+    g: parseInt(hexB.slice(3, 5), 16),
+    b: parseInt(hexB.slice(5, 7), 16),
+  };
+  const rmean = (a.r + b.r) / 2;
+  const dr = a.r - b.r;
+  const dg = a.g - b.g;
+  const db = a.b - b.b;
+  return Math.sqrt(
+    (2 + rmean / 256) * dr * dr + 4 * dg * dg + (2 + (255 - rmean) / 256) * db * db
+  );
+}
+
+// True when two team colors are too close to reliably tell apart on the pitch
+// (real-world equivalent: a kit clash forcing the away side to change strip).
+export function colorsClash(hexA: string, hexB: string): boolean {
+  return colorDistance(hexA, hexB) < 110;
+}

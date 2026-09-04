@@ -1,21 +1,39 @@
 import type { MatchEvent } from "@/lib/types";
 
-const ICON: Record<string, string> = {
-  Goal: "⚽",
-  "Own Goal": "⚽",
-  "Yellow Card": "■",
-  "Red Card": "■",
-  Substitution: "⇄",
-  "Missed Penalty": "✕",
-};
-
-function iconTone(type: string): string {
-  if (type === "Red Card") return "text-danger";
-  if (type === "Goal" || type === "Own Goal" || type === "Yellow Card") return "text-accent-2";
-  return "text-muted";
+function EventIcon({ type }: { type: string }) {
+  if (type === "Yellow Card") {
+    return <span className="h-3.5 w-2.5 shrink-0 rounded-[2px] bg-yellow-400" />;
+  }
+  if (type === "Red Card") {
+    return <span className="h-3.5 w-2.5 shrink-0 rounded-[2px] bg-danger" />;
+  }
+  if (type === "Goal" || type === "Own Goal") {
+    return <span className="shrink-0 text-sm">⚽</span>;
+  }
+  if (type === "Substitution") {
+    return null;
+  }
+  if (type === "Missed Penalty") {
+    return <span className="shrink-0 text-sm text-muted">✕</span>;
+  }
+  return <span className="shrink-0 text-sm text-muted">•</span>;
 }
 
 function EventLine({ event }: { event: MatchEvent }) {
+  if (event.type === "Substitution") {
+    // player = coming on (substituted for substitutedFor), substitutedFor = going off
+    return (
+      <span className="leading-tight">
+        <span className="flex items-center gap-1.5 text-success">
+          <span className="text-xs">▲</span> {event.player}
+        </span>
+        <span className="mt-0.5 flex items-center gap-1.5 text-danger/80">
+          <span className="text-xs">▼</span> {event.substitutedFor}
+        </span>
+      </span>
+    );
+  }
+
   const sub =
     event.assist != null
       ? `assist: ${event.assist}`
@@ -24,15 +42,7 @@ function EventLine({ event }: { event: MatchEvent }) {
         : null;
   return (
     <span className="leading-tight">
-      <span className="text-foreground">
-        {event.type === "Substitution" ? (
-          <>
-            {event.player} <span className="text-muted">←</span> {event.substitutedFor}
-          </>
-        ) : (
-          event.player
-        )}
-      </span>
+      <span className="text-foreground">{event.player}</span>
       {sub && <span className="block text-[11px] text-muted">{sub}</span>}
     </span>
   );
@@ -50,12 +60,21 @@ export default function MatchTimeline({
   );
 
   return (
-    <div className="glass space-y-3 rounded-xl p-5">
+    <div className="glass space-y-1 rounded-xl p-5">
       {sorted.map((e, i) => {
         const isHome = e.teamId === homeTeamId;
-        const icon = <span className={`shrink-0 text-sm ${iconTone(e.type)}`}>{ICON[e.type] ?? "•"}</span>;
+        const tone =
+          e.type === "Red Card"
+            ? "border-danger/30 bg-danger/5"
+            : e.type === "Yellow Card"
+              ? "border-yellow-400/30 bg-yellow-400/5"
+              : "border-transparent";
+        const icon = <EventIcon type={e.type} />;
         return (
-          <div key={i} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
+          <div
+            key={i}
+            className={`grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-lg border px-2 py-1.5 text-sm ${tone}`}
+          >
             <div className="flex items-center justify-end gap-2 text-right">
               {isHome && (
                 <>

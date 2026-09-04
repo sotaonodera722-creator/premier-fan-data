@@ -40,6 +40,7 @@ export default async function MatchDetailPage({
         <Link href={`/teams/${homeTeam.id}`} className="flex flex-col items-center gap-2">
           <TeamBadge team={homeTeam} size={52} />
           <span className="text-sm font-medium text-foreground">{homeTeam.name}</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">ホーム</span>
         </Link>
         <span className="font-[family-name:var(--font-display)] text-4xl font-bold text-foreground">
           {match.homeGoals} - {match.awayGoals}
@@ -47,6 +48,7 @@ export default async function MatchDetailPage({
         <Link href={`/teams/${awayTeam.id}`} className="flex flex-col items-center gap-2">
           <TeamBadge team={awayTeam} size={52} />
           <span className="text-sm font-medium text-foreground">{awayTeam.name}</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">アウェイ</span>
         </Link>
       </div>
 
@@ -60,7 +62,7 @@ export default async function MatchDetailPage({
       {lineup.statistics && (
         <section className="mt-10">
           <SectionHeading eyebrow="Stats" title="トップ統計" />
-          <MatchStats statistics={lineup.statistics} />
+          <MatchStats statistics={lineup.statistics} homeTeam={homeTeam} awayTeam={awayTeam} />
         </section>
       )}
 

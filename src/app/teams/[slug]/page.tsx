@@ -9,6 +9,7 @@ import {
   getForm,
   getMatchLineup,
 } from "@/lib/data";
+import { getTeamColor } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import WinLossBar from "@/components/WinLossBar";
@@ -44,14 +45,24 @@ export default async function TeamDetailPage({
   const form = getForm(team.id, 5);
   const jpPlayers = roster.filter((p) => p.isJapanese);
   const r = team.record;
+  const teamColor = getTeamColor(team.id);
 
   return (
     <div className="pb-20">
+      <div className="h-1" style={{ backgroundColor: teamColor }} />
       <div className="border-b border-border bg-background-alt py-12">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:px-6">
-          <TeamBadge team={team} size={88} />
+          <div
+            className="flex shrink-0 items-center justify-center rounded-full border p-3"
+            style={{ borderColor: `${teamColor}55` }}
+          >
+            <TeamBadge team={team} size={72} />
+          </div>
           <div className="flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: teamColor }}
+            >
               {r ? `第${r.position}位` : "プレミアリーグ"}
             </p>
             <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
