@@ -13,7 +13,6 @@ import TeamBadge from "@/components/TeamBadge";
 import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
 import StatTile from "@/components/StatTile";
-import LeaguePointsChart from "@/components/LeaguePointsChart";
 import JapanesePlayersSection from "@/components/JapanesePlayersSection";
 
 export default function Home() {
@@ -163,47 +162,39 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-14 grid gap-8 lg:grid-cols-2">
-        <div>
-          <SectionHeading eyebrow="Ranking" title="勝点レース" />
-          <div className="glass rounded-xl p-5">
-            <LeaguePointsChart
-              data={withRecord.map((t) => ({
-                name: t.shortName,
-                points: t.record!.points,
-                zone:
-                  t.record!.position <= 4 ? "top" : t.record!.position >= withRecord.length - 2 ? "bottom" : "mid",
-              }))}
-            />
-          </div>
-        </div>
-
-        <div>
-          <SectionHeading eyebrow="Scorers" title="得点ランキング" />
-          <div className="glass divide-y divide-border rounded-xl">
-            {topScorers.map((p, i) => {
-              const team = teamById[p.teamId];
-              return (
-                <Link
-                  key={p.id}
-                  href={`/players/${p.id}`}
-                  className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface/60"
-                >
-                  <span className="w-5 text-sm font-bold text-muted">{i + 1}</span>
-                  {team && <TeamBadge team={team} size={30} />}
-                  <div className="flex-1">
-                    <p className="flex items-center gap-1.5 text-sm font-medium text-foreground">
-                      {p.isJapanese && "🇯🇵"} {p.name}
-                    </p>
-                    <p className="text-xs text-muted">{team?.name}</p>
-                  </div>
-                  <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
-                    {p.goals}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+      <section className="mt-14">
+        <SectionHeading
+          eyebrow="Scorers"
+          title="得点ランキング"
+          action={
+            <Link href="/players" className="text-sm font-medium text-accent-2 hover:underline">
+              選手名鑑へ →
+            </Link>
+          }
+        />
+        <div className="glass divide-y divide-border rounded-xl">
+          {topScorers.map((p, i) => {
+            const team = teamById[p.teamId];
+            return (
+              <Link
+                key={p.id}
+                href={`/players/${p.id}`}
+                className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface/60"
+              >
+                <span className="w-5 text-sm font-bold text-muted">{i + 1}</span>
+                {team && <TeamBadge team={team} size={30} />}
+                <div className="flex-1">
+                  <p className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                    {p.isJapanese && "🇯🇵"} {p.name}
+                  </p>
+                  <p className="text-xs text-muted">{team?.name}</p>
+                </div>
+                <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
+                  {p.goals}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </div>
