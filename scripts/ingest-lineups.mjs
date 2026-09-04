@@ -1,12 +1,13 @@
-// Fetches Premier League starting lineups/formations from Highlightly and writes them to
-// src/data/lineups.json, keyed by the football-data.org match id used elsewhere in this app.
+// Fetches Premier League lineups, match events (goals/cards/subs) and match statistics
+// from Highlightly and writes them to src/data/lineups.json, keyed by the
+// football-data.org match id used elsewhere in this app.
 // Usage: node scripts/ingest-lineups.mjs
 // Requires HIGHLIGHTLY_API_KEY in .env.local (see .env.local.example) and an already
 // up-to-date src/data/matches.json / teams.json (run ingest-football-data.mjs first).
 //
 // Highlightly's free "BASIC" plan is capped at 100 requests/day, so this script only
-// fetches lineups for finished matches it doesn't already have, grouping the lookup of
-// Highlightly match ids by date to keep the request count low.
+// fetches data for finished matches missing lineups, events, or statistics, grouping
+// the lookup of Highlightly match ids by date to keep the request count low.
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -106,6 +107,26 @@ function toTeamLineup(teamId, side) {
   };
 }
 
+function toEvents(hlEvents, hlReverseMap) {
+  return (hlEvents ?? [])
+    .filter((e) => e.team?.id in hlReverseMap)
+    .map((e) => ({
+      minute: e.time,
+      type: e.type,
+      teamId: hlReverseMap[e.team.id],
+      player: e.player,
+      assist: e.assist ?? null,
+      substitutedFor: e.type === "Substitution" ? e.substituted : null,
+    }));
+}
+
+function toStatistics(hlStats, teamId) {
+  return {
+    teamId,
+    statistics: (hlStats?.statistics ?? []).map((s) => ({ displayName: s.displayName, value: s.value })),
+  };
+}
+
 async function main() {
   const matchesPath = path.join(DATA_DIR, "matches.json");
   const lineupsPath = path.join(DATA_DIR, "lineups.json");
@@ -120,13 +141,16 @@ async function main() {
     : { meta: { source: "highlightly.net", lastUpdated: null }, lineups: {} };
 
   const finished = matches.filter((m) => m.played);
-  const missing = finished.filter((m) => !(String(m.id) in existing.lineups));
+  const missing = finished.filter((m) => {
+    const entry = existing.lineups[String(m.id)];
+    return !entry || !entry.events || !entry.statistics;
+  });
 
   if (missing.length === 0) {
-    console.log("No new finished matches to fetch lineups for.");
+    console.log("Nothing new to fetch — every finished match already has lineups, events and statistics.");
     return;
   }
-  console.log(`${missing.length} finished match(es) missing lineups. Looking them up on Highlightly ...`);
+  console.log(`${missing.length} finished match(es) missing data. Looking them up on Highlightly ...`);
 
   const hlReverseMap = Object.fromEntries(Object.entries(TEAM_ID_MAP).map(([ours, hl]) => [hl, Number(ours)]));
 
@@ -149,6 +173,8 @@ async function main() {
     const hlMatchesForDate = hlDay?.data ?? [];
 
     for (const m of dateMatches) {
+      if (stop) break;
+
       const homeHlId = TEAM_ID_MAP[m.homeTeamId];
       const awayHlId = TEAM_ID_MAP[m.awayTeamId];
       const hlMatch = hlMatchesForDate.find(
@@ -159,28 +185,49 @@ async function main() {
         continue;
       }
 
-      if (stop) break;
-      const { data: lineup, exhausted: lineupExhausted } = await apiGet(`/lineups/${hlMatch.id}`);
-      if (lineupExhausted) stop = true;
+      const entry = existing.lineups[String(m.id)] ?? { matchId: m.id };
 
-      if (!lineup?.homeTeam?.initialLineup || !lineup?.awayTeam?.initialLineup) {
-        console.warn(`No lineup published yet for match ${m.id} (Highlightly id ${hlMatch.id}).`);
-        continue;
+      if (!entry.homeTeam || !entry.awayTeam) {
+        const { data: lineup, exhausted: ex1 } = await apiGet(`/lineups/${hlMatch.id}`);
+        if (ex1) stop = true;
+        if (lineup?.homeTeam?.initialLineup && lineup?.awayTeam?.initialLineup) {
+          entry.homeTeam = toTeamLineup(m.homeTeamId, lineup.homeTeam);
+          entry.awayTeam = toTeamLineup(m.awayTeamId, lineup.awayTeam);
+        } else {
+          console.warn(`No lineup published yet for match ${m.id} (Highlightly id ${hlMatch.id}).`);
+        }
       }
 
-      existing.lineups[String(m.id)] = {
-        matchId: m.id,
-        homeTeam: toTeamLineup(m.homeTeamId, lineup.homeTeam),
-        awayTeam: toTeamLineup(m.awayTeamId, lineup.awayTeam),
-      };
-      console.log(`Saved lineup for match ${m.id} (${date}).`);
+      if (!stop && !entry.events) {
+        const { data: hlEvents, exhausted: ex2 } = await apiGet(`/events/${hlMatch.id}`);
+        if (ex2) stop = true;
+        entry.events = toEvents(hlEvents, hlReverseMap);
+      }
+
+      if (!stop && !entry.statistics) {
+        const { data: hlStats, exhausted: ex3 } = await apiGet(`/statistics/${hlMatch.id}`);
+        if (ex3) stop = true;
+        const homeStats = hlStats?.find((s) => s.team?.id === homeHlId);
+        const awayStats = hlStats?.find((s) => s.team?.id === awayHlId);
+        if (homeStats && awayStats) {
+          entry.statistics = {
+            homeTeam: toStatistics(homeStats, m.homeTeamId),
+            awayTeam: toStatistics(awayStats, m.awayTeamId),
+          };
+        }
+      }
+
+      if (entry.homeTeam && entry.awayTeam) {
+        existing.lineups[String(m.id)] = entry;
+        console.log(`Saved data for match ${m.id} (${date}).`);
+      }
     }
   }
 
   existing.meta = { source: "highlightly.net", lastUpdated: new Date().toISOString() };
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(lineupsPath, JSON.stringify(existing, null, 2));
-  console.log(`Done. ${Object.keys(existing.lineups).length} match(es) with lineups saved.`);
+  console.log(`Done. ${Object.keys(existing.lineups).length} match(es) saved.`);
 }
 
 main().catch((err) => {

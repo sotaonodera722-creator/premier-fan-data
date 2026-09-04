@@ -78,10 +78,36 @@ export interface TeamLineup {
   substitutes: LineupPlayer[];
 }
 
+export interface MatchEvent {
+  minute: string;
+  type: string;
+  teamId: number;
+  player: string;
+  assist: string | null;
+  substitutedFor: string | null;
+}
+
+export interface MatchStatItem {
+  displayName: string;
+  value: number;
+}
+
+export interface TeamStatistics {
+  teamId: number;
+  statistics: MatchStatItem[];
+}
+
+export interface MatchStatistics {
+  homeTeam: TeamStatistics;
+  awayTeam: TeamStatistics;
+}
+
 export interface MatchLineup {
   matchId: number;
   homeTeam: TeamLineup;
   awayTeam: TeamLineup;
+  events?: MatchEvent[];
+  statistics?: MatchStatistics;
 }
 
 export interface LineupsFile {

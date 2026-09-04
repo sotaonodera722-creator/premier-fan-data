@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getMatchById, getMatchLineup, getMatchIdsWithLineups, getTeamById } from "@/lib/data";
 import TeamBadge from "@/components/TeamBadge";
 import MatchFormation from "@/components/MatchFormation";
+import MatchTimeline from "@/components/MatchTimeline";
+import MatchStats from "@/components/MatchStats";
 import SectionHeading from "@/components/SectionHeading";
 import type { LineupPlayer } from "@/lib/types";
 
@@ -47,6 +49,20 @@ export default async function MatchDetailPage({
           <span className="text-sm font-medium text-foreground">{awayTeam.name}</span>
         </Link>
       </div>
+
+      {lineup.events && lineup.events.length > 0 && (
+        <section className="mt-10">
+          <SectionHeading eyebrow="Timeline" title="タイムライン" />
+          <MatchTimeline events={lineup.events} homeTeamId={homeTeam.id} />
+        </section>
+      )}
+
+      {lineup.statistics && (
+        <section className="mt-10">
+          <SectionHeading eyebrow="Stats" title="トップ統計" />
+          <MatchStats statistics={lineup.statistics} />
+        </section>
+      )}
 
       <section className="mt-10">
         <SectionHeading eyebrow="Lineups" title="スタメン・フォーメーション" />
