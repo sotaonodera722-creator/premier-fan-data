@@ -23,6 +23,8 @@ export default async function PlayerDetailPage({
     ? getPlayersByTeam(team.id).filter((p) => p.id !== player.id).slice(0, 6)
     : [];
   const appearances = getPlayerAppearances(player.id);
+  const starts = appearances.filter((a) => a.status === "start").length;
+  const subApps = appearances.filter((a) => a.status === "bench").length;
 
   return (
     <div className="pb-20">
@@ -61,7 +63,7 @@ export default async function PlayerDetailPage({
         </section>
         {player.goals === null && (
           <p className="mt-3 text-xs text-muted">
-            ※ ゴール・アシストは得点ランキング上位選手のみ取得しています。この選手の詳細成績は未取得です。
+            ※ ラインナップ取得が済んでいる試合にまだ出場していないため、ゴール・アシストのデータがありません。
           </p>
         )}
 
@@ -73,7 +75,9 @@ export default async function PlayerDetailPage({
               <Row label="ポジション" value={player.position} />
               <Row label="生年月日" value={player.dateOfBirth} />
               <Row label="年齢" value={player.age ? `${player.age}歳` : "-"} />
-              {player.appearances !== null && <Row label="出場試合" value={player.appearances} />}
+              {appearances.length > 0 && (
+                <Row label="出場試合" value={subApps > 0 ? `${starts}(${subApps})` : starts} />
+              )}
               <Row label="所属クラブ" value={team?.name ?? "-"} />
             </div>
           </div>
@@ -107,7 +111,7 @@ export default async function PlayerDetailPage({
                           : "bg-surface-2 text-muted"
                       }`}
                     >
-                      {a.status === "start" ? "先発" : "ベンチ入り"}
+                      {a.status === "start" ? "先発" : "途中出場"}
                     </span>
                   </Link>
                 );
