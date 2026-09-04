@@ -1,17 +1,23 @@
 @import "tailwindcss";
 
+/* Monochrome UI — color is reserved for real club identity (crests, per-team accents
+   from src/lib/teamColors.ts) rather than a fixed site-wide brand hue. --accent /
+   --accent-2 are neutral emphasis tones, not colors. --success / --info / --danger are
+   semantic only (form, table zones) and are never used as decoration. */
 :root {
-  --background: #0a0710;
-  --background-alt: #120b1c;
-  --surface: #170f24;
-  --surface-2: #1e1530;
-  --border: #33253f;
-  --foreground: #f4f0f8;
-  --muted: #9c8fac;
-  --accent: #a259ec;
-  --accent-2: #e0b039;
-  --accent-warm: #e0b039;
-  --danger: #e2415a;
+  --background: #ffffff;
+  --background-alt: #f7f7f6;
+  --surface: #ffffff;
+  --surface-2: #f0efee;
+  --border: #e3e1de;
+  --foreground: #14120f;
+  --muted: #6d6a66;
+  --accent: #14120f;
+  --accent-2: #4a4744;
+  --accent-warm: #4a4744;
+  --success: #1f7a4d;
+  --info: #2f6fb0;
+  --danger: #c0303f;
 }
 
 @theme inline {
@@ -25,6 +31,8 @@
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-accent-warm: var(--accent-warm);
+  --color-success: var(--success);
+  --color-info: var(--info);
   --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -41,8 +49,17 @@ body {
 
 .pitch-lines {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(20, 18, 15, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 18, 15, 0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* Literal grass-pitch texture for MatchFormation — always dark green regardless of
+   site theme, so its grid lines stay white regardless of --foreground. */
+.pitch-grass {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 42px 42px;
 }
 

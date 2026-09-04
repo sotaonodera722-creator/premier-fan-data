@@ -49,7 +49,7 @@ export default function MatchFormation({
           {homeTeam.shortName} · {lineup.homeTeam.formation} <span className="h-2 w-2 rounded-full bg-accent" />
         </span>
       </div>
-      <div className="pitch-lines relative flex flex-col justify-between gap-6 bg-[#0b1f14] px-3 py-6 sm:px-6">
+      <div className="pitch-grass relative flex flex-col justify-between gap-6 bg-[#0b1f14] px-3 py-6 sm:px-6">
         <div className="flex flex-col gap-5">
           {awayRows.map((row, i) => (
             <Row key={`away-${i}`} row={row} tone="away" />
