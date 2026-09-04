@@ -64,6 +64,12 @@ export function getTopAssists(limit = 10): Player[] {
     .slice(0, limit);
 }
 
+export function getAllMatches(): Match[] {
+  return [...matchesFile.matches].sort(
+    (a, b) => new Date(a.utcDate).getTime() - new Date(b.utcDate).getTime()
+  );
+}
+
 export function getMatchesForTeam(teamId: number): Match[] {
   return matchesFile.matches
     .filter((m) => m.homeTeamId === teamId || m.awayTeamId === teamId)

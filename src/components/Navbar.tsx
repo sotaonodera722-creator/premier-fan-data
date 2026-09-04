@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "/", label: "ホーム" },
+  { href: "/matches", label: "試合" },
   { href: "/teams", label: "チーム" },
   { href: "/players", label: "選手名鑑" },
   { href: "/standings", label: "順位表" },
