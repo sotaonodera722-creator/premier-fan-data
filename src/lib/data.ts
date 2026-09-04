@@ -142,6 +142,64 @@ export function getLatestResults(limit = 8): Match[] {
     .slice(0, limit);
 }
 
+export function getGoalsPerGameRanking(limit = 3): { team: Team; value: number }[] {
+  return teams
+    .filter((t) => (t.record?.played ?? 0) > 0)
+    .map((t) => ({ team: t, value: t.record!.goalsFor / t.record!.played }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, limit);
+}
+
+export function getGoalsConcededPerGameRanking(limit = 3): { team: Team; value: number }[] {
+  return teams
+    .filter((t) => (t.record?.played ?? 0) > 0)
+    .map((t) => ({ team: t, value: t.record!.goalsAgainst / t.record!.played }))
+    .sort((a, b) => a.value - b.value)
+    .slice(0, limit);
+}
+
+export function getCleanSheetsRanking(limit = 3): { team: Team; value: number }[] {
+  return teams
+    .map((t) => {
+      const cleanSheets = getRecentResults(t.id, Infinity).filter((m) => {
+        const conceded = m.homeTeamId === t.id ? m.awayGoals : m.homeGoals;
+        return conceded === 0;
+      }).length;
+      return { team: t, value: cleanSheets };
+    })
+    .sort((a, b) => b.value - a.value)
+    .slice(0, limit);
+}
+
+// Averages a per-match team statistic (by its displayName in lineup.statistics,
+// e.g. "Possession", "Expected Goals") over whichever of a team's matches we have
+// lineup data for. Teams with no covered matches are left out.
+export function getTeamStatAverage(
+  displayName: string,
+  limit = 3,
+  ascending = false
+): { team: Team; value: number }[] {
+  const lineupIds = new Set(getMatchIdsWithLineups());
+  return teams
+    .map((t) => {
+      const values: number[] = [];
+      for (const m of getMatchesForTeam(t.id)) {
+        if (!lineupIds.has(m.id)) continue;
+        const lineup = getMatchLineup(m.id);
+        if (!lineup?.statistics) continue;
+        const isHome = m.homeTeamId === t.id;
+        const side = isHome ? lineup.statistics.homeTeam : lineup.statistics.awayTeam;
+        const stat = side.statistics.find((s) => s.displayName === displayName);
+        if (stat) values.push(stat.value);
+      }
+      const value = values.length ? values.reduce((s, v) => s + v, 0) / values.length : null;
+      return { team: t, value };
+    })
+    .filter((x): x is { team: Team; value: number } => x.value !== null)
+    .sort((a, b) => (ascending ? a.value - b.value : b.value - a.value))
+    .slice(0, limit);
+}
+
 function h2hKey(a: number, b: number): string {
   return [a, b].sort((x, y) => x - y).join("-");
 }
