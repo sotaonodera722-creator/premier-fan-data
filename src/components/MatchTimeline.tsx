@@ -21,14 +21,14 @@ function EventIcon({ type }: { type: string }) {
 
 function EventLine({ event }: { event: MatchEvent }) {
   if (event.type === "Substitution") {
-    // player = coming on (substituted for substitutedFor), substitutedFor = going off
+    // event.player left the pitch; event.substitutedFor came on.
     return (
       <span className="leading-tight">
         <span className="flex items-center gap-1.5 text-success">
-          <span className="text-xs">▲</span> {event.player}
+          <span className="text-xs">▲</span> {event.substitutedFor}
         </span>
         <span className="mt-0.5 flex items-center gap-1.5 text-danger/80">
-          <span className="text-xs">▼</span> {event.substitutedFor}
+          <span className="text-xs">▼</span> {event.player}
         </span>
       </span>
     );
