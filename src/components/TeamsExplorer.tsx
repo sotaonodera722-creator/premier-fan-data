@@ -5,16 +5,22 @@ import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import FormPills from "@/components/FormPills";
-import { getForm } from "@/lib/data";
+import { getForm, getPlayersByTeam, getUpcomingFixtures, getTeamById } from "@/lib/data";
 
-type SortKey = "position" | "points" | "goalDiff" | "winRate";
+type SortKey = "position" | "form" | "goalDiff" | "winRate";
 
 const SORTS: { key: SortKey; label: string }[] = [
   { key: "position", label: "順位" },
-  { key: "points", label: "勝点" },
+  { key: "form", label: "調子(直近5試合)" },
   { key: "goalDiff", label: "得失点差" },
   { key: "winRate", label: "勝率" },
 ];
+
+const FORM_POINTS: Record<string, number> = { W: 3, D: 1, L: 0 };
+
+function formPoints(teamId: number): number {
+  return getForm(teamId, 5).reduce((sum, r) => sum + (FORM_POINTS[r] ?? 0), 0);
+}
 
 export default function TeamsExplorer({ teams }: { teams: Team[] }) {
   const [sort, setSort] = useState<SortKey>("position");
@@ -30,8 +36,8 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
       const rb = b.record;
       if (!ra || !rb) return 0;
       switch (sort) {
-        case "points":
-          return rb.points - ra.points;
+        case "form":
+          return formPoints(b.id) - formPoints(a.id);
         case "goalDiff":
           return rb.goalDiff - ra.goalDiff;
         case "winRate":
@@ -69,6 +75,11 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((team) => {
           const r = team.record;
+          const jpCount = getPlayersByTeam(team.id).filter((p) => p.isJapanese).length;
+          const nextFixture = getUpcomingFixtures(team.id, 1)[0];
+          const nextOpponent = nextFixture
+            ? getTeamById(nextFixture.homeTeamId === team.id ? nextFixture.awayTeamId : nextFixture.homeTeamId)
+            : undefined;
           return (
             <Link
               key={team.id}
@@ -84,6 +95,9 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
                   <p className="text-xs text-muted">
                     {r ? `第${r.position}位 · ${r.points}pt` : "データなし"}
                   </p>
+                  {jpCount > 0 && (
+                    <p className="mt-0.5 text-[10px] font-medium text-accent-2">🇯🇵 日本人選手 {jpCount}名</p>
+                  )}
                 </div>
                 {r && (
                   <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-foreground">
@@ -115,9 +129,22 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
                 </div>
               )}
 
-              <div className="mt-4 flex items-center justify-between border-t border-border pt-3.5">
-                <span className="text-xs text-muted">直近5試合</span>
-                <FormPills form={getForm(team.id, 5)} />
+              <div className="mt-4 space-y-2 border-t border-border pt-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted">直近5試合</span>
+                  <FormPills form={getForm(team.id, 5)} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted">次戦</span>
+                  {nextOpponent ? (
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                      {nextOpponent.shortName}
+                      <TeamBadge team={nextOpponent} size={18} />
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted">-</span>
+                  )}
+                </div>
               </div>
             </Link>
           );
