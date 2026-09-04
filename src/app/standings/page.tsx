@@ -6,7 +6,7 @@ import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
 
 export const metadata = {
-  title: "順位表 | プレミアリーグ データベース",
+  title: "順位表 | Premier Fan Data",
 };
 
 export default function StandingsPage() {

@@ -3,7 +3,7 @@ import SectionHeading from "@/components/SectionHeading";
 import TeamsExplorer from "@/components/TeamsExplorer";
 
 export const metadata = {
-  title: "チーム一覧 | プレミアリーグ データベース",
+  title: "チーム一覧 | Premier Fan Data",
 };
 
 export default function TeamsPage() {

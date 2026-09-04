@@ -20,11 +20,11 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-2 text-sm font-bold text-background">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-sm font-bold text-background">
             PL
           </span>
           <span className="font-[family-name:var(--font-display)] text-lg font-bold tracking-wide text-foreground">
-            プレミア<span className="text-gradient">コンパス</span>
+            Premier Fan <span className="text-accent-2">Data</span>
           </span>
         </Link>
 

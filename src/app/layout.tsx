@@ -21,7 +21,7 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "プレミアコンパス",
+  title: "Premier Fan Data",
   description: "プレミアリーグの順位表・チーム情報・選手データを日本語でまとめたデータベース。日本人選手の活躍もひと目で確認できます。",
 };
 

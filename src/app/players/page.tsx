@@ -3,7 +3,7 @@ import SectionHeading from "@/components/SectionHeading";
 import PlayersExplorer from "@/components/PlayersExplorer";
 
 export const metadata = {
-  title: "選手名鑑 | プレミアリーグ データベース",
+  title: "選手名鑑 | Premier Fan Data",
 };
 
 export default function PlayersPage() {

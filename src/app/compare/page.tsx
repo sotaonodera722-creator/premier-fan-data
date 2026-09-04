@@ -5,7 +5,7 @@ import SectionHeading from "@/components/SectionHeading";
 import StatTile from "@/components/StatTile";
 
 export const metadata = {
-  title: "チーム対戦成績比較 | プレミアリーグ データベース",
+  title: "チーム対戦成績比較 | Premier Fan Data",
 };
 
 export default async function ComparePage({
