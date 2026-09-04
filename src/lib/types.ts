@@ -91,3 +91,41 @@ export interface LineupsFile {
   };
   lineups: Record<string, MatchLineup>;
 }
+
+export interface HeadToHeadMatch {
+  utcDate: string;
+  competition: string;
+  homeTeamId: number;
+  awayTeamId: number;
+  homeGoals: number;
+  awayGoals: number;
+}
+
+export interface HeadToHead {
+  teamAId: number;
+  teamBId: number;
+  numberOfMatches: number;
+  teamAWins: number;
+  draws: number;
+  teamBWins: number;
+  matches: HeadToHeadMatch[];
+}
+
+export interface HeadToHeadFile {
+  meta: {
+    source: string;
+    lastUpdated: string;
+  };
+  headToHead: Record<string, HeadToHead>;
+}
+
+export interface PlayerAppearance {
+  matchId: number;
+  matchday: number;
+  utcDate: string;
+  opponentId: number;
+  isHome: boolean;
+  homeGoals: number | null;
+  awayGoals: number | null;
+  status: "start" | "bench";
+}

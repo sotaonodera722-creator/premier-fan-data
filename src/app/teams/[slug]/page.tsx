@@ -63,6 +63,12 @@ export default async function TeamDetailPage({
               </p>
             )}
           </div>
+          <Link
+            href={`/compare?a=${team.id}`}
+            className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-surface"
+          >
+            対戦成績を比較 →
+          </Link>
         </div>
       </div>
 

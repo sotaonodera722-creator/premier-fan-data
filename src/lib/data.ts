@@ -2,12 +2,25 @@ import teamsJson from "@/data/teams.json";
 import playersJson from "@/data/players.json";
 import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
-import type { Team, Player, MatchesFile, Match, MatchResultLetter, LineupsFile, MatchLineup } from "@/lib/types";
+import h2hJson from "@/data/h2h.json";
+import type {
+  Team,
+  Player,
+  MatchesFile,
+  Match,
+  MatchResultLetter,
+  LineupsFile,
+  MatchLineup,
+  HeadToHead,
+  HeadToHeadFile,
+  PlayerAppearance,
+} from "@/lib/types";
 
 const teams = teamsJson as Team[];
 const players = playersJson as Player[];
 const matchesFile = matchesJson as MatchesFile;
 const lineupsFile = lineupsJson as LineupsFile;
+const h2hFile = h2hJson as HeadToHeadFile;
 
 export function getTeams(): Team[] {
   return teams;
@@ -102,4 +115,51 @@ export function getMatchLineup(matchId: number): MatchLineup | undefined {
 
 export function getMatchIdsWithLineups(): number[] {
   return Object.values(lineupsFile.lineups).map((l) => l.matchId);
+}
+
+function h2hKey(a: number, b: number): string {
+  return [a, b].sort((x, y) => x - y).join("-");
+}
+
+export function getHeadToHead(teamAId: number, teamBId: number): HeadToHead | undefined {
+  return h2hFile.headToHead[h2hKey(teamAId, teamBId)];
+}
+
+function normalizeName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+// Derived from the lineups we've fetched so far (only finished matches with a
+// published lineup), matched to our player records by normalized name.
+export function getPlayerAppearances(playerId: number): PlayerAppearance[] {
+  const player = getPlayerById(playerId);
+  if (!player) return [];
+  const targetName = normalizeName(player.name);
+
+  const appearances: PlayerAppearance[] = [];
+  for (const m of getRecentResults(player.teamId, Infinity)) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    const isHome = m.homeTeamId === player.teamId;
+    const side = isHome ? lineup.homeTeam : lineup.awayTeam;
+    const inStart = side.startXI.flat().some((p) => normalizeName(p.name) === targetName);
+    const inBench = side.substitutes.some((p) => normalizeName(p.name) === targetName);
+    if (!inStart && !inBench) continue;
+
+    appearances.push({
+      matchId: m.id,
+      matchday: m.matchday,
+      utcDate: m.utcDate,
+      opponentId: isHome ? m.awayTeamId : m.homeTeamId,
+      isHome,
+      homeGoals: m.homeGoals,
+      awayGoals: m.awayGoals,
+      status: inStart ? "start" : "bench",
+    });
+  }
+  return appearances;
 }

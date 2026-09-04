@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/teams", label: "チーム" },
   { href: "/players", label: "選手名鑑" },
   { href: "/standings", label: "順位表" },
+  { href: "/compare", label: "対戦成績比較" },
 ];
 
 export default function Navbar() {

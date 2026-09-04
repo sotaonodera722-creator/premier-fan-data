@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam } from "@/lib/data";
+import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam, getPlayerAppearances } from "@/lib/data";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import SectionHeading from "@/components/SectionHeading";
@@ -22,6 +22,7 @@ export default async function PlayerDetailPage({
   const teammates = team
     ? getPlayersByTeam(team.id).filter((p) => p.id !== player.id).slice(0, 6)
     : [];
+  const appearances = getPlayerAppearances(player.id);
 
   return (
     <div className="pb-20">
@@ -77,6 +78,46 @@ export default async function PlayerDetailPage({
             </div>
           </div>
         </section>
+
+        {appearances.length > 0 && (
+          <section className="mt-12">
+            <SectionHeading eyebrow="Appearances" title="出場記録" />
+            <div className="glass divide-y divide-border rounded-xl">
+              {appearances.map((a) => {
+                const opponent = getTeamById(a.opponentId);
+                const gf = a.isHome ? a.homeGoals : a.awayGoals;
+                const ga = a.isHome ? a.awayGoals : a.homeGoals;
+                return (
+                  <Link
+                    key={a.matchId}
+                    href={`/matches/${a.matchId}`}
+                    className="flex items-center gap-3 px-4 py-3 text-sm transition hover:bg-surface/60"
+                  >
+                    <span className="w-9 shrink-0 text-xs text-muted">第{a.matchday}節</span>
+                    <span className="w-8 shrink-0 text-xs text-muted">{a.isHome ? "H" : "A"}</span>
+                    {opponent && <TeamBadge team={opponent} size={24} />}
+                    <span className="flex-1 truncate text-foreground">{opponent?.name}</span>
+                    <span className="font-[family-name:var(--font-display)] font-bold text-foreground">
+                      {gf} - {ga}
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-[10px] font-semibold ${
+                        a.status === "start"
+                          ? "bg-accent/10 text-accent"
+                          : "bg-surface-2 text-muted"
+                      }`}
+                    >
+                      {a.status === "start" ? "先発" : "ベンチ入り"}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-xs text-muted">
+              ラインナップ取得が済んでいる試合のみの記録です(全試合を網羅しているとは限りません)。
+            </p>
+          </section>
+        )}
 
         {team && teammates.length > 0 && (
           <section className="mt-12">
