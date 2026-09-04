@@ -122,7 +122,18 @@ function h2hKey(a: number, b: number): string {
 }
 
 export function getHeadToHead(teamAId: number, teamBId: number): HeadToHead | undefined {
-  return h2hFile.headToHead[h2hKey(teamAId, teamBId)];
+  const stored = h2hFile.headToHead[h2hKey(teamAId, teamBId)];
+  if (!stored) return undefined;
+  // Stored records always key teamA as the lower team id; reorient to whatever
+  // order the caller asked for so teamAWins/teamBWins line up with their teamAId/teamBId.
+  if (stored.teamAId === teamAId) return stored;
+  return {
+    ...stored,
+    teamAId,
+    teamBId,
+    teamAWins: stored.teamBWins,
+    teamBWins: stored.teamAWins,
+  };
 }
 
 function normalizeName(name: string): string {
