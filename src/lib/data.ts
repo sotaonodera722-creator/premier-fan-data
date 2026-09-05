@@ -146,16 +146,28 @@ export function getMatchIdsWithLineups(): number[] {
   return Object.values(lineupsFile.lineups).map((l) => l.matchId);
 }
 
-// The most recently completed matchday's results, across every team — used for the
-// homepage "latest scores" ticket strip.
-export function getLatestResults(limit = 8): Match[] {
-  const finished = matchesFile.matches.filter((m) => m.played);
-  if (finished.length === 0) return [];
-  const latestMatchday = Math.max(...finished.map((m) => m.matchday));
-  return finished
-    .filter((m) => m.matchday === latestMatchday)
-    .sort((a, b) => new Date(b.utcDate).getTime() - new Date(a.utcDate).getTime())
-    .slice(0, limit);
+// Every fixture of the "active" matchday — used for the homepage ticket strip.
+// The active matchday is the latest one that has kicked off (at least one match
+// played) whose predecessor is fully finished; while it's in progress this mixes
+// finished matches (shown as scores) with ones still to come (shown as fixtures),
+// rather than only trickling in results one at a time as the round plays out.
+export function getActiveRoundMatches(): Match[] {
+  const all = matchesFile.matches;
+  const matchdays = [...new Set(all.map((m) => m.matchday))].sort((a, b) => a - b);
+
+  let active: number | null = null;
+  matchdays.forEach((md, i) => {
+    const mdMatches = all.filter((m) => m.matchday === md);
+    if (!mdMatches.some((m) => m.played)) return;
+    const prevMd = i > 0 ? matchdays[i - 1] : null;
+    const prevComplete = prevMd == null || all.filter((m) => m.matchday === prevMd).every((m) => m.played);
+    if (prevComplete) active = md;
+  });
+
+  if (active == null) return [];
+  return all
+    .filter((m) => m.matchday === active)
+    .sort((a, b) => new Date(a.utcDate).getTime() - new Date(b.utcDate).getTime());
 }
 
 export function getGoalsPerGameRanking(limit = 3): { team: Team; value: number }[] {

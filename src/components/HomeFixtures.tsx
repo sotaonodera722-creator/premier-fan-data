@@ -5,11 +5,11 @@ import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 
 function shortDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" });
+  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric", timeZone: "Asia/Tokyo" });
 }
 
 function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
 }
 
 export default function HomeFixtures({

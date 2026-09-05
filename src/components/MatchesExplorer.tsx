@@ -19,19 +19,25 @@ function dateKey(utcDate: string): string {
     month: "long",
     day: "numeric",
     weekday: "long",
+    timeZone: "Asia/Tokyo",
   });
 }
 
 function rangeDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "long", day: "numeric" });
+  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "long", day: "numeric", timeZone: "Asia/Tokyo" });
 }
 
 function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
 }
 
 function shortDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric", weekday: "short" });
+  return new Date(utcDate).toLocaleDateString("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+    timeZone: "Asia/Tokyo",
+  });
 }
 
 function MatchRow({

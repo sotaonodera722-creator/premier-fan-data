@@ -75,23 +75,11 @@ body {
   color: var(--accent-2);
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 32s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none;
-  }
+/* JS-managed hover highlight for LatestResultsMarquee's sliding tickets — see the
+   comment in that component for why this can't just be a plain :hover style. */
+.marquee-ticket.is-active {
+  border-color: var(--accent-2);
+  background-color: var(--surface-2);
 }
 
 ::-webkit-scrollbar {

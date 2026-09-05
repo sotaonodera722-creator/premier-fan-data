@@ -7,7 +7,7 @@ import {
   getJapanesePlayers,
   getTeams,
   getAllMatches,
-  getLatestResults,
+  getActiveRoundMatches,
   getMatchIdsWithLineups,
   getTeamStatAverage,
 } from "@/lib/data";
@@ -27,7 +27,7 @@ export default function Home() {
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
   const allMatches = getAllMatches();
-  const latestResults = getLatestResults(20);
+  const latestResults = getActiveRoundMatches();
   const latestMatchday = latestResults[0]?.matchday ?? matchday;
   const lineupMatchIds = new Set(getMatchIdsWithLineups());
 

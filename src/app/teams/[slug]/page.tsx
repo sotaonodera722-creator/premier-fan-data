@@ -228,7 +228,7 @@ export default async function TeamDetailPage({
                         {opponent?.name}
                       </Link>
                       <span className="text-xs text-muted">
-                        {date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}
+                        {date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", timeZone: "Asia/Tokyo" })}
                       </span>
                     </div>
                   );

@@ -35,7 +35,7 @@ export default async function MatchDetailPage({
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
       <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">
         Matchday {match.matchday} ·{" "}
-        {date.toLocaleDateString("ja-JP", { year: "numeric", month: "short", day: "numeric" })}
+        {date.toLocaleDateString("ja-JP", { year: "numeric", month: "short", day: "numeric", timeZone: "Asia/Tokyo" })}
       </p>
 
       <div className="mt-4 flex items-center justify-center gap-6 sm:gap-10">
