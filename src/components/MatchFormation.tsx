@@ -1,20 +1,25 @@
+import Link from "next/link";
 import type { LineupPlayer, MatchLineup, Team } from "@/lib/types";
 import { getTeamColor, getContrastText, colorsClash } from "@/lib/teamColors";
+import { resolveRosterPlayer } from "@/lib/data";
 
 function PlayerDot({
   player,
+  teamId,
   color,
   outline,
 }: {
   player: LineupPlayer;
+  teamId: number;
   color: string;
   outline?: boolean;
 }) {
   const textColor = outline ? color : getContrastText(color);
-  return (
-    <div className="flex w-14 flex-col items-center gap-1 text-center sm:w-[70px]">
+  const resolved = resolveRosterPlayer(player.name, teamId);
+  const content = (
+    <div className="group flex w-14 flex-col items-center gap-1 rounded-lg p-1.5 text-center transition group-hover:bg-white/15 sm:w-[70px]">
       <span
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold shadow-lg sm:h-8 sm:w-8"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold shadow-lg transition group-hover:brightness-110 sm:h-8 sm:w-8"
         style={{
           backgroundColor: outline ? "#f4f4f2" : color,
           borderColor: outline ? color : "rgba(255,255,255,0.8)",
@@ -23,18 +28,21 @@ function PlayerDot({
       >
         {player.number}
       </span>
-      <span className="max-w-full truncate text-[10px] font-medium leading-tight text-white sm:text-[11px]">
+      <span className="max-w-full truncate text-[10px] font-medium leading-tight text-white transition group-hover:underline sm:text-[11px]">
         {player.name}
       </span>
     </div>
   );
+
+  if (!resolved) return content;
+  return <Link href={`/players/${resolved.id}`}>{content}</Link>;
 }
 
-function Row({ row, color, outline }: { row: LineupPlayer[]; color: string; outline?: boolean }) {
+function Row({ row, teamId, color, outline }: { row: LineupPlayer[]; teamId: number; color: string; outline?: boolean }) {
   return (
     <div className="flex justify-around gap-1">
       {row.map((p) => (
-        <PlayerDot key={p.id} player={p} color={color} outline={outline} />
+        <PlayerDot key={p.id} player={p} teamId={teamId} color={color} outline={outline} />
       ))}
     </div>
   );
@@ -74,7 +82,7 @@ export default function MatchFormation({
       <div className="pitch-grass relative flex flex-col justify-between gap-6 px-3 py-6 sm:px-6">
         <div className="flex flex-col gap-5">
           {awayRows.map((row, i) => (
-            <Row key={`away-${i}`} row={row} color={awayColor} outline={awayOutline} />
+            <Row key={`away-${i}`} row={row} teamId={awayTeam.id} color={awayColor} outline={awayOutline} />
           ))}
         </div>
 
@@ -85,7 +93,7 @@ export default function MatchFormation({
 
         <div className="flex flex-col gap-5">
           {homeRows.map((row, i) => (
-            <Row key={`home-${i}`} row={row} color={homeColor} />
+            <Row key={`home-${i}`} row={row} teamId={homeTeam.id} color={homeColor} />
           ))}
         </div>
       </div>

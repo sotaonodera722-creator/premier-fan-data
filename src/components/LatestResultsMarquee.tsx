@@ -16,7 +16,11 @@ function Ticket({
   if (!home || !away) return null;
 
   const content = (
-    <div className="flex shrink-0 items-center gap-2.5 border border-border bg-surface px-3.5 py-2.5 transition hover:border-accent-2">
+    <div
+      className={`flex shrink-0 items-center gap-2.5 border border-border bg-surface px-3.5 py-2.5 transition ${
+        clickable ? "hover:border-accent-2 hover:bg-surface-2" : ""
+      }`}
+    >
       <TeamBadge team={home} size={22} />
       <span className="font-[family-name:var(--font-display)] text-sm font-bold text-foreground">
         {match.homeGoals} - {match.awayGoals}

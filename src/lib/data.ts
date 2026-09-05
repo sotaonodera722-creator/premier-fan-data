@@ -242,35 +242,59 @@ function normalizeName(name: string): string {
     .replace(/[øØ]/g, "o")
     .replace(/[đĐ]/g, "d")
     .replace(/[łŁ]/g, "l")
+    .replace(/ß/g, "ss")
     .toLowerCase()
     .trim();
 }
 
+function nameParts(name: string): string[] {
+  return name
+    .replace(/\./g, "")
+    .split(/[\s-]+/)
+    .filter(Boolean);
+}
+
 // Different endpoints (and even different matches from the same lineup source) give
-// player names in inconsistent shapes — full ("Carl Rushworth") or abbreviated
-// ("C. Rushworth"). Treats two names as the same player if they're an exact match
-// once normalized, or if one is a first-initial + last-name abbreviation of the other.
+// player names in inconsistent shapes: full ("Carl Rushworth") or abbreviated
+// ("C. Rushworth"), hyphenated or split into separate words ("Dewsbury-Hall" vs
+// "Dewsbury Hall"), or as the single name a player is commonly known by ("Alisson",
+// "Thiago") instead of their full one. Treats two names as the same player if,
+// once normalized, they're an exact match, one is a first-initial + surname
+// abbreviation of the other (surname compared as a suffix, so "J. Larsen" matches
+// "Jørgen Strand Larsen"), or one is a single word that appears in the other.
 function namesMatch(a: string, b: string): boolean {
   const na = normalizeName(a);
   const nb = normalizeName(b);
   if (na === nb) return true;
-  return abbreviatesTo(na, nb) || abbreviatesTo(nb, na);
+  if (abbreviatesTo(na, nb) || abbreviatesTo(nb, na)) return true;
+  return mononymMatch(na, nb);
 }
 
 function abbreviatesTo(shortName: string, fullName: string): boolean {
-  const shortParts = shortName.replace(/\./g, "").split(/\s+/).filter(Boolean);
-  const fullParts = fullName.split(/\s+/).filter(Boolean);
+  const shortParts = nameParts(shortName);
+  const fullParts = nameParts(fullName);
   if (shortParts.length < 2 || fullParts.length < 2) return false;
+  if (shortParts[0][0] !== fullParts[0][0]) return false;
   const shortLast = shortParts.slice(1).join(" ");
   const fullLast = fullParts.slice(1).join(" ");
-  return shortParts[0][0] === fullParts[0][0] && shortLast === fullLast;
+  return fullLast === shortLast || fullLast.endsWith(` ${shortLast}`);
+}
+
+// One side is a single word (a nickname or mononym like "Beto" or "Thiago") — treat
+// it as a match if that word is one of the other, fuller name's parts.
+function mononymMatch(a: string, b: string): boolean {
+  const aParts = nameParts(a);
+  const bParts = nameParts(b);
+  if (aParts.length === 1) return bParts.includes(aParts[0]);
+  if (bParts.length === 1) return aParts.includes(bParts[0]);
+  return false;
 }
 
 // Resolves a lineup/event name (full or abbreviated) to one of this team's actual
 // player records, since players.json is the one place names are always in full.
 // Uses the raw roster (not getPlayers()) to avoid a circular dependency, since
 // getPlayers() itself calls into match-event derivation that resolves names.
-function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
+export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   return rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
 }
 

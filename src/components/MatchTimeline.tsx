@@ -1,4 +1,27 @@
+import Link from "next/link";
 import type { MatchEvent } from "@/lib/types";
+import { resolveRosterPlayer } from "@/lib/data";
+
+function PlayerLink({
+  name,
+  teamId,
+  fallbackTeamId,
+}: {
+  name: string | null;
+  teamId: number;
+  // "Own Goal" events are recorded under the team that benefits, not the scorer's
+  // own team — fall back to the other side's roster when the primary lookup misses.
+  fallbackTeamId?: number;
+}) {
+  if (!name) return null;
+  const resolved = resolveRosterPlayer(name, teamId) ?? (fallbackTeamId != null ? resolveRosterPlayer(name, fallbackTeamId) : undefined);
+  if (!resolved) return <>{name}</>;
+  return (
+    <Link href={`/players/${resolved.id}`} className="transition hover:text-accent-2 hover:underline">
+      {name}
+    </Link>
+  );
+}
 
 function EventIcon({ type }: { type: string }) {
   if (type === "Yellow Card") {
@@ -19,31 +42,45 @@ function EventIcon({ type }: { type: string }) {
   return <span className="shrink-0 text-sm text-muted">•</span>;
 }
 
-function EventLine({ event }: { event: MatchEvent }) {
+function EventLine({
+  event,
+  homeTeamId,
+  awayTeamId,
+}: {
+  event: MatchEvent;
+  homeTeamId: number;
+  awayTeamId: number;
+}) {
   if (event.type === "Substitution") {
     // event.player left the pitch; event.substitutedFor came on.
     return (
       <span className="leading-tight">
         <span className="flex items-center gap-1.5 text-success">
-          <span className="text-xs">▲</span> {event.substitutedFor}
+          <span className="text-xs">▲</span> <PlayerLink name={event.substitutedFor} teamId={event.teamId} />
         </span>
         <span className="mt-0.5 flex items-center gap-1.5 text-danger/80">
-          <span className="text-xs">▼</span> {event.player}
+          <span className="text-xs">▼</span> <PlayerLink name={event.player} teamId={event.teamId} />
         </span>
       </span>
     );
   }
 
-  const sub =
-    event.assist != null
-      ? `assist: ${event.assist}`
-      : event.type === "Missed Penalty"
-        ? "PK失敗"
-        : null;
+  const otherTeamId = event.teamId === homeTeamId ? awayTeamId : homeTeamId;
   return (
     <span className="leading-tight">
-      <span className="text-foreground">{event.player}</span>
-      {sub && <span className="block text-[11px] text-muted">{sub}</span>}
+      <span className="text-foreground">
+        <PlayerLink
+          name={event.player}
+          teamId={event.teamId}
+          fallbackTeamId={event.type === "Own Goal" ? otherTeamId : undefined}
+        />
+      </span>
+      {event.assist != null && (
+        <span className="block text-[11px] text-muted">
+          assist: <PlayerLink name={event.assist} teamId={event.teamId} />
+        </span>
+      )}
+      {event.type === "Missed Penalty" && <span className="block text-[11px] text-muted">PK失敗</span>}
     </span>
   );
 }
@@ -51,9 +88,11 @@ function EventLine({ event }: { event: MatchEvent }) {
 export default function MatchTimeline({
   events,
   homeTeamId,
+  awayTeamId,
 }: {
   events: MatchEvent[];
   homeTeamId: number;
+  awayTeamId: number;
 }) {
   const sorted = [...events].sort(
     (a, b) => Number.parseInt(a.minute, 10) - Number.parseInt(b.minute, 10)
@@ -78,7 +117,7 @@ export default function MatchTimeline({
             <div className="flex items-center justify-end gap-2 text-right">
               {isHome && (
                 <>
-                  <EventLine event={e} />
+                  <EventLine event={e} homeTeamId={homeTeamId} awayTeamId={awayTeamId} />
                   {icon}
                 </>
               )}
@@ -90,7 +129,7 @@ export default function MatchTimeline({
               {!isHome && (
                 <>
                   {icon}
-                  <EventLine event={e} />
+                  <EventLine event={e} homeTeamId={homeTeamId} awayTeamId={awayTeamId} />
                 </>
               )}
             </div>

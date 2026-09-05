@@ -95,7 +95,7 @@ export default async function PlayerDetailPage({
                   <Link
                     key={a.matchId}
                     href={`/matches/${a.matchId}`}
-                    className="flex items-center gap-3 px-4 py-3 text-sm transition hover:bg-surface/60"
+                    className="flex items-center gap-3 px-4 py-3 text-sm transition hover:bg-surface-2"
                   >
                     <span className="w-9 shrink-0 text-xs text-muted">第{a.matchday}節</span>
                     <span className="w-8 shrink-0 text-xs text-muted">{a.isHome ? "H" : "A"}</span>

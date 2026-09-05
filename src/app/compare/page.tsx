@@ -141,9 +141,9 @@ function TeamSummary({ team, align = "left" }: { team: ReturnType<typeof getTeam
   const r = team.record;
   return (
     <div className={`flex flex-col items-center gap-3 ${align === "right" ? "sm:items-end" : "sm:items-start"}`}>
-      <Link href={`/teams/${team.id}`} className="flex items-center gap-3">
+      <Link href={`/teams/${team.id}`} className="group flex items-center gap-3">
         <TeamBadge team={team} size={40} />
-        <span className="text-lg font-bold text-foreground">{team.name}</span>
+        <span className="text-lg font-bold text-foreground transition group-hover:text-accent-2">{team.name}</span>
       </Link>
       {r && (
         <div className="grid w-full grid-cols-3 gap-2 sm:max-w-xs">

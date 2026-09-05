@@ -112,12 +112,14 @@ export default function Home() {
             }
           />
           <HomeFixtures matches={allMatches} teams={teams} currentMatchday={matchday} />
-          <div className="mt-6">
+          <div className="mt-8">
             <TeamStatCard
+              eyebrow="Expected Goals"
               title="平均期待得点 (xG) TOP3"
               rows={topXg}
               format={(v) => v.toFixed(2)}
               tab="xg"
+              size="lg"
             />
           </div>
         </div>

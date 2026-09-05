@@ -142,7 +142,7 @@ export default async function TeamDetailPage({
                       <Link
                         key={p.id}
                         href={`/players/${p.id}`}
-                        className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-surface/60"
+                        className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-surface-2"
                       >
                         <span className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-bold text-muted">
                           {p.position}
@@ -269,7 +269,7 @@ export default async function TeamDetailPage({
                         </thead>
                         <tbody>
                           {group.map((p) => (
-                            <tr key={p.id} className="border-t border-border transition hover:bg-surface/60">
+                            <tr key={p.id} className="border-t border-border transition hover:bg-surface-2">
                               <td className="px-4 py-2.5">
                                 <Link
                                   href={`/players/${p.id}`}

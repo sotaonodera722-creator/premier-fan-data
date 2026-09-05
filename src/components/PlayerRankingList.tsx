@@ -42,7 +42,7 @@ export default function PlayerRankingList({
             <Link
               key={p.id}
               href={`/players/${p.id}`}
-              className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface/60"
+              className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface-2"
             >
               <span className="w-5 text-sm font-bold text-muted">{i + 1}</span>
               {team && <TeamBadge team={team} size={28} />}
