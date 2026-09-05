@@ -8,7 +8,7 @@
     "clubColors": "Sky Blue / White",
     "venue": "Etihad Stadium",
     "founded": 1880,
-    "coach": "Enzo Maresca",
+    "coach": null,
     "record": {
       "position": 1,
       "played": 2,
@@ -31,7 +31,7 @@
     "clubColors": "Red / White",
     "venue": "Emirates Stadium",
     "founded": 1886,
-    "coach": "Mikel Arteta",
+    "coach": null,
     "record": {
       "position": 2,
       "played": 2,
@@ -54,7 +54,7 @@
     "clubColors": "Orange / Black",
     "venue": "Kingston Communications Stadium",
     "founded": 1904,
-    "coach": "Sergej Jakirović",
+    "coach": null,
     "record": {
       "position": 3,
       "played": 2,
@@ -77,7 +77,7 @@
     "clubColors": "Royal Blue / White",
     "venue": "Stamford Bridge",
     "founded": 1905,
-    "coach": "Xabi Alonso",
+    "coach": null,
     "record": {
       "position": 4,
       "played": 2,
@@ -92,6 +92,29 @@
     }
   },
   {
+    "id": 64,
+    "name": "Liverpool FC",
+    "shortName": "Liverpool",
+    "tla": "LIV",
+    "crest": "https://crests.football-data.org/64.png",
+    "clubColors": "Red / White",
+    "venue": "Anfield",
+    "founded": 1892,
+    "coach": null,
+    "record": {
+      "position": 5,
+      "played": 3,
+      "wins": 1,
+      "draws": 2,
+      "losses": 0,
+      "goalsFor": 6,
+      "goalsAgainst": 4,
+      "goalDiff": 2,
+      "points": 5,
+      "winRate": 33.3
+    }
+  },
+  {
     "id": 402,
     "name": "Brentford FC",
     "shortName": "Brentford",
@@ -100,9 +123,9 @@
     "clubColors": "Red / White / Black",
     "venue": "Griffin Park",
     "founded": 1889,
-    "coach": "Keith Andrews",
+    "coach": null,
     "record": {
-      "position": 5,
+      "position": 6,
       "played": 2,
       "wins": 1,
       "draws": 1,
@@ -123,9 +146,9 @@
     "clubColors": "Black / White",
     "venue": "St. James' Park",
     "founded": 1881,
-    "coach": "Matthias Jaissle",
+    "coach": null,
     "record": {
-      "position": 6,
+      "position": 7,
       "played": 2,
       "wins": 1,
       "draws": 1,
@@ -146,9 +169,9 @@
     "clubColors": "Blue / White",
     "venue": "Goodison Park",
     "founded": 1878,
-    "coach": "David Moyes",
+    "coach": null,
     "record": {
-      "position": 7,
+      "position": 8,
       "played": 2,
       "wins": 1,
       "draws": 1,
@@ -169,9 +192,9 @@
     "clubColors": "White / Blue",
     "venue": "Elland Road",
     "founded": 1904,
-    "coach": "Daniel Farke",
+    "coach": null,
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 2,
       "wins": 1,
       "draws": 1,
@@ -192,9 +215,9 @@
     "clubColors": "Blue / White",
     "venue": "The American Express Community Stadium",
     "founded": 1898,
-    "coach": "Fabian Hürzeler",
+    "coach": null,
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 2,
       "wins": 1,
       "draws": 0,
@@ -215,9 +238,9 @@
     "clubColors": "Red / White",
     "venue": "Old Trafford",
     "founded": 1878,
-    "coach": "Michael Carrick",
+    "coach": null,
     "record": {
-      "position": 10,
+      "position": 11,
       "played": 2,
       "wins": 1,
       "draws": 0,
@@ -238,9 +261,9 @@
     "clubColors": "Red / White",
     "venue": "Stadium of Light",
     "founded": 1879,
-    "coach": "Regis Le Bris",
+    "coach": null,
     "record": {
-      "position": 11,
+      "position": 12,
       "played": 2,
       "wins": 1,
       "draws": 0,
@@ -261,41 +284,18 @@
     "clubColors": "Blue / White",
     "venue": "Portman Road Stadium",
     "founded": 1887,
-    "coach": "Gary O'Neil",
-    "record": {
-      "position": 12,
-      "played": 2,
-      "wins": 1,
-      "draws": 0,
-      "losses": 1,
-      "goalsFor": 4,
-      "goalsAgainst": 6,
-      "goalDiff": -2,
-      "points": 3,
-      "winRate": 50
-    }
-  },
-  {
-    "id": 64,
-    "name": "Liverpool FC",
-    "shortName": "Liverpool",
-    "tla": "LIV",
-    "crest": "https://crests.football-data.org/64.png",
-    "clubColors": "Red / White",
-    "venue": "Anfield",
-    "founded": 1892,
-    "coach": "Andoni Iraola",
+    "coach": null,
     "record": {
       "position": 13,
-      "played": 2,
-      "wins": 0,
-      "draws": 2,
-      "losses": 0,
+      "played": 3,
+      "wins": 1,
+      "draws": 0,
+      "losses": 2,
       "goalsFor": 4,
-      "goalsAgainst": 4,
-      "goalDiff": 0,
-      "points": 2,
-      "winRate": 0
+      "goalsAgainst": 8,
+      "goalDiff": -4,
+      "points": 3,
+      "winRate": 33.3
     }
   },
   {
@@ -307,7 +307,7 @@
     "clubColors": "Red / White",
     "venue": "The City Ground",
     "founded": 1865,
-    "coach": "Oliver Glasner",
+    "coach": null,
     "record": {
       "position": 14,
       "played": 2,
@@ -330,7 +330,7 @@
     "clubColors": "Red / Black",
     "venue": "Vitality Stadium",
     "founded": 1890,
-    "coach": "Marco Rose",
+    "coach": null,
     "record": {
       "position": 14,
       "played": 2,
@@ -353,7 +353,7 @@
     "clubColors": "White / Black",
     "venue": "Craven Cottage",
     "founded": 1879,
-    "coach": "Arbeloa",
+    "coach": null,
     "record": {
       "position": 16,
       "played": 2,
@@ -376,7 +376,7 @@
     "clubColors": "Sky Blue / White",
     "venue": "St Andrew's Trillion Trophy Stadium",
     "founded": 1883,
-    "coach": "Frank Lampard",
+    "coach": null,
     "record": {
       "position": 17,
       "played": 2,
@@ -399,7 +399,7 @@
     "clubColors": "Red / Blue",
     "venue": "Selhurst Park",
     "founded": 1905,
-    "coach": "Pierre Sage",
+    "coach": null,
     "record": {
       "position": 18,
       "played": 2,
@@ -422,7 +422,7 @@
     "clubColors": "Claret / Sky Blue",
     "venue": "Villa Park",
     "founded": 1872,
-    "coach": "Unai Emery",
+    "coach": null,
     "record": {
       "position": 19,
       "played": 2,
@@ -445,7 +445,7 @@
     "clubColors": "Navy Blue / White",
     "venue": "Tottenham Hotspur Stadium",
     "founded": 1882,
-    "coach": "Roberto De Zerbi",
+    "coach": null,
     "record": {
       "position": 19,
       "played": 2,
