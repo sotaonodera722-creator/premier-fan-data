@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   getGoalsPerGameRanking,
   getGoalsConcededPerGameRanking,
@@ -6,9 +5,7 @@ import {
   getTeamStatAverage,
 } from "@/lib/data";
 import type { Team } from "@/lib/types";
-import TeamBadge from "@/components/TeamBadge";
-
-type Row = { team: Team; value: number; rank: number };
+import TeamStatCard, { type TeamStatRow as Row } from "@/components/TeamStatCard";
 
 const TEAM_COUNT = 20;
 
@@ -21,50 +18,6 @@ function buildRows(all: { team: Team; value: number }[], teamId?: number): Row[]
   const mine = ranked.find((r) => r.team.id === teamId);
   if (!mine || mine.rank <= 3) return ranked.slice(0, 3);
   return [...ranked.slice(0, 2), mine];
-}
-
-function StatCard({
-  title,
-  rows,
-  format,
-  tab,
-  teamId,
-}: {
-  title: string;
-  rows: Row[];
-  format: (v: number) => string;
-  tab: string;
-  teamId?: number;
-}) {
-  if (rows.length === 0) return null;
-  return (
-    <div className="glass rounded-xl p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-sm font-semibold text-foreground">{title}</p>
-        <Link href={`/teams/rankings?tab=${tab}`} className="text-xs font-medium text-accent-2 hover:underline">
-          もっと見る →
-        </Link>
-      </div>
-      <div className="space-y-2.5">
-        {rows.map((row) => (
-          <Link
-            key={row.team.id}
-            href={`/teams/${row.team.id}`}
-            className={`flex items-center gap-2.5 text-sm transition hover:text-accent-2 ${
-              row.team.id === teamId ? "font-semibold text-foreground" : ""
-            }`}
-          >
-            <span className="w-3 text-xs font-bold text-muted">{row.rank}</span>
-            <TeamBadge team={row.team} size={20} />
-            <span className="flex-1 truncate text-foreground">{row.team.shortName}</span>
-            <span className="rounded-md bg-surface-2 px-2 py-0.5 text-xs font-bold text-foreground">
-              {format(row.value)}
-            </span>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 export default function KeyTeamStats({ teamId }: { teamId?: number } = {}) {
@@ -111,7 +64,7 @@ export default function KeyTeamStats({ teamId }: { teamId?: number } = {}) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((c) => (
-        <StatCard key={c.title} title={c.title} rows={c.rows} format={c.format} tab={c.tab} teamId={teamId} />
+        <TeamStatCard key={c.title} title={c.title} rows={c.rows} format={c.format} tab={c.tab} teamId={teamId} />
       ))}
     </div>
   );
