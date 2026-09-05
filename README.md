@@ -29,6 +29,20 @@ football-data.org の無料プランは10リクエスト/分の制限がある�
 
 `ingest-h2h.mjs` は football-data.org から今シーズン対戦する全チームペア(20チーム総当たり、190ペア)の過去の対戦成績を取得し `src/data/h2h.json` に書き出します。まだ取得していないペアだけを差分取得します。初回は190リクエストかかるため数分〜十数分ほどお待ちください。
 
+## 自動更新(GitHub Actions)
+
+`.github/workflows/update-data.yml` が4時間おき(1日6回)に上記3本のスクリプトを順番に実行し、`src/data/*.json` に変更があれば自動でコミット・pushします。GitHubリポジトリと連携させれば、あなたのPCの電源を切っていても動きます。
+
+セットアップ手順(初回のみ):
+
+1. GitHubで空のリポジトリを作成し、このプロジェクトをpushする
+2. リポジトリの **Settings → Secrets and variables → Actions** で以下のRepository secretsを登録する(`.env.local` と同じ値)
+   - `FOOTBALL_DATA_API_TOKEN`
+   - `HIGHLIGHTLY_API_KEY`
+3. Vercel などにこのリポジトリをインポートして接続する(pushのたびに自動で再デプロイされます)
+
+**Actions** タブから手動実行(workflow_dispatch)して動作確認もできます。スケジュール実行が失敗した場合はGitHubがリポジトリのオーナーに自動でメール通知します。GitHubのcronは60日間リポジトリへのコミットが無いと自動停止する仕様があるため、その場合は手動実行で再度有効になります。
+
 ## 構成
 
 - `src/app` — ページ(ホーム / チーム一覧・詳細 / 選手名鑑・詳細 / 順位表 / 試合詳細・スタメン / 対戦成績比較)
@@ -38,6 +52,7 @@ football-data.org の無料プランは10リクエスト/分の制限がある�
 - `scripts/ingest-football-data.mjs` — football-data.org からチーム・選手・試合データを取得するスクリプト
 - `scripts/ingest-lineups.mjs` — Highlightly からスタメン・フォーメーションを取得するスクリプト
 - `scripts/ingest-h2h.mjs` — football-data.org からチーム同士の過去の対戦成績を取得するスクリプト
+- `.github/workflows/update-data.yml` — 上記3本のスクリプトを定期実行し、変更があれば自動コミットするGitHub Actionsワークフロー
 
 ## データ利用について
 
@@ -50,4 +65,3 @@ football-data.org の無料プランは10リクエスト/分の制限がある�
 ## 今後の拡張候補
 
 - 日本人選手の特集記事・週間ハイライト
-- ラインナップ・対戦成績取得の定期実行(現状は手動実行)
