@@ -23,29 +23,6 @@
     }
   },
   {
-    "id": 57,
-    "name": "Arsenal FC",
-    "shortName": "Arsenal",
-    "tla": "ARS",
-    "crest": "https://crests.football-data.org/57.png",
-    "clubColors": "Red / White",
-    "venue": "Emirates Stadium",
-    "founded": 1886,
-    "coach": null,
-    "record": {
-      "position": 2,
-      "played": 2,
-      "wins": 2,
-      "draws": 0,
-      "losses": 0,
-      "goalsFor": 4,
-      "goalsAgainst": 0,
-      "goalDiff": 4,
-      "points": 6,
-      "winRate": 100
-    }
-  },
-  {
     "id": 322,
     "name": "Hull City AFC",
     "shortName": "Hull City",
@@ -56,14 +33,37 @@
     "founded": 1904,
     "coach": null,
     "record": {
+      "position": 2,
+      "played": 3,
+      "wins": 2,
+      "draws": 1,
+      "losses": 0,
+      "goalsFor": 3,
+      "goalsAgainst": 0,
+      "goalDiff": 3,
+      "points": 7,
+      "winRate": 66.7
+    }
+  },
+  {
+    "id": 57,
+    "name": "Arsenal FC",
+    "shortName": "Arsenal",
+    "tla": "ARS",
+    "crest": "https://crests.football-data.org/57.png",
+    "clubColors": "Red / White",
+    "venue": "Emirates Stadium",
+    "founded": 1886,
+    "coach": null,
+    "record": {
       "position": 3,
       "played": 2,
       "wins": 2,
       "draws": 0,
       "losses": 0,
-      "goalsFor": 3,
+      "goalsFor": 4,
       "goalsAgainst": 0,
-      "goalDiff": 3,
+      "goalDiff": 4,
       "points": 6,
       "winRate": 100
     }
@@ -368,6 +368,29 @@
     }
   },
   {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": null,
+    "record": {
+      "position": 17,
+      "played": 3,
+      "wins": 0,
+      "draws": 1,
+      "losses": 2,
+      "goalsFor": 0,
+      "goalsAgainst": 5,
+      "goalDiff": -5,
+      "points": 1,
+      "winRate": 0
+    }
+  },
+  {
     "id": 73,
     "name": "Tottenham Hotspur FC",
     "shortName": "Tottenham",
@@ -401,7 +424,7 @@
     "founded": 1879,
     "coach": null,
     "record": {
-      "position": 18,
+      "position": 19,
       "played": 3,
       "wins": 0,
       "draws": 0,
@@ -409,29 +432,6 @@
       "goalsFor": 4,
       "goalsAgainst": 7,
       "goalDiff": -3,
-      "points": 0,
-      "winRate": 0
-    }
-  },
-  {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": null,
-    "record": {
-      "position": 19,
-      "played": 2,
-      "wins": 0,
-      "draws": 0,
-      "losses": 2,
-      "goalsFor": 0,
-      "goalsAgainst": 5,
-      "goalDiff": -5,
       "points": 0,
       "winRate": 0
     }
@@ -447,7 +447,7 @@
     "founded": 1883,
     "coach": null,
     "record": {
-      "position": 19,
+      "position": 20,
       "played": 3,
       "wins": 0,
       "draws": 0,
