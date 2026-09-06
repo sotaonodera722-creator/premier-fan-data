@@ -21,6 +21,30 @@ export function generateStaticParams() {
   return getClickableMatchIds().map((id) => ({ slug: String(id) }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const match = getMatchById(Number(slug));
+  if (!match) return { title: "試合 | Premier Fan Data" };
+
+  const home = getTeamById(match.homeTeamId);
+  const away = getTeamById(match.awayTeamId);
+  if (!home || !away) return { title: "試合 | Premier Fan Data" };
+
+  const fixture = `${home.shortName} vs ${away.shortName}`;
+  const score = match.played ? ` ${match.homeGoals}-${match.awayGoals}` : "";
+  return {
+    title: `${fixture}${score} | Premier Fan Data`,
+    description: match.played
+      ? `第${match.matchday}節 ${fixture} の結果${score}。スタメン・フォーメーション・タイムライン・対戦成績をまとめています。`
+      : `第${match.matchday}節 ${fixture} の予想スタメンと対戦成績。`,
+  };
+}
+
+
 export default async function MatchDetailPage({
   params,
 }: {
