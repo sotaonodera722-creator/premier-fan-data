@@ -313,7 +313,36 @@ function namesMatch(a: string, b: string): boolean {
   const nb = normalizeName(b);
   if (na === nb) return true;
   if (abbreviatesTo(na, nb) || abbreviatesTo(nb, na)) return true;
-  return mononymMatch(na, nb);
+  if (mononymMatch(na, nb)) return true;
+  return transliterationMatch(na, nb);
+}
+
+// Last-resort fallback for the same player spelled differently by two data
+// providers (e.g. Highlightly's "Yehor Yarmoliuk" vs football-data.org's "Yegor
+// Yarmolyuk" — different English transliterations of the same Ukrainian name).
+// Only fires for two full (multi-part) names of nearly equal length that are
+// within a small edit distance, so it can't casually conflate two different
+// players who happen to share a surname.
+function transliterationMatch(a: string, b: string): boolean {
+  if (nameParts(a).length < 2 || nameParts(b).length < 2) return false;
+  if (Math.abs(a.length - b.length) > 2) return false;
+  return levenshteinDistance(a, b) <= 2;
+}
+
+function levenshteinDistance(a: string, b: string): number {
+  const prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  let curr = new Array(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      curr[j] =
+        a[i - 1] === b[j - 1]
+          ? prev[j - 1]
+          : 1 + Math.min(prev[j - 1], prev[j], curr[j - 1]);
+    }
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+  }
+  return prev[b.length];
 }
 
 function abbreviatesTo(shortName: string, fullName: string): boolean {
@@ -342,6 +371,16 @@ function mononymMatch(a: string, b: string): boolean {
 // getPlayers() itself calls into match-event derivation that resolves names.
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   return rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
+}
+
+// True if `name` belongs to someone who was actually part of this match's squad
+// (starting XI or substitutes bench) — used to tell a real player who's simply
+// missing from players.json yet (a just-arrived transfer the season roster hasn't
+// caught up with) apart from a name that isn't a player at all (a manager or
+// backroom staff member the lineup provider recorded a card against).
+export function isKnownMatchParticipant(name: string, teamLineup: TeamLineup): boolean {
+  const squadNames = [...teamLineup.startXI.flat(), ...teamLineup.substitutes].map((p) => p.name);
+  return squadNames.some((n) => namesMatch(n, name));
 }
 
 // "45", "90+3" -> 45, 90. Stoppage time is dropped, not added, so a full match is

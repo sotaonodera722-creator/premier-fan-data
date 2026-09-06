@@ -91,7 +91,13 @@ export default async function MatchDetailPage({
       {lineup?.events && lineup.events.length > 0 && (
         <section className="mt-10">
           <SectionHeading eyebrow="Timeline" title="タイムライン" />
-          <MatchTimeline events={lineup.events} homeTeamId={homeTeam.id} awayTeamId={awayTeam.id} />
+          <MatchTimeline
+            events={lineup.events}
+            homeTeamId={homeTeam.id}
+            awayTeamId={awayTeam.id}
+            homeSquad={lineup.homeTeam}
+            awaySquad={lineup.awayTeam}
+          />
         </section>
       )}
 

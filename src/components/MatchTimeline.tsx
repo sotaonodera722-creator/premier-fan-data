@@ -1,6 +1,47 @@
 import Link from "next/link";
-import type { MatchEvent } from "@/lib/types";
-import { resolveRosterPlayer } from "@/lib/data";
+import type { MatchEvent, TeamLineup } from "@/lib/types";
+import { resolveRosterPlayer, isKnownMatchParticipant } from "@/lib/data";
+
+// True if `name` can be tied to an actual person in this match — either a roster
+// player (resolveRosterPlayer) or, failing that, someone who was at least in this
+// match's own squad list (a player missing only from the season-long roster
+// data). False means the lineup provider recorded this name against someone who
+// was never part of either squad — almost always a manager or other non-playing
+// staff member booked for a touchline incident — which isn't worth showing since
+// there's no player to attribute or link it to.
+function isRealMatchPlayer(name: string | null, teamId: number, squad: TeamLineup): boolean {
+  if (!name) return false;
+  return Boolean(resolveRosterPlayer(name, teamId)) || isKnownMatchParticipant(name, squad);
+}
+
+// Drops events the lineup provider attributed to someone who was never part of
+// either squad (see isRealMatchPlayer above) — a manager or other non-playing
+// staff member, most often booked for a touchline incident, with no player page
+// to show or link to.
+function eventHasRealPlayer(
+  event: MatchEvent,
+  homeTeamId: number,
+  awayTeamId: number,
+  homeSquad: TeamLineup,
+  awaySquad: TeamLineup
+): boolean {
+  const squad = event.teamId === homeTeamId ? homeSquad : awaySquad;
+  if (event.type === "Substitution") {
+    return (
+      isRealMatchPlayer(event.player, event.teamId, squad) &&
+      isRealMatchPlayer(event.substitutedFor, event.teamId, squad)
+    );
+  }
+  if (event.type === "Own Goal") {
+    const otherTeamId = event.teamId === homeTeamId ? awayTeamId : homeTeamId;
+    const otherSquad = event.teamId === homeTeamId ? awaySquad : homeSquad;
+    return (
+      isRealMatchPlayer(event.player, event.teamId, squad) ||
+      isRealMatchPlayer(event.player, otherTeamId, otherSquad)
+    );
+  }
+  return isRealMatchPlayer(event.player, event.teamId, squad);
+}
 
 function PlayerLink({
   name,
@@ -89,14 +130,18 @@ export default function MatchTimeline({
   events,
   homeTeamId,
   awayTeamId,
+  homeSquad,
+  awaySquad,
 }: {
   events: MatchEvent[];
   homeTeamId: number;
   awayTeamId: number;
+  homeSquad: TeamLineup;
+  awaySquad: TeamLineup;
 }) {
-  const sorted = [...events].sort(
-    (a, b) => Number.parseInt(a.minute, 10) - Number.parseInt(b.minute, 10)
-  );
+  const sorted = events
+    .filter((e) => eventHasRealPlayer(e, homeTeamId, awayTeamId, homeSquad, awaySquad))
+    .sort((a, b) => Number.parseInt(a.minute, 10) - Number.parseInt(b.minute, 10));
 
   return (
     <div className="glass space-y-1 rounded-xl p-5">

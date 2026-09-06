@@ -98,12 +98,31 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Highlightly's player/event names sometimes come back HTML-entity-encoded (e.g.
+// "O&apos;Brien" instead of "O'Brien"), which breaks name matching against
+// players.json downstream — decode the handful of entities that actually show up
+// in names.
+function decodeHtmlEntities(str) {
+  if (typeof str !== "string") return str;
+  return str
+    .replace(/&apos;/g, "'")
+    .replace(/&#0?39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function decodeLineupPlayers(list) {
+  return (list ?? []).map((p) => ({ ...p, name: decodeHtmlEntities(p.name) }));
+}
+
 function toTeamLineup(teamId, side) {
   return {
     teamId,
     formation: side.formation,
-    startXI: side.initialLineup,
-    substitutes: side.substitutes,
+    startXI: (side.initialLineup ?? []).map(decodeLineupPlayers),
+    substitutes: decodeLineupPlayers(side.substitutes),
   };
 }
 
@@ -114,9 +133,9 @@ function toEvents(hlEvents, hlReverseMap) {
       minute: e.time,
       type: e.type,
       teamId: hlReverseMap[e.team.id],
-      player: e.player,
-      assist: e.assist ?? null,
-      substitutedFor: e.type === "Substitution" ? e.substituted : null,
+      player: decodeHtmlEntities(e.player),
+      assist: decodeHtmlEntities(e.assist ?? null),
+      substitutedFor: e.type === "Substitution" ? decodeHtmlEntities(e.substituted) : null,
     }));
 }
 
