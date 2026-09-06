@@ -7,8 +7,8 @@ import {
   getJapanesePlayers,
   getTeams,
   getAllMatches,
-  getLatestResults,
-  getMatchIdsWithLineups,
+  getActiveRoundMatches,
+  getClickableMatchIds,
   getTeamStatAverage,
 } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
@@ -20,16 +20,21 @@ import HomeFixtures from "@/components/HomeFixtures";
 import PlayerRankingList from "@/components/PlayerRankingList";
 import TeamStatCard from "@/components/TeamStatCard";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ round?: string }>;
+}) {
+  const { round } = await searchParams;
   const standings = getStandings();
   const matchday = getCurrentMatchday();
   const jpPlayers = getJapanesePlayers();
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
   const allMatches = getAllMatches();
-  const latestResults = getLatestResults(20);
+  const latestResults = getActiveRoundMatches();
   const latestMatchday = latestResults[0]?.matchday ?? matchday;
-  const lineupMatchIds = new Set(getMatchIdsWithLineups());
+  const clickableMatchIds = new Set(getClickableMatchIds());
 
   const topScorers = getTopScorers(3).map((p) => ({ player: p, value: p.goals ?? 0 }));
   const topAssists = getTopAssists(3).map((p) => ({ player: p, value: p.assists ?? 0 }));
@@ -77,7 +82,7 @@ export default function Home() {
           matches={latestResults}
           teamById={teamById}
           matchday={latestMatchday}
-          lineupMatchIds={lineupMatchIds}
+          clickableMatchIds={clickableMatchIds}
         />
       </section>
 
@@ -111,7 +116,13 @@ export default function Home() {
               </Link>
             }
           />
-          <HomeFixtures matches={allMatches} teams={teams} currentMatchday={matchday} />
+          <HomeFixtures
+            matches={allMatches}
+            teams={teams}
+            currentMatchday={latestMatchday}
+            initialRound={round}
+            clickableMatchIds={clickableMatchIds}
+          />
           <div className="mt-8">
             <TeamStatCard
               eyebrow="Expected Goals"

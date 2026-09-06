@@ -34,10 +34,13 @@ const POSITION_NAMES: Record<Position, string> = {
 
 export default async function TeamDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const { slug } = await params;
+  const { tab } = await searchParams;
   const teamId = Number(slug);
   const team = getTeamById(teamId);
   if (!team) notFound();
@@ -93,6 +96,7 @@ export default async function TeamDetailPage({
       </div>
 
       <TeamTabs
+        initialTab={tab}
         overview={
           <>
             {r && (
@@ -179,13 +183,19 @@ export default async function TeamDetailPage({
                   const result = gf > ga ? "W" : gf < ga ? "L" : "D";
                   const hasLineup = Boolean(getMatchLineup(m.id));
                   return (
-                    <div key={m.id} className="flex items-center gap-3 px-4 py-3">
+                    <div
+                      key={m.id}
+                      className={`relative flex items-center gap-3 px-4 py-3 ${hasLineup ? "transition hover:bg-surface-2" : ""}`}
+                    >
+                      {hasLineup && (
+                        <Link href={`/matches/${m.id}`} className="absolute inset-0" aria-label="試合詳細を見る" />
+                      )}
                       <span className="w-9 text-xs text-muted">第{m.matchday}節</span>
                       <span className="w-8 text-xs text-muted">{isHome ? "H" : "A"}</span>
                       {opponent && <TeamBadge team={opponent} size={26} />}
                       <Link
                         href={opponent ? `/teams/${opponent.id}` : "#"}
-                        className="flex-1 truncate text-sm text-foreground hover:underline"
+                        className="relative flex-1 truncate text-sm text-foreground hover:underline"
                       >
                         {opponent?.name}
                       </Link>
@@ -194,12 +204,9 @@ export default async function TeamDetailPage({
                       </span>
                       <FormPills form={[result]} />
                       {hasLineup && (
-                        <Link
-                          href={`/matches/${m.id}`}
-                          className="rounded-md border border-border px-2 py-1 text-[10px] font-medium text-accent-2 transition hover:bg-surface"
-                        >
+                        <span className="rounded-md border border-border px-2 py-1 text-[10px] font-medium text-accent-2">
                           スタメン
-                        </Link>
+                        </span>
                       )}
                     </div>
                   );
@@ -217,18 +224,19 @@ export default async function TeamDetailPage({
                   const opponent = getTeamById(oppId);
                   const date = new Date(m.utcDate);
                   return (
-                    <div key={m.id} className="flex items-center gap-3 px-4 py-3">
+                    <div key={m.id} className="relative flex items-center gap-3 px-4 py-3 transition hover:bg-surface-2">
+                      <Link href={`/matches/${m.id}`} className="absolute inset-0" aria-label="試合詳細を見る" />
                       <span className="w-9 text-xs text-muted">第{m.matchday}節</span>
                       <span className="w-8 text-xs text-muted">{isHome ? "H" : "A"}</span>
                       {opponent && <TeamBadge team={opponent} size={26} />}
                       <Link
                         href={opponent ? `/teams/${opponent.id}` : "#"}
-                        className="flex-1 truncate text-sm text-foreground hover:underline"
+                        className="relative flex-1 truncate text-sm text-foreground hover:underline"
                       >
                         {opponent?.name}
                       </Link>
                       <span className="text-xs text-muted">
-                        {date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}
+                        {date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", timeZone: "Asia/Tokyo" })}
                       </span>
                     </div>
                   );

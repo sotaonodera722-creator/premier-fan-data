@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { useUrlParams } from "@/lib/useUrlParams";
 
 export type TeamStatRow = { team: Team; display: string };
 
@@ -37,6 +38,12 @@ export default function TeamStatsExplorer({
 }) {
   const isTab = (v: string | undefined): v is Tab => TABS.some((t) => t.key === v);
   const [tab, setTab] = useState<Tab>(isTab(initialTab) ? initialTab : "goals");
+  const updateUrl = useUrlParams();
+
+  function selectTab(next: Tab) {
+    setTab(next);
+    updateUrl({ tab: next });
+  }
 
   const dataByTab: Record<Tab, TeamStatRow[]> = { goals, conceded, cleanSheets, possession, xg, shots };
   const rows = dataByTab[tab];
@@ -47,7 +54,7 @@ export default function TeamStatsExplorer({
         {TABS.map((t) => (
           <button
             key={t.key}
-            onClick={() => setTab(t.key)}
+            onClick={() => selectTab(t.key)}
             className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition ${
               tab === t.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}

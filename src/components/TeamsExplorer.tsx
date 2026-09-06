@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import FormPills from "@/components/FormPills";
 import { getForm, getPlayersByTeam, getUpcomingFixtures, getTeamById } from "@/lib/data";
+import { useUrlParams } from "@/lib/useUrlParams";
 
 type SortKey = "position" | "form" | "goalDiff" | "winRate";
 
@@ -22,9 +23,31 @@ function formPoints(teamId: number): number {
   return getForm(teamId, 5).reduce((sum, r) => sum + (FORM_POINTS[r] ?? 0), 0);
 }
 
-export default function TeamsExplorer({ teams }: { teams: Team[] }) {
-  const [sort, setSort] = useState<SortKey>("position");
-  const [query, setQuery] = useState("");
+const isSortKey = (v: string | undefined): v is SortKey => SORTS.some((s) => s.key === v);
+
+export default function TeamsExplorer({
+  teams,
+  initialSort,
+  initialQuery,
+}: {
+  teams: Team[];
+  initialSort?: string;
+  initialQuery?: string;
+}) {
+  const [sort, setSort] = useState<SortKey>(isSortKey(initialSort) ? initialSort : "position");
+  const [query, setQuery] = useState(initialQuery ?? "");
+  const updateUrl = useUrlParams();
+
+  function selectSort(next: SortKey) {
+    setSort(next);
+    updateUrl({ sort: next === "position" ? undefined : next });
+  }
+
+  // Debounced so the URL isn't rewritten on every keystroke.
+  useEffect(() => {
+    const id = setTimeout(() => updateUrl({ q: query || undefined }), 300);
+    return () => clearTimeout(id);
+  }, [query, updateUrl]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -55,7 +78,7 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
           {SORTS.map((s) => (
             <button
               key={s.key}
-              onClick={() => setSort(s.key)}
+              onClick={() => selectSort(s.key)}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
                 sort === s.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}

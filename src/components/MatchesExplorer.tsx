@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { useUrlParams } from "@/lib/useUrlParams";
 
 type Mode = "date" | "matchday" | "team";
 
@@ -19,19 +20,25 @@ function dateKey(utcDate: string): string {
     month: "long",
     day: "numeric",
     weekday: "long",
+    timeZone: "Asia/Tokyo",
   });
 }
 
 function rangeDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "long", day: "numeric" });
+  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "long", day: "numeric", timeZone: "Asia/Tokyo" });
 }
 
 function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
 }
 
 function shortDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric", weekday: "short" });
+  return new Date(utcDate).toLocaleDateString("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+    timeZone: "Asia/Tokyo",
+  });
 }
 
 function MatchRow({
@@ -116,12 +123,12 @@ function MatchdayPager({
 function MatchList({
   matches,
   teamById,
-  lineupMatchIds,
+  clickableMatchIds,
   showDate,
 }: {
   matches: Match[];
   teamById: Map<number, Team>;
-  lineupMatchIds: Set<number>;
+  clickableMatchIds: Set<number>;
   showDate?: boolean;
 }) {
   if (matches.length === 0) {
@@ -134,7 +141,7 @@ function MatchList({
           key={m.id}
           match={m}
           teamById={teamById}
-          clickable={lineupMatchIds.has(m.id)}
+          clickable={clickableMatchIds.has(m.id)}
           showDate={showDate}
         />
       ))}
@@ -142,23 +149,55 @@ function MatchList({
   );
 }
 
+const isMode = (v: string | undefined): v is Mode => MODES.some((m) => m.key === v);
+
 export default function MatchesExplorer({
   matches,
   teams,
   currentMatchday,
-  lineupMatchIds,
+  clickableMatchIds,
+  initialMode,
+  initialMatchday,
+  initialTeamId,
 }: {
   matches: Match[];
   teams: Team[];
   currentMatchday: number;
-  lineupMatchIds: number[];
+  clickableMatchIds: number[];
+  initialMode?: string;
+  initialMatchday?: string;
+  initialTeamId?: string;
 }) {
-  const [mode, setMode] = useState<Mode>("date");
-  const [matchday, setMatchday] = useState(currentMatchday);
-  const [teamId, setTeamId] = useState<number>(teams[0]?.id ?? 0);
+  const parsedInitialMatchday = Number(initialMatchday);
+  const parsedInitialTeamId = Number(initialTeamId);
+  const [mode, setMode] = useState<Mode>(isMode(initialMode) ? initialMode : "date");
+  const [matchday, setMatchday] = useState(
+    Number.isInteger(parsedInitialMatchday) && parsedInitialMatchday >= 1 ? parsedInitialMatchday : currentMatchday
+  );
+  const [teamId, setTeamId] = useState<number>(
+    Number.isInteger(parsedInitialTeamId) && teams.some((t) => t.id === parsedInitialTeamId)
+      ? parsedInitialTeamId
+      : teams[0]?.id ?? 0
+  );
+  const updateUrl = useUrlParams();
+
+  function selectMode(next: Mode) {
+    setMode(next);
+    updateUrl({ mode: next === "date" ? undefined : next });
+  }
+
+  function changeMatchday(next: number) {
+    setMatchday(next);
+    updateUrl({ matchday: String(next) });
+  }
+
+  function selectTeamId(next: number) {
+    setTeamId(next);
+    updateUrl({ team: String(next) });
+  }
 
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
-  const lineupSet = useMemo(() => new Set(lineupMatchIds), [lineupMatchIds]);
+  const clickableSet = useMemo(() => new Set(clickableMatchIds), [clickableMatchIds]);
   const maxMatchday = useMemo(() => matches.reduce((m, x) => Math.max(m, x.matchday), 1), [matches]);
 
   const matchdayMatches = useMemo(
@@ -195,7 +234,7 @@ export default function MatchesExplorer({
         {MODES.map((m) => (
           <button
             key={m.key}
-            onClick={() => setMode(m.key)}
+            onClick={() => selectMode(m.key)}
             className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition ${
               mode === m.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
@@ -207,14 +246,14 @@ export default function MatchesExplorer({
 
       {mode === "date" && (
         <div>
-          <MatchdayPager label={dateRangeLabel} matchday={matchday} maxMatchday={maxMatchday} onChange={setMatchday} />
+          <MatchdayPager label={dateRangeLabel} matchday={matchday} maxMatchday={maxMatchday} onChange={changeMatchday} />
           <div className="space-y-6">
             {dateGroups.map((g) => (
               <div key={g.label}>
                 <p className="mb-2 rounded-md bg-surface-2 px-3 py-1.5 text-xs font-semibold text-muted">
                   {g.label}
                 </p>
-                <MatchList matches={g.matches} teamById={teamById} lineupMatchIds={lineupSet} />
+                <MatchList matches={g.matches} teamById={teamById} clickableMatchIds={clickableSet} />
               </div>
             ))}
           </div>
@@ -227,9 +266,9 @@ export default function MatchesExplorer({
             label={`第${matchday}節`}
             matchday={matchday}
             maxMatchday={maxMatchday}
-            onChange={setMatchday}
+            onChange={changeMatchday}
           />
-          <MatchList matches={matchdayMatches} teamById={teamById} lineupMatchIds={lineupSet} showDate />
+          <MatchList matches={matchdayMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
         </div>
       )}
 
@@ -237,7 +276,7 @@ export default function MatchesExplorer({
         <div>
           <select
             value={teamId}
-            onChange={(e) => setTeamId(Number(e.target.value))}
+            onChange={(e) => selectTeamId(Number(e.target.value))}
             className="mb-4 w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground focus:border-accent-2 focus:outline-none"
           >
             {teams.map((t) => (
@@ -246,7 +285,7 @@ export default function MatchesExplorer({
               </option>
             ))}
           </select>
-          <MatchList matches={teamMatches} teamById={teamById} lineupMatchIds={lineupSet} showDate />
+          <MatchList matches={teamMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
         </div>
       )}
     </div>

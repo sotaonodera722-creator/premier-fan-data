@@ -11,6 +11,7 @@ import type {
   MatchResultLetter,
   LineupsFile,
   MatchLineup,
+  TeamLineup,
   HeadToHead,
   HeadToHeadFile,
   PlayerAppearance,
@@ -146,16 +147,61 @@ export function getMatchIdsWithLineups(): number[] {
   return Object.values(lineupsFile.lineups).map((l) => l.matchId);
 }
 
-// The most recently completed matchday's results, across every team — used for the
-// homepage "latest scores" ticket strip.
-export function getLatestResults(limit = 8): Match[] {
-  const finished = matchesFile.matches.filter((m) => m.played);
-  if (finished.length === 0) return [];
-  const latestMatchday = Math.max(...finished.map((m) => m.matchday));
-  return finished
-    .filter((m) => m.matchday === latestMatchday)
-    .sort((a, b) => new Date(b.utcDate).getTime() - new Date(a.utcDate).getTime())
-    .slice(0, limit);
+// Matches the match detail page can render something for: either a finished match
+// with real lineup data, or a not-yet-played fixture (shown with a predicted
+// lineup instead). A finished match missing lineup data still 404s.
+export function getClickableMatchIds(): number[] {
+  const upcoming = matchesFile.matches.filter((m) => !m.played).map((m) => m.id);
+  return [...getMatchIdsWithLineups(), ...upcoming];
+}
+
+// The most recent past match for this team (strictly before `beforeMatchId`'s
+// kickoff) that has real lineup data, used to show a "predicted lineup" for a
+// fixture that hasn't been played yet. Falls further back automatically if the
+// immediately preceding match is missing lineup data.
+export function getPredictedLineup(
+  teamId: number,
+  beforeMatchId: number
+): { match: Match; teamLineup: TeamLineup } | undefined {
+  const target = getMatchById(beforeMatchId);
+  if (!target) return undefined;
+
+  const candidates = getMatchesForTeam(teamId)
+    .filter((m) => m.played && m.utcDate < target.utcDate)
+    .sort((a, b) => new Date(b.utcDate).getTime() - new Date(a.utcDate).getTime());
+
+  for (const m of candidates) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    const teamLineup =
+      lineup.homeTeam.teamId === teamId ? lineup.homeTeam : lineup.awayTeam.teamId === teamId ? lineup.awayTeam : undefined;
+    if (teamLineup && teamLineup.startXI.length > 0) return { match: m, teamLineup };
+  }
+  return undefined;
+}
+
+// Every fixture of the "active" matchday — used for the homepage ticket strip.
+// The active matchday is the latest one that has kicked off (at least one match
+// played) whose predecessor is fully finished; while it's in progress this mixes
+// finished matches (shown as scores) with ones still to come (shown as fixtures),
+// rather than only trickling in results one at a time as the round plays out.
+export function getActiveRoundMatches(): Match[] {
+  const all = matchesFile.matches;
+  const matchdays = [...new Set(all.map((m) => m.matchday))].sort((a, b) => a - b);
+
+  let active: number | null = null;
+  matchdays.forEach((md, i) => {
+    const mdMatches = all.filter((m) => m.matchday === md);
+    if (!mdMatches.some((m) => m.played)) return;
+    const prevMd = i > 0 ? matchdays[i - 1] : null;
+    const prevComplete = prevMd == null || all.filter((m) => m.matchday === prevMd).every((m) => m.played);
+    if (prevComplete) active = md;
+  });
+
+  if (active == null) return [];
+  return all
+    .filter((m) => m.matchday === active)
+    .sort((a, b) => new Date(a.utcDate).getTime() - new Date(b.utcDate).getTime());
 }
 
 export function getGoalsPerGameRanking(limit = 3): { team: Team; value: number }[] {
@@ -267,7 +313,36 @@ function namesMatch(a: string, b: string): boolean {
   const nb = normalizeName(b);
   if (na === nb) return true;
   if (abbreviatesTo(na, nb) || abbreviatesTo(nb, na)) return true;
-  return mononymMatch(na, nb);
+  if (mononymMatch(na, nb)) return true;
+  return transliterationMatch(na, nb);
+}
+
+// Last-resort fallback for the same player spelled differently by two data
+// providers (e.g. Highlightly's "Yehor Yarmoliuk" vs football-data.org's "Yegor
+// Yarmolyuk" — different English transliterations of the same Ukrainian name).
+// Only fires for two full (multi-part) names of nearly equal length that are
+// within a small edit distance, so it can't casually conflate two different
+// players who happen to share a surname.
+function transliterationMatch(a: string, b: string): boolean {
+  if (nameParts(a).length < 2 || nameParts(b).length < 2) return false;
+  if (Math.abs(a.length - b.length) > 2) return false;
+  return levenshteinDistance(a, b) <= 2;
+}
+
+function levenshteinDistance(a: string, b: string): number {
+  const prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  const curr = new Array(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      curr[j] =
+        a[i - 1] === b[j - 1]
+          ? prev[j - 1]
+          : 1 + Math.min(prev[j - 1], prev[j], curr[j - 1]);
+    }
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+  }
+  return prev[b.length];
 }
 
 function abbreviatesTo(shortName: string, fullName: string): boolean {
@@ -296,6 +371,16 @@ function mononymMatch(a: string, b: string): boolean {
 // getPlayers() itself calls into match-event derivation that resolves names.
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   return rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
+}
+
+// True if `name` belongs to someone who was actually part of this match's squad
+// (starting XI or substitutes bench) — used to tell a real player who's simply
+// missing from players.json yet (a just-arrived transfer the season roster hasn't
+// caught up with) apart from a name that isn't a player at all (a manager or
+// backroom staff member the lineup provider recorded a card against).
+export function isKnownMatchParticipant(name: string, teamLineup: TeamLineup): boolean {
+  const squadNames = [...teamLineup.startXI.flat(), ...teamLineup.substitutes].map((p) => p.name);
+  return squadNames.some((n) => namesMatch(n, name));
 }
 
 // "45", "90+3" -> 45, 90. Stoppage time is dropped, not added, so a full match is
