@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Player, Position, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { useUrlParams } from "@/lib/useUrlParams";
 
 type SortKey = "goals" | "assists" | "age";
 
@@ -14,19 +15,58 @@ const SORTS: { key: SortKey; label: string }[] = [
 ];
 
 const POSITIONS: Position[] = ["GK", "DF", "MF", "FW"];
+const isSortKey = (v: string | undefined): v is SortKey => SORTS.some((s) => s.key === v);
+const isPosition = (v: string | undefined): v is Position => POSITIONS.some((p) => p === v);
 
 export default function PlayersExplorer({
   players,
   teams,
+  initialQuery,
+  initialTeamId,
+  initialPosition,
+  initialJapaneseOnly,
+  initialSort,
 }: {
   players: Player[];
   teams: Team[];
+  initialQuery?: string;
+  initialTeamId?: string;
+  initialPosition?: string;
+  initialJapaneseOnly?: string;
+  initialSort?: string;
 }) {
-  const [query, setQuery] = useState("");
-  const [teamId, setTeamId] = useState<string>("all");
-  const [position, setPosition] = useState<Position | "all">("all");
-  const [japaneseOnly, setJapaneseOnly] = useState(false);
-  const [sort, setSort] = useState<SortKey>("goals");
+  const [query, setQuery] = useState(initialQuery ?? "");
+  const [teamId, setTeamId] = useState<string>(initialTeamId ?? "all");
+  const [position, setPosition] = useState<Position | "all">(isPosition(initialPosition) ? initialPosition : "all");
+  const [japaneseOnly, setJapaneseOnly] = useState(initialJapaneseOnly === "1");
+  const [sort, setSort] = useState<SortKey>(isSortKey(initialSort) ? initialSort : "goals");
+  const updateUrl = useUrlParams();
+
+  useEffect(() => {
+    const id = setTimeout(() => updateUrl({ q: query || undefined }), 300);
+    return () => clearTimeout(id);
+  }, [query, updateUrl]);
+
+  function selectTeamId(next: string) {
+    setTeamId(next);
+    updateUrl({ team: next === "all" ? undefined : next });
+  }
+
+  function selectPosition(next: Position | "all") {
+    setPosition(next);
+    updateUrl({ pos: next === "all" ? undefined : next });
+  }
+
+  function toggleJapaneseOnly() {
+    const next = !japaneseOnly;
+    setJapaneseOnly(next);
+    updateUrl({ jp: next ? "1" : undefined });
+  }
+
+  function selectSort(next: SortKey) {
+    setSort(next);
+    updateUrl({ sort: next === "goals" ? undefined : next });
+  }
 
   const teamById = useMemo(() => Object.fromEntries(teams.map((t) => [t.id, t])), [teams]);
 
@@ -56,7 +96,7 @@ export default function PlayersExplorer({
         />
         <select
           value={teamId}
-          onChange={(e) => setTeamId(e.target.value)}
+          onChange={(e) => selectTeamId(e.target.value)}
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-2 focus:outline-none"
         >
           <option value="all">全チーム</option>
@@ -68,7 +108,7 @@ export default function PlayersExplorer({
         </select>
         <div className="flex gap-1 rounded-lg border border-border bg-surface p-1">
           <button
-            onClick={() => setPosition("all")}
+            onClick={() => selectPosition("all")}
             className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
               position === "all" ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
@@ -78,7 +118,7 @@ export default function PlayersExplorer({
           {POSITIONS.map((pos) => (
             <button
               key={pos}
-              onClick={() => setPosition(pos)}
+              onClick={() => selectPosition(pos)}
               className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
                 position === pos ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}
@@ -88,7 +128,7 @@ export default function PlayersExplorer({
           ))}
         </div>
         <button
-          onClick={() => setJapaneseOnly((v) => !v)}
+          onClick={toggleJapaneseOnly}
           className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
             japaneseOnly
               ? "border-accent-2/50 bg-accent-2/15 text-accent-2"
@@ -101,7 +141,7 @@ export default function PlayersExplorer({
           {SORTS.map((s) => (
             <button
               key={s.key}
-              onClick={() => setSort(s.key)}
+              onClick={() => selectSort(s.key)}
               className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
                 sort === s.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}

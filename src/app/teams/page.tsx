@@ -7,7 +7,12 @@ export const metadata = {
   title: "チーム一覧 | Premier Fan Data",
 };
 
-export default function TeamsPage() {
+export default async function TeamsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sort?: string; q?: string }>;
+}) {
+  const { sort, q } = await searchParams;
   const teams = getStandings();
 
   return (
@@ -23,7 +28,7 @@ export default function TeamsPage() {
       </div>
 
       <SectionHeading eyebrow="Directory" title="チームを探す" />
-      <TeamsExplorer teams={teams} />
+      <TeamsExplorer teams={teams} initialSort={sort} initialQuery={q} />
     </div>
   );
 }

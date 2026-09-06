@@ -29,6 +29,14 @@ function kickoffTime(utcDate: string): string {
   });
 }
 
+function matchDate(utcDate: string): string {
+  return new Date(utcDate).toLocaleDateString("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+    timeZone: "Asia/Tokyo",
+  });
+}
+
 function Ticket({
   match,
   teamById,
@@ -45,13 +53,18 @@ function Ticket({
   const content = (
     <div className="marquee-ticket flex shrink-0 select-none items-center gap-2.5 border border-border bg-surface px-3.5 py-2.5 transition">
       <TeamBadge team={home} size={22} />
-      <span
-        className={`font-[family-name:var(--font-display)] text-sm font-bold ${
-          match.played ? "text-foreground" : "text-muted"
-        }`}
-      >
-        {match.played ? `${match.homeGoals} - ${match.awayGoals}` : kickoffTime(match.utcDate)}
-      </span>
+      <div className="flex flex-col items-center gap-0.5">
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
+          {matchDate(match.utcDate)}
+        </span>
+        <span
+          className={`font-[family-name:var(--font-display)] text-sm font-bold ${
+            match.played ? "text-foreground" : "text-muted"
+          }`}
+        >
+          {match.played ? `${match.homeGoals} - ${match.awayGoals}` : kickoffTime(match.utcDate)}
+        </span>
+      </div>
       <TeamBadge team={away} size={22} />
     </div>
   );

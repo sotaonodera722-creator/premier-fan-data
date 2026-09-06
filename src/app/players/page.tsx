@@ -7,7 +7,12 @@ export const metadata = {
   title: "選手名鑑 | Premier Fan Data",
 };
 
-export default function PlayersPage() {
+export default async function PlayersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; team?: string; pos?: string; jp?: string; sort?: string }>;
+}) {
+  const { q, team, pos, jp, sort } = await searchParams;
   const players = getPlayers();
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
@@ -61,7 +66,15 @@ export default function PlayersPage() {
       </div>
 
       <SectionHeading eyebrow="Directory" title="選手を検索" />
-      <PlayersExplorer players={players} teams={teams} />
+      <PlayersExplorer
+        players={players}
+        teams={teams}
+        initialQuery={q}
+        initialTeamId={team}
+        initialPosition={pos}
+        initialJapaneseOnly={jp}
+        initialSort={sort}
+      />
     </div>
   );
 }

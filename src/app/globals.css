@@ -86,6 +86,13 @@ body {
   height: 8px;
   width: 8px;
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 ::-webkit-scrollbar-thumb {
   background: var(--surface-2);
   border-radius: 8px;

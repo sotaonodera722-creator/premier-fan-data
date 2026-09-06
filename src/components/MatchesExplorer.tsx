@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { useUrlParams } from "@/lib/useUrlParams";
 
 type Mode = "date" | "matchday" | "team";
 
@@ -148,20 +149,52 @@ function MatchList({
   );
 }
 
+const isMode = (v: string | undefined): v is Mode => MODES.some((m) => m.key === v);
+
 export default function MatchesExplorer({
   matches,
   teams,
   currentMatchday,
   clickableMatchIds,
+  initialMode,
+  initialMatchday,
+  initialTeamId,
 }: {
   matches: Match[];
   teams: Team[];
   currentMatchday: number;
   clickableMatchIds: number[];
+  initialMode?: string;
+  initialMatchday?: string;
+  initialTeamId?: string;
 }) {
-  const [mode, setMode] = useState<Mode>("date");
-  const [matchday, setMatchday] = useState(currentMatchday);
-  const [teamId, setTeamId] = useState<number>(teams[0]?.id ?? 0);
+  const parsedInitialMatchday = Number(initialMatchday);
+  const parsedInitialTeamId = Number(initialTeamId);
+  const [mode, setMode] = useState<Mode>(isMode(initialMode) ? initialMode : "date");
+  const [matchday, setMatchday] = useState(
+    Number.isInteger(parsedInitialMatchday) && parsedInitialMatchday >= 1 ? parsedInitialMatchday : currentMatchday
+  );
+  const [teamId, setTeamId] = useState<number>(
+    Number.isInteger(parsedInitialTeamId) && teams.some((t) => t.id === parsedInitialTeamId)
+      ? parsedInitialTeamId
+      : teams[0]?.id ?? 0
+  );
+  const updateUrl = useUrlParams();
+
+  function selectMode(next: Mode) {
+    setMode(next);
+    updateUrl({ mode: next === "date" ? undefined : next });
+  }
+
+  function changeMatchday(next: number) {
+    setMatchday(next);
+    updateUrl({ matchday: String(next) });
+  }
+
+  function selectTeamId(next: number) {
+    setTeamId(next);
+    updateUrl({ team: String(next) });
+  }
 
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
   const clickableSet = useMemo(() => new Set(clickableMatchIds), [clickableMatchIds]);
@@ -201,7 +234,7 @@ export default function MatchesExplorer({
         {MODES.map((m) => (
           <button
             key={m.key}
-            onClick={() => setMode(m.key)}
+            onClick={() => selectMode(m.key)}
             className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition ${
               mode === m.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
@@ -213,7 +246,7 @@ export default function MatchesExplorer({
 
       {mode === "date" && (
         <div>
-          <MatchdayPager label={dateRangeLabel} matchday={matchday} maxMatchday={maxMatchday} onChange={setMatchday} />
+          <MatchdayPager label={dateRangeLabel} matchday={matchday} maxMatchday={maxMatchday} onChange={changeMatchday} />
           <div className="space-y-6">
             {dateGroups.map((g) => (
               <div key={g.label}>
@@ -233,7 +266,7 @@ export default function MatchesExplorer({
             label={`第${matchday}節`}
             matchday={matchday}
             maxMatchday={maxMatchday}
-            onChange={setMatchday}
+            onChange={changeMatchday}
           />
           <MatchList matches={matchdayMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
         </div>
@@ -243,7 +276,7 @@ export default function MatchesExplorer({
         <div>
           <select
             value={teamId}
-            onChange={(e) => setTeamId(Number(e.target.value))}
+            onChange={(e) => selectTeamId(Number(e.target.value))}
             className="mb-4 w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground focus:border-accent-2 focus:outline-none"
           >
             {teams.map((t) => (

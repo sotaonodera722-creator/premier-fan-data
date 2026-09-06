@@ -20,7 +20,12 @@ import HomeFixtures from "@/components/HomeFixtures";
 import PlayerRankingList from "@/components/PlayerRankingList";
 import TeamStatCard from "@/components/TeamStatCard";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ round?: string }>;
+}) {
+  const { round } = await searchParams;
   const standings = getStandings();
   const matchday = getCurrentMatchday();
   const jpPlayers = getJapanesePlayers();
@@ -111,7 +116,13 @@ export default function Home() {
               </Link>
             }
           />
-          <HomeFixtures matches={allMatches} teams={teams} currentMatchday={matchday} />
+          <HomeFixtures
+            matches={allMatches}
+            teams={teams}
+            currentMatchday={latestMatchday}
+            initialRound={round}
+            clickableMatchIds={clickableMatchIds}
+          />
           <div className="mt-8">
             <TeamStatCard
               eyebrow="Expected Goals"

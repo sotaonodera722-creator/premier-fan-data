@@ -6,7 +6,12 @@ export const metadata = {
   title: "試合 | Premier Fan Data",
 };
 
-export default function MatchesPage() {
+export default async function MatchesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string; matchday?: string; team?: string }>;
+}) {
+  const { mode, matchday, team } = await searchParams;
   const matches = getAllMatches();
   const teams = getTeams();
   const currentMatchday = getCurrentMatchday();
@@ -20,6 +25,9 @@ export default function MatchesPage() {
         teams={teams}
         currentMatchday={currentMatchday}
         clickableMatchIds={clickableMatchIds}
+        initialMode={mode}
+        initialMatchday={matchday}
+        initialTeamId={team}
       />
     </div>
   );
