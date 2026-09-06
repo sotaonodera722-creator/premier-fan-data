@@ -192,7 +192,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 7935,
@@ -242,9 +242,9 @@
     "age": 27,
     "nationality": "Germany",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 8279,
@@ -270,7 +270,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 144434,
@@ -866,9 +866,9 @@
     "age": 24,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 1,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 121103,
@@ -894,7 +894,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 1,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 170261,
@@ -920,7 +920,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 205684,
@@ -946,7 +946,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 3328,
@@ -972,7 +972,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 2,
-    "appearances": 2
+    "appearances": 3
   },
   {
     "id": 150599,
@@ -1087,9 +1087,9 @@
     "age": 29,
     "nationality": "England",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 1
   },
   {
     "id": 7829,
@@ -1295,9 +1295,9 @@
     "age": 20,
     "nationality": "England",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 3
   },
   {
     "id": 3174,
@@ -2634,7 +2634,7 @@
     "age": 27,
     "nationality": "Cameroon",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
     "appearances": 3
   },
@@ -2673,9 +2673,9 @@
     "age": 23,
     "nationality": "Slovenia",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 3
   },
   {
     "id": 133584,

@@ -23,29 +23,6 @@
     }
   },
   {
-    "id": 322,
-    "name": "Hull City AFC",
-    "shortName": "Hull City",
-    "tla": "HUL",
-    "crest": "https://crests.football-data.org/322.png",
-    "clubColors": "Orange / Black",
-    "venue": "Kingston Communications Stadium",
-    "founded": 1904,
-    "coach": null,
-    "record": {
-      "position": 2,
-      "played": 3,
-      "wins": 2,
-      "draws": 1,
-      "losses": 0,
-      "goalsFor": 3,
-      "goalsAgainst": 0,
-      "goalDiff": 3,
-      "points": 7,
-      "winRate": 66.7
-    }
-  },
-  {
     "id": 57,
     "name": "Arsenal FC",
     "shortName": "Arsenal",
@@ -56,16 +33,39 @@
     "founded": 1886,
     "coach": null,
     "record": {
-      "position": 3,
-      "played": 2,
+      "position": 2,
+      "played": 3,
       "wins": 2,
-      "draws": 0,
+      "draws": 1,
       "losses": 0,
-      "goalsFor": 4,
-      "goalsAgainst": 0,
+      "goalsFor": 5,
+      "goalsAgainst": 1,
       "goalDiff": 4,
-      "points": 6,
-      "winRate": 100
+      "points": 7,
+      "winRate": 66.7
+    }
+  },
+  {
+    "id": 322,
+    "name": "Hull City AFC",
+    "shortName": "Hull City",
+    "tla": "HUL",
+    "crest": "https://crests.football-data.org/322.png",
+    "clubColors": "Orange / Black",
+    "venue": "Kingston Communications Stadium",
+    "founded": 1904,
+    "coach": null,
+    "record": {
+      "position": 3,
+      "played": 3,
+      "wins": 2,
+      "draws": 1,
+      "losses": 0,
+      "goalsFor": 3,
+      "goalsAgainst": 0,
+      "goalDiff": 3,
+      "points": 7,
+      "winRate": 66.7
     }
   },
   {
@@ -80,15 +80,15 @@
     "coach": null,
     "record": {
       "position": 4,
-      "played": 2,
+      "played": 3,
       "wins": 2,
-      "draws": 0,
+      "draws": 1,
       "losses": 0,
-      "goalsFor": 7,
-      "goalsAgainst": 5,
+      "goalsFor": 8,
+      "goalsAgainst": 6,
       "goalDiff": 2,
-      "points": 6,
-      "winRate": 100
+      "points": 7,
+      "winRate": 66.7
     }
   },
   {
@@ -161,6 +161,29 @@
     }
   },
   {
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": null,
+    "record": {
+      "position": 8,
+      "played": 3,
+      "wins": 1,
+      "draws": 2,
+      "losses": 0,
+      "goalsFor": 5,
+      "goalsAgainst": 3,
+      "goalDiff": 2,
+      "points": 5,
+      "winRate": 33.3
+    }
+  },
+  {
     "id": 341,
     "name": "Leeds United FC",
     "shortName": "Leeds United",
@@ -171,7 +194,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -194,7 +217,7 @@
     "founded": 1898,
     "coach": null,
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 3,
       "wins": 1,
       "draws": 1,
@@ -202,52 +225,6 @@
       "goalsFor": 8,
       "goalsAgainst": 5,
       "goalDiff": 3,
-      "points": 4,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": null,
-    "record": {
-      "position": 10,
-      "played": 2,
-      "wins": 1,
-      "draws": 1,
-      "losses": 0,
-      "goalsFor": 3,
-      "goalsAgainst": 1,
-      "goalDiff": 2,
-      "points": 4,
-      "winRate": 50
-    }
-  },
-  {
-    "id": 71,
-    "name": "Sunderland AFC",
-    "shortName": "Sunderland",
-    "tla": "SUN",
-    "crest": "https://crests.football-data.org/71.png",
-    "clubColors": "Red / White",
-    "venue": "Stadium of Light",
-    "founded": 1879,
-    "coach": null,
-    "record": {
-      "position": 11,
-      "played": 3,
-      "wins": 1,
-      "draws": 1,
-      "losses": 1,
-      "goalsFor": 3,
-      "goalsAgainst": 3,
-      "goalDiff": 0,
       "points": 4,
       "winRate": 33.3
     }
@@ -263,16 +240,39 @@
     "founded": 1878,
     "coach": null,
     "record": {
-      "position": 12,
-      "played": 2,
+      "position": 11,
+      "played": 3,
       "wins": 1,
-      "draws": 0,
+      "draws": 1,
       "losses": 1,
-      "goalsFor": 5,
-      "goalsAgainst": 4,
+      "goalsFor": 7,
+      "goalsAgainst": 6,
       "goalDiff": 1,
-      "points": 3,
-      "winRate": 50
+      "points": 4,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 71,
+    "name": "Sunderland AFC",
+    "shortName": "Sunderland",
+    "tla": "SUN",
+    "crest": "https://crests.football-data.org/71.png",
+    "clubColors": "Red / White",
+    "venue": "Stadium of Light",
+    "founded": 1879,
+    "coach": null,
+    "record": {
+      "position": 12,
+      "played": 3,
+      "wins": 1,
+      "draws": 1,
+      "losses": 1,
+      "goalsFor": 3,
+      "goalsAgainst": 3,
+      "goalDiff": 0,
+      "points": 4,
+      "winRate": 33.3
     }
   },
   {
