@@ -68,12 +68,12 @@ export default function LatestResultsMarquee({
   matches,
   teamById,
   matchday,
-  lineupMatchIds,
+  clickableMatchIds,
 }: {
   matches: Match[];
   teamById: Record<number, Team>;
   matchday: number;
-  lineupMatchIds: Set<number>;
+  clickableMatchIds: Set<number>;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
@@ -223,7 +223,7 @@ export default function LatestResultsMarquee({
       >
         <div ref={rowRef} className="flex w-max gap-2">
           {[...matches, ...matches].map((m, i) => (
-            <Ticket key={`${m.id}-${i}`} match={m} teamById={teamById} clickable={lineupMatchIds.has(m.id)} />
+            <Ticket key={`${m.id}-${i}`} match={m} teamById={teamById} clickable={clickableMatchIds.has(m.id)} />
           ))}
         </div>
       </div>

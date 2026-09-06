@@ -11,6 +11,7 @@ import type {
   MatchResultLetter,
   LineupsFile,
   MatchLineup,
+  TeamLineup,
   HeadToHead,
   HeadToHeadFile,
   PlayerAppearance,
@@ -144,6 +145,39 @@ export function getMatchLineup(matchId: number): MatchLineup | undefined {
 
 export function getMatchIdsWithLineups(): number[] {
   return Object.values(lineupsFile.lineups).map((l) => l.matchId);
+}
+
+// Matches the match detail page can render something for: either a finished match
+// with real lineup data, or a not-yet-played fixture (shown with a predicted
+// lineup instead). A finished match missing lineup data still 404s.
+export function getClickableMatchIds(): number[] {
+  const upcoming = matchesFile.matches.filter((m) => !m.played).map((m) => m.id);
+  return [...getMatchIdsWithLineups(), ...upcoming];
+}
+
+// The most recent past match for this team (strictly before `beforeMatchId`'s
+// kickoff) that has real lineup data, used to show a "predicted lineup" for a
+// fixture that hasn't been played yet. Falls further back automatically if the
+// immediately preceding match is missing lineup data.
+export function getPredictedLineup(
+  teamId: number,
+  beforeMatchId: number
+): { match: Match; teamLineup: TeamLineup } | undefined {
+  const target = getMatchById(beforeMatchId);
+  if (!target) return undefined;
+
+  const candidates = getMatchesForTeam(teamId)
+    .filter((m) => m.played && m.utcDate < target.utcDate)
+    .sort((a, b) => new Date(b.utcDate).getTime() - new Date(a.utcDate).getTime());
+
+  for (const m of candidates) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    const teamLineup =
+      lineup.homeTeam.teamId === teamId ? lineup.homeTeam : lineup.awayTeam.teamId === teamId ? lineup.awayTeam : undefined;
+    if (teamLineup && teamLineup.startXI.length > 0) return { match: m, teamLineup };
+  }
+  return undefined;
 }
 
 // Every fixture of the "active" matchday — used for the homepage ticket strip.

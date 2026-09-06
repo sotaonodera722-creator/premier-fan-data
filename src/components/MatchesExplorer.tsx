@@ -122,12 +122,12 @@ function MatchdayPager({
 function MatchList({
   matches,
   teamById,
-  lineupMatchIds,
+  clickableMatchIds,
   showDate,
 }: {
   matches: Match[];
   teamById: Map<number, Team>;
-  lineupMatchIds: Set<number>;
+  clickableMatchIds: Set<number>;
   showDate?: boolean;
 }) {
   if (matches.length === 0) {
@@ -140,7 +140,7 @@ function MatchList({
           key={m.id}
           match={m}
           teamById={teamById}
-          clickable={lineupMatchIds.has(m.id)}
+          clickable={clickableMatchIds.has(m.id)}
           showDate={showDate}
         />
       ))}
@@ -152,19 +152,19 @@ export default function MatchesExplorer({
   matches,
   teams,
   currentMatchday,
-  lineupMatchIds,
+  clickableMatchIds,
 }: {
   matches: Match[];
   teams: Team[];
   currentMatchday: number;
-  lineupMatchIds: number[];
+  clickableMatchIds: number[];
 }) {
   const [mode, setMode] = useState<Mode>("date");
   const [matchday, setMatchday] = useState(currentMatchday);
   const [teamId, setTeamId] = useState<number>(teams[0]?.id ?? 0);
 
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
-  const lineupSet = useMemo(() => new Set(lineupMatchIds), [lineupMatchIds]);
+  const clickableSet = useMemo(() => new Set(clickableMatchIds), [clickableMatchIds]);
   const maxMatchday = useMemo(() => matches.reduce((m, x) => Math.max(m, x.matchday), 1), [matches]);
 
   const matchdayMatches = useMemo(
@@ -220,7 +220,7 @@ export default function MatchesExplorer({
                 <p className="mb-2 rounded-md bg-surface-2 px-3 py-1.5 text-xs font-semibold text-muted">
                   {g.label}
                 </p>
-                <MatchList matches={g.matches} teamById={teamById} lineupMatchIds={lineupSet} />
+                <MatchList matches={g.matches} teamById={teamById} clickableMatchIds={clickableSet} />
               </div>
             ))}
           </div>
@@ -235,7 +235,7 @@ export default function MatchesExplorer({
             maxMatchday={maxMatchday}
             onChange={setMatchday}
           />
-          <MatchList matches={matchdayMatches} teamById={teamById} lineupMatchIds={lineupSet} showDate />
+          <MatchList matches={matchdayMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
         </div>
       )}
 
@@ -252,7 +252,7 @@ export default function MatchesExplorer({
               </option>
             ))}
           </select>
-          <MatchList matches={teamMatches} teamById={teamById} lineupMatchIds={lineupSet} showDate />
+          <MatchList matches={teamMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
         </div>
       )}
     </div>

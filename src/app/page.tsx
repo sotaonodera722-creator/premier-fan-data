@@ -8,7 +8,7 @@ import {
   getTeams,
   getAllMatches,
   getActiveRoundMatches,
-  getMatchIdsWithLineups,
+  getClickableMatchIds,
   getTeamStatAverage,
 } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
@@ -29,7 +29,7 @@ export default function Home() {
   const allMatches = getAllMatches();
   const latestResults = getActiveRoundMatches();
   const latestMatchday = latestResults[0]?.matchday ?? matchday;
-  const lineupMatchIds = new Set(getMatchIdsWithLineups());
+  const clickableMatchIds = new Set(getClickableMatchIds());
 
   const topScorers = getTopScorers(3).map((p) => ({ player: p, value: p.goals ?? 0 }));
   const topAssists = getTopAssists(3).map((p) => ({ player: p, value: p.assists ?? 0 }));
@@ -77,7 +77,7 @@ export default function Home() {
           matches={latestResults}
           teamById={teamById}
           matchday={latestMatchday}
-          lineupMatchIds={lineupMatchIds}
+          clickableMatchIds={clickableMatchIds}
         />
       </section>
 

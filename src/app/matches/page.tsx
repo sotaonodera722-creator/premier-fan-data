@@ -1,4 +1,4 @@
-import { getAllMatches, getTeams, getCurrentMatchday, getMatchIdsWithLineups } from "@/lib/data";
+import { getAllMatches, getTeams, getCurrentMatchday, getClickableMatchIds } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import MatchesExplorer from "@/components/MatchesExplorer";
 
@@ -10,7 +10,7 @@ export default function MatchesPage() {
   const matches = getAllMatches();
   const teams = getTeams();
   const currentMatchday = getCurrentMatchday();
-  const lineupMatchIds = getMatchIdsWithLineups();
+  const clickableMatchIds = getClickableMatchIds();
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
@@ -19,7 +19,7 @@ export default function MatchesPage() {
         matches={matches}
         teams={teams}
         currentMatchday={currentMatchday}
-        lineupMatchIds={lineupMatchIds}
+        clickableMatchIds={clickableMatchIds}
       />
     </div>
   );
