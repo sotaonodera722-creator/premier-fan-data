@@ -9,6 +9,24 @@ export function generateStaticParams() {
   return getPlayers().map((p) => ({ slug: String(p.id) }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const player = getPlayerById(Number(slug));
+  if (!player) return { title: "選手 | Premier Fan Data" };
+
+  const team = getTeamById(player.teamId);
+  const where = team ? `${team.shortName}所属の` : "";
+  return {
+    title: `${player.name} | Premier Fan Data`,
+    description: `${where}${player.name}（${player.position}）のプロフィールと今季成績。出場記録・ゴール・アシストをまとめています。`,
+  };
+}
+
+
 export default async function PlayerDetailPage({
   params,
 }: {

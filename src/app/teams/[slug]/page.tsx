@@ -24,6 +24,23 @@ export function generateStaticParams() {
   return getTeams().map((t) => ({ slug: String(t.id) }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const team = getTeamById(Number(slug));
+  if (!team) return { title: "チーム | Premier Fan Data" };
+
+  const rank = team.record ? `プレミアリーグ${team.record.position}位・勝点${team.record.points}。` : "";
+  return {
+    title: `${team.shortName} | Premier Fan Data`,
+    description: `${team.name} の${rank}所属選手・直近の試合結果・今後の日程・チームスタッツをまとめています。`,
+  };
+}
+
+
 const POSITION_ORDER: Position[] = ["GK", "DF", "MF", "FW"];
 const POSITION_NAMES: Record<Position, string> = {
   GK: "ゴールキーパー",

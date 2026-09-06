@@ -94,7 +94,7 @@ export default async function Home({
       </section>
 
       <section className="mt-14 grid gap-8 lg:grid-cols-2">
-        <div>
+        <div className="min-w-0">
           <SectionHeading
             eyebrow="Standings"
             title="順位表"
@@ -106,7 +106,7 @@ export default async function Home({
           />
           <HomeStandingsTable standings={standings} />
         </div>
-        <div>
+        <div className="min-w-0">
           <SectionHeading
             eyebrow="Fixtures"
             title="ラウンド別試合日程"
