@@ -331,7 +331,7 @@ function transliterationMatch(a: string, b: string): boolean {
 
 function levenshteinDistance(a: string, b: string): number {
   const prev = Array.from({ length: b.length + 1 }, (_, j) => j);
-  let curr = new Array(b.length + 1).fill(0);
+  const curr = new Array(b.length + 1).fill(0);
   for (let i = 1; i <= a.length; i++) {
     curr[0] = i;
     for (let j = 1; j <= b.length; j++) {
