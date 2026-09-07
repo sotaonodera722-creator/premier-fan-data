@@ -3,6 +3,7 @@ import SectionHeading from "@/components/SectionHeading";
 import SampleSizeNote from "@/components/SampleSizeNote";
 import StandingsTable from "@/components/StandingsTable";
 import ZoneLegend from "@/components/ZoneLegend";
+import MovementLegend from "@/components/MovementLegend";
 
 export const metadata = {
   title: "順位表 | Premier Fan Data",
@@ -31,6 +32,7 @@ export default function StandingsPage() {
         </p>
       )}
 
+      <MovementLegend className="mb-2.5" />
       <StandingsTable rows={rows} />
       <ZoneLegend totalTeams={rows.length} hasProvisionalBoundary={hasProvisionalBoundary} />
       <SampleSizeNote />

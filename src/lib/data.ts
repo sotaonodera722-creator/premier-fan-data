@@ -4,6 +4,7 @@ import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import type {
   Team,
@@ -20,6 +21,7 @@ import type {
   JapanesePlayerSummary,
   JapanesePlayerRoundStat,
   JapaneseRoundStatus,
+  JapanesePlayerPreviousRound,
   StandingRow,
 } from "@/lib/types";
 
@@ -539,6 +541,11 @@ export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
   const latest = getLatestResults();
   const round = getRoundStats(latest.matchday);
 
+  const previousMatchday = latest.matchday - 1;
+  const previousStats = previousMatchday >= 1 ? getRoundStats(previousMatchday) : null;
+  const previousMatches =
+    previousMatchday >= 1 ? matchesFile.matches.filter((m) => m.matchday === previousMatchday) : [];
+
   return getJapanesePlayers()
     .map((player) => {
       const appearances = getPlayerAppearances(player.id);
@@ -554,9 +561,41 @@ export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
         round: roundStat,
         roundStatus: resolveRoundStatus(player, roundMatch, roundStat),
         roundMatch: roundMatch ?? null,
+        previousRound: previousStats
+          ? resolvePreviousRound(player, previousMatchday, previousMatches, previousStats, roundStat)
+          : null,
       };
     })
     .sort(compareJapaneseSummaries);
+}
+
+// The same player one round back, so the section can report a direction rather
+// than a single week's number. The status is resolved by the same rules as the
+// current round, so "ベンチ入り → 出場" is a like-for-like comparison; a round we
+// hold no lineup for resolves to "unknown" and is dropped instead of guessed at.
+function resolvePreviousRound(
+  player: Player,
+  matchday: number,
+  matches: Match[],
+  stats: Map<number, JapanesePlayerRoundStat>,
+  currentStat: JapanesePlayerRoundStat | null
+): JapanesePlayerPreviousRound | null {
+  const match = matches.find((m) => m.homeTeamId === player.teamId || m.awayTeamId === player.teamId);
+  const stat = stats.get(player.id) ?? null;
+  const status = resolveRoundStatus(player, match, stat);
+  if (status === "unknown" || status === "pending") return null;
+
+  const minutes = stat?.minutes ?? 0;
+  const currentMinutes = currentStat?.minutes ?? 0;
+  return {
+    matchday,
+    status,
+    minutes,
+    // Only comparable when he was on the pitch in both rounds. "-90分" for a
+    // player who was left out reports the drop as an arithmetic detail, which is
+    // the least interesting way to say it.
+    minutesChange: status === "played" && currentMinutes > 0 ? currentMinutes - minutes : null,
+  };
 }
 
 // "Did not play" hides three different situations from a reader following one
@@ -711,6 +750,7 @@ export function getStandingsTable(): StandingRow[] {
 
   const total = sorted.length;
   const maxPlayed = sorted.reduce((max, t) => Math.max(max, t.record?.played ?? 0), 0);
+  const movements = getRoundMovements();
 
   // Ranks held by each shared position number, so a tie can be reported as one.
   const ranksByPosition = new Map<number, number[]>();
@@ -746,6 +786,9 @@ export function getStandingsTable(): StandingRow[] {
       tieStraddlesZoneBoundary,
       played: team.record?.played ?? null,
       gamesInHand: maxPlayed - (team.record?.played ?? maxPlayed),
+      previousPosition: movements.get(team.id)?.previousPosition ?? null,
+      positionChange: movements.get(team.id)?.change ?? null,
+      roundPoints: movements.get(team.id)?.pointsGained ?? 0,
     };
   });
 }
@@ -875,4 +918,247 @@ export function getTitleRaceSummary(): {
     challenger,
     pointsClear: leader.team.record.points - (challenger?.record?.points ?? leader.team.record.points),
   };
+}
+
+// The table as it stood at the end of an earlier round, rebuilt from results.
+//
+// The feed is a snapshot: it knows today's table and nothing about last week's,
+// so a weekly site cannot say what changed without recomputing. Replaying the
+// results reproduces the feed's current table exactly — points, goal difference,
+// goals for and, crucially, its tie convention, where clubs level on all three
+// share a position and the next number is skipped. That equivalence is what
+// makes a movement figure trustworthy: both ends are counted the same way.
+export function getTableAtMatchday(matchday: number): Map<number, number> {
+  const totals = new Map<number, { points: number; goalDiff: number; goalsFor: number }>();
+  for (const team of teams) totals.set(team.id, { points: 0, goalDiff: 0, goalsFor: 0 });
+
+  for (const m of matchesFile.matches) {
+    if (!m.played || m.matchday > matchday) continue;
+    const home = totals.get(m.homeTeamId);
+    const away = totals.get(m.awayTeamId);
+    if (!home || !away || m.homeGoals == null || m.awayGoals == null) continue;
+
+    home.goalsFor += m.homeGoals;
+    away.goalsFor += m.awayGoals;
+    home.goalDiff += m.homeGoals - m.awayGoals;
+    away.goalDiff += m.awayGoals - m.homeGoals;
+    if (m.homeGoals > m.awayGoals) home.points += 3;
+    else if (m.homeGoals < m.awayGoals) away.points += 3;
+    else {
+      home.points += 1;
+      away.points += 1;
+    }
+  }
+
+  const rows = [...totals.entries()].map(([id, t]) => ({ id, ...t }));
+  const outranks = (
+    a: { points: number; goalDiff: number; goalsFor: number },
+    b: { points: number; goalDiff: number; goalsFor: number }
+  ) =>
+    b.points > a.points ||
+    (b.points === a.points && (b.goalDiff > a.goalDiff || (b.goalDiff === a.goalDiff && b.goalsFor > a.goalsFor)));
+
+  // Competition ranking: a club's position is one more than the number of clubs
+  // strictly above it, so level clubs share a number.
+  return new Map(rows.map((row) => [row.id, 1 + rows.filter((other) => outranks(row, other)).length]));
+}
+
+export interface RoundMovement {
+  /** Position at the end of the previous round; null in the opening round. */
+  previousPosition: number | null;
+  /** Places gained this round. Positive is upward. Null when there is no previous round. */
+  change: number | null;
+  /** Points won in this round alone. */
+  pointsGained: number;
+}
+
+// What this round did to each club: places moved, and points won.
+export function getRoundMovements(): Map<number, RoundMovement> {
+  const { matchday } = getLatestResults();
+  const movements = new Map<number, RoundMovement>();
+  if (matchday <= 1) {
+    for (const team of teams) {
+      movements.set(team.id, { previousPosition: null, change: null, pointsGained: pointsInRound(team.id, matchday) });
+    }
+    return movements;
+  }
+
+  const previous = getTableAtMatchday(matchday - 1);
+  for (const team of teams) {
+    const previousPosition = previous.get(team.id) ?? null;
+    const currentPosition = team.record?.position ?? null;
+    movements.set(team.id, {
+      previousPosition,
+      change:
+        previousPosition != null && currentPosition != null ? previousPosition - currentPosition : null,
+      pointsGained: pointsInRound(team.id, matchday),
+    });
+  }
+  return movements;
+}
+
+export interface RoundSummary {
+  matchday: number;
+  /** Nothing came before this round, so no clause here can be a comparison. */
+  isOpeningRound: boolean;
+  /** Every fixture in the round has been played. */
+  complete: boolean;
+  /** The round in one paragraph, assembled from the clauses that had something to say. */
+  text: string;
+}
+
+// The round in a sentence, written by rule rather than by hand.
+//
+// A sentence someone has to remember to rewrite every week is a sentence that
+// goes stale and then quietly starts lying, so every clause here is derived from
+// the same data the rest of the page is drawn from. Clauses that have nothing to
+// report drop out instead of padding: a round with no particular shape says
+// nothing about its shape, and a round with no Japanese involvement does not
+// pretend otherwise.
+export function getRoundSummary(): RoundSummary | null {
+  const { matchday, matches } = getLatestResults();
+  const played = matches.filter((m) => m.played);
+  if (played.length === 0) return null;
+
+  const complete = played.length === matches.length;
+  const isOpeningRound = matchday <= 1;
+  const clauses: string[] = [];
+
+  const goals = played.reduce((sum, m) => sum + (m.homeGoals ?? 0) + (m.awayGoals ?? 0), 0);
+  const roundLabel = isOpeningRound ? "開幕節" : `第${matchday}節`;
+  // Mid-round, the denominator has to lead: every figure below it is a figure
+  // about part of a round, and a reader who misses that reads them as final.
+  const opening = complete
+    ? `${roundLabel}は${played.length}試合で${goals}ゴール。`
+    : `${roundLabel}はここまで${matches.length}試合中${played.length}試合を終えて${goals}ゴール。`;
+
+  // The shape of the round, if it had one. Thresholds are deliberately far from
+  // ordinary — an average round should trip none of them and simply say nothing.
+  const shape = describeRoundShape(played);
+  clauses.push(opening + (shape ?? ""));
+
+  const race = describeTitleRace();
+  if (race) clauses.push(race);
+
+  if (!isOpeningRound) {
+    const climb = describeBiggestClimb();
+    if (climb) clauses.push(climb);
+  }
+
+  const japanese = describeJapaneseInvolvement(complete);
+  if (japanese) clauses.push(japanese);
+
+  return { matchday, isOpeningRound, complete, text: clauses.join("") };
+}
+
+// Reads as a connective onto the clause that follows it ("引き分けが6試合と多く、
+// 首位は…"), so it is returned with its comma attached, or not at all.
+function describeRoundShape(played: Match[]): string | null {
+  // Under half a round the sample is too thin to call anything a tendency.
+  if (played.length < 5) return null;
+
+  const draws = played.filter((m) => m.homeGoals === m.awayGoals).length;
+  const homeWins = played.filter((m) => (m.homeGoals ?? 0) > (m.awayGoals ?? 0)).length;
+  const awayWins = played.length - draws - homeWins;
+  const goals = played.reduce((sum, m) => sum + (m.homeGoals ?? 0) + (m.awayGoals ?? 0), 0);
+  const perMatch = goals / played.length;
+
+  if (draws / played.length >= 0.4) return `引き分けが${draws}試合と多く、`;
+  if (perMatch >= 3.2) return `1試合平均${perMatch.toFixed(1)}ゴールとよく点が入り、`;
+  if (perMatch <= 1.8) return `1試合平均${perMatch.toFixed(1)}ゴールと締まった内容で、`;
+  if (awayWins >= 4 && awayWins >= homeWins * 2) return `アウェイの勝利が${awayWins}試合と目立ち、`;
+  if (homeWins / played.length >= 0.6) return `ホームが${homeWins}試合で勝ち、`;
+  return null;
+}
+
+// "首位" on its own is not news. What the top of the table is doing is: pulling
+// away, or level and unresolved.
+//
+// The clause has to agree with the table printed under it. Early in a season
+// half the league can share a points total while the table still numbers them
+// 1, 2, 2, 4 — so "並んだ" is reserved for two clubs, where it reads the way
+// football coverage uses it, and a wider pile-up names the leader and the
+// tiebreak that actually put them on top instead of claiming nine joint leaders.
+function describeTitleRace(): string | null {
+  const rows = getStandingsTable().filter((r) => r.team.record);
+  const leader = rows[0];
+  const leaderRecord = leader?.team.record;
+  if (!leaderRecord) return null;
+
+  const points = leaderRecord.points;
+  const level = rows.filter((r) => r.team.record?.points === points);
+
+  if (level.length === 2) {
+    return `首位は${clubNameJa(level[0].team)}と${clubNameJa(level[1].team)}が勝点${points}で並んだ。`;
+  }
+  if (level.length > 2) {
+    const next = level[1]?.team.record;
+    const separator =
+      next && leaderRecord.goalDiff > next.goalDiff
+        ? "得失点差"
+        : next && leaderRecord.goalsFor > next.goalsFor
+          ? "総得点"
+          : null;
+    return separator
+      ? `勝点${points}で並ぶ${level.length}クラブのうち、${separator}で${clubNameJa(leader.team)}が首位に立っている。`
+      : `首位は${level.length}クラブが勝点${points}で並んだ。`;
+  }
+
+  const challenger = rows[1];
+  if (!challenger?.team.record) return `首位は${clubNameJa(leader.team)}（勝点${points}）。`;
+  return `首位は${clubNameJa(leader.team)}が勝点${points}で、${clubNameJa(
+    challenger.team
+  )}に勝点${points - challenger.team.record.points}差をつけている。`;
+}
+
+// One club stands for the whole week's movement: the one that climbed furthest.
+// A round where nobody climbed is itself worth a word, since the reason a reader
+// opens the table on a Sunday is to find out whether anything moved.
+function describeBiggestClimb(): string | null {
+  const rows = getStandingsTable().filter((r) => r.positionChange != null && r.position != null);
+  const climbs = rows
+    .filter((r) => (r.positionChange ?? 0) > 0)
+    .sort((a, b) => (b.positionChange ?? 0) - (a.positionChange ?? 0) || (a.position ?? 0) - (b.position ?? 0));
+
+  const best = climbs[0];
+  if (!best) return rows.length > 0 ? "順位の入れ替わりはなかった。" : null;
+  return `${clubNameJa(best.team)}が${best.previousPosition}位から${best.position}位へ最も順位を上げている。`;
+}
+
+// The clause the site exists for. It reports nothing rather than reporting a
+// zero, except once the round is over — by then "出場はなかった" is the answer.
+function describeJapaneseInvolvement(complete: boolean): string | null {
+  const jp = getJapaneseRoundSummary();
+  if (jp.total === 0) return null;
+  if (jp.played === 0) return complete ? "日本人選手の出場はなかった。" : null;
+
+  const record =
+    jp.goals > 0 && jp.assists > 0
+      ? `${jp.goals}ゴール${jp.assists}アシスト`
+      : jp.goals > 0
+        ? `${jp.goals}ゴール`
+        : jp.assists > 0
+          ? `${jp.assists}アシスト`
+          : null;
+
+  return record
+    ? `日本人選手は${jp.played}人が出場し、${record}を記録した。`
+    : `日本人選手は${jp.played}人が出場した。`;
+}
+
+function clubNameJa(team: Team): string {
+  return getTeamNameJa(team.id)?.full ?? team.name;
+}
+
+function pointsInRound(teamId: number, matchday: number): number {
+  return matchesFile.matches
+    .filter((m) => m.matchday === matchday && m.played && (m.homeTeamId === teamId || m.awayTeamId === teamId))
+    .reduce((sum, m) => {
+      const isHome = m.homeTeamId === teamId;
+      const scored = (isHome ? m.homeGoals : m.awayGoals) ?? 0;
+      const conceded = (isHome ? m.awayGoals : m.homeGoals) ?? 0;
+      if (scored > conceded) return sum + 3;
+      if (scored === conceded) return sum + 1;
+      return sum;
+    }, 0);
 }

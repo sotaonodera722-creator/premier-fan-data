@@ -13,6 +13,8 @@ import {
 import SectionHeading from "@/components/SectionHeading";
 import SectionLink from "@/components/SectionLink";
 import RoundStatus from "@/components/RoundStatus";
+import RoundSummaryLede from "@/components/RoundSummaryLede";
+import MovementLegend from "@/components/MovementLegend";
 import WeekendTiles from "@/components/WeekendTiles";
 import JapanesePlayersSection from "@/components/JapanesePlayersSection";
 import WeekendBoard from "@/components/WeekendBoard";
@@ -52,6 +54,8 @@ export default async function Home({
       <section className="border-b border-border pb-7 pt-2 sm:pt-10">
         <RoundStatus />
 
+        <RoundSummaryLede />
+
         <div className="mt-2 sm:mt-4">
           <WeekendBoard
             matches={results.matches}
@@ -82,6 +86,7 @@ export default async function Home({
             title="順位表"
             action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
           />
+          <MovementLegend className="mb-2.5" />
           <HomeStandingsTable rows={standingsRows} />
         </div>
         <div className="min-w-0">

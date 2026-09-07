@@ -9,6 +9,7 @@ import type { StandingRow } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import FormPills from "@/components/FormPills";
 import ZoneChip from "@/components/ZoneChip";
+import MovementIndicator from "@/components/MovementIndicator";
 
 /** "+5" / "-3" / "±0" — a bare "0" reads as missing data rather than as level. */
 function goalDiff(value: number): string {
@@ -84,8 +85,14 @@ export function StandingsCardList({
               className="block py-2.5 pl-4 pr-3 transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
             >
               <div className="flex items-center gap-2.5">
-                <span className="w-5 shrink-0 text-center font-[family-name:var(--font-display)] text-base font-bold tabular-nums text-foreground">
-                  {row.position ?? "-"}
+                {/* Position and movement read as one figure — "6th, up seven" —
+                    so they are stacked in a single column rather than separated
+                    by the badge. */}
+                <span className="flex w-6 shrink-0 flex-col items-center gap-0.5">
+                  <span className="font-[family-name:var(--font-display)] text-base font-bold leading-none tabular-nums text-foreground">
+                    {row.position ?? "-"}
+                  </span>
+                  <MovementIndicator row={row} />
                 </span>
                 <TeamBadge team={row.team} size={24} />
                 <span className="min-w-0 flex-1">
@@ -104,7 +111,7 @@ export function StandingsCardList({
                   <span className="block text-[9px] leading-tight text-muted">勝点</span>
                 </span>
               </div>
-              <div className="mt-1.5 flex items-center gap-2 pl-[1.875rem] text-[11px] text-muted">
+              <div className="mt-1.5 flex items-center gap-2 pl-[2.125rem] text-[11px] text-muted">
                 {row.provisionalZone && (
                   <ZoneChip zone={row.provisionalZone} provisional={row.tieStraddlesZoneBoundary} />
                 )}
@@ -173,6 +180,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                     <span className="font-[family-name:var(--font-display)] font-bold tabular-nums text-foreground">
                       {row.position ?? "-"}
                     </span>
+                    <MovementIndicator row={row} />
                     {row.provisionalZone && (
                       <ZoneChip zone={row.provisionalZone} provisional={row.tieStraddlesZoneBoundary} />
                     )}
