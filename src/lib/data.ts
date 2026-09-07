@@ -23,8 +23,37 @@ import type {
   JapanesePlayerRoundStat,
   JapaneseRoundStatus,
   JapanesePlayerPreviousRound,
+  Position,
+  LineupPlayer,
   StandingRow,
 } from "@/lib/types";
+
+// Every figure on this site is derived from four static JSON files that never
+// change while the process is running, so anything computed from them is
+// computed once. Without this the player pages rebuilt the whole season's
+// minutes for each of the 548 of them and the build timed out.
+function memo<T>(compute: () => T): () => T {
+  let value: T;
+  let done = false;
+  return () => {
+    if (!done) {
+      value = compute();
+      done = true;
+    }
+    return value;
+  };
+}
+
+function memoByKey<T>(compute: (key: number) => T): (key: number) => T {
+  const cache = new Map<number, T>();
+  return (key: number) => {
+    const hit = cache.get(key);
+    if (hit !== undefined) return hit;
+    const value = compute(key);
+    cache.set(key, value);
+    return value;
+  };
+}
 
 const teams = teamsJson as Team[];
 const players = playersJson as Player[];
@@ -54,7 +83,7 @@ function rawPlayersByTeam(teamId: number): Player[] {
 // top-scorer list. Overlays them with counts derived from match events (every player
 // who has actually appeared in a covered match gets a real 0-or-more value instead of
 // null), which is both more accurate and covers far more players.
-export function getPlayers(): Player[] {
+export const getPlayers: () => Player[] = memo(() => {
   const minutesMap = getPlayerMinutesMap();
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
@@ -64,10 +93,12 @@ export function getPlayers(): Player[] {
     const c = contributions.get(p.id);
     return { ...withName, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
   });
-}
+});
+
+const playersById = memo(() => new Map(getPlayers().map((p) => [p.id, p])));
 
 export function getPlayerById(id: number): Player | undefined {
-  return getPlayers().find((p) => p.id === id);
+  return playersById().get(id);
 }
 
 export function getPlayersByTeam(teamId: number): Player[] {
@@ -380,8 +411,16 @@ function mononymMatch(a: string, b: string): boolean {
 // player records, since players.json is the one place names are always in full.
 // Uses the raw roster (not getPlayers()) to avoid a circular dependency, since
 // getPlayers() itself calls into match-event derivation that resolves names.
+// Called for every name in every lineup, many times over during a build, and
+// each call is a linear scan with a normalising comparison at each step.
+const resolvedRosterPlayers = new Map<string, Player | undefined>();
+
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
-  return rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
+  const key = `${teamId}|${name}`;
+  if (resolvedRosterPlayers.has(key)) return resolvedRosterPlayers.get(key);
+  const found = rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
+  resolvedRosterPlayers.set(key, found);
+  return found;
 }
 
 // True if `name` belongs to someone who was actually part of this match's squad
@@ -434,7 +473,7 @@ function computeMatchMinutes(lineup: MatchLineup): Map<number, number> {
 }
 
 // Total season minutes per player, summed across every match we have a lineup for.
-export function getPlayerMinutesMap(): Map<number, number> {
+export const getPlayerMinutesMap: () => Map<number, number> = memo(() => {
   const totals = new Map<number, number>();
   for (const matchId of getMatchIdsWithLineups()) {
     const lineup = getMatchLineup(matchId);
@@ -444,7 +483,7 @@ export function getPlayerMinutesMap(): Map<number, number> {
     }
   }
   return totals;
-}
+});
 
 // Goals/assists for one match, keyed by player id. Only "Goal" and "Penalty" events
 // count as a personal goal (a converted penalty is its own event, separate from any
@@ -474,7 +513,7 @@ function computeMatchGoalContributions(lineup: MatchLineup): Map<number, { goals
 
 // Total season goals/assists per player, derived from match events rather than the
 // sparse players.json fields (which only cover the official top-scorer list).
-export function getPlayerGoalContributionsMap(): Map<number, { goals: number; assists: number }> {
+export const getPlayerGoalContributionsMap: () => Map<number, { goals: number; assists: number }> = memo(() => {
   const totals = new Map<number, { goals: number; assists: number }>();
   for (const matchId of getMatchIdsWithLineups()) {
     const lineup = getMatchLineup(matchId);
@@ -487,6 +526,310 @@ export function getPlayerGoalContributionsMap(): Map<number, { goals: number; as
     }
   }
   return totals;
+});
+
+// ---------------------------------------------------------------------------
+// Squad usage: is this player a regular?
+// ---------------------------------------------------------------------------
+
+/**
+ * Where a player sits in the manager's plans, by share of the club's pitch time.
+ *
+ * The thresholds are stated rather than tuned: a player on the pitch for at
+ * least seven tenths of his club's football is picked whenever he is fit, one
+ * between three and seven tenths is rotated, and anyone under that is waiting.
+ */
+export type UsageRole = "everyPresent" | "rotation" | "waiting" | "unused";
+
+const EVERY_PRESENT_SHARE = 0.7;
+const ROTATION_SHARE = 0.3;
+
+function roleForShare(share: number): UsageRole {
+  if (share <= 0) return "unused";
+  if (share >= EVERY_PRESENT_SHARE) return "everyPresent";
+  if (share >= ROTATION_SHARE) return "rotation";
+  return "waiting";
+}
+
+const LINEUP_POSITION_TO_CODE: Record<string, Position> = {
+  Goalkeeper: "GK",
+  Defender: "DF",
+  Midfielder: "MF",
+  Forward: "FW",
+};
+
+export interface SquadUsageRow {
+  /**
+   * The lineup provider's own player id. Names are not usable as a key here —
+   * 330 of the 472 players in these lineups appear under more than one spelling
+   * ("Cody Gakpo" and "C. Gakpo") — and roster ids do not exist for everyone.
+   */
+  lineupPlayerId: number;
+  /** The fullest spelling seen for him, since the provider alternates forms. */
+  name: string;
+  /**
+   * The roster entry, where players.json has one. Null for the players it is
+   * missing — around one appearance in twenty — who are counted in the ranking
+   * but have no page to link to. Leaving them out would rank a squad against an
+   * incomplete squad, which is the one thing a ranking must not do.
+   */
+  player: Player | null;
+  position: Position;
+  minutes: number;
+  starts: number;
+  /** Matches he came on in. */
+  substituteAppearances: number;
+  /** Share of the club's available pitch time, 0..1. */
+  share: number;
+  role: UsageRole;
+}
+
+export interface SquadUsage {
+  teamId: number;
+  /** Matches we hold a lineup for. The denominator behind every share here. */
+  coveredMatches: number;
+  /** Most minutes first. */
+  rows: SquadUsageRow[];
+}
+
+// Minutes for everyone who actually took the pitch in one match, keyed by the
+// provider's player id so unrostered players are counted too.
+function computeSquadMinutesByLineupId(
+  lineup: MatchLineup,
+  teamId: number
+): Map<number, { entry: LineupPlayer; minutes: number; started: boolean }> {
+  const side =
+    lineup.homeTeam.teamId === teamId
+      ? lineup.homeTeam
+      : lineup.awayTeam.teamId === teamId
+        ? lineup.awayTeam
+        : null;
+  if (!side) return new Map();
+
+  const squad = [...side.startXI.flat(), ...side.substitutes];
+  const found = new Map<number, { entry: LineupPlayer; minutes: number; started: boolean }>();
+
+  for (const entry of side.startXI.flat()) {
+    found.set(entry.id, { entry, minutes: FULL_MATCH_MINUTES, started: true });
+  }
+
+  for (const e of lineup.events ?? []) {
+    if (e.type !== "Substitution" || e.teamId !== teamId) continue;
+    const minute = parseMinute(e.minute);
+    const offName = e.player;
+    const onName = e.substitutedFor;
+    const off = offName ? squad.find((p) => namesMatch(p.name, offName)) : undefined;
+    const on = onName ? squad.find((p) => namesMatch(p.name, onName)) : undefined;
+    if (off) found.set(off.id, { entry: off, minutes: minute, started: true });
+    if (on) found.set(on.id, { entry: on, minutes: FULL_MATCH_MINUTES - minute, started: false });
+  }
+
+  return found;
+}
+
+// How a club has actually used its squad, over every match we hold a lineup for.
+export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: number) => {
+  const matches = getMatchesForTeam(teamId).filter((m) => m.played);
+  const totals = new Map<
+    number,
+    { name: string; position: Position; minutes: number; starts: number; subs: number }
+  >();
+  let coveredMatches = 0;
+
+  for (const match of matches) {
+    const lineup = getMatchLineup(match.id);
+    if (!lineup) continue;
+    coveredMatches += 1;
+
+    for (const [id, { entry, minutes, started }] of computeSquadMinutesByLineupId(lineup, teamId)) {
+      const cur = totals.get(id) ?? {
+        name: entry.name,
+        position: LINEUP_POSITION_TO_CODE[entry.position] ?? "MF",
+        minutes: 0,
+        starts: 0,
+        subs: 0,
+      };
+      // The provider alternates between "C. Gakpo" and "Cody Gakpo"; the longer
+      // form is the one worth printing.
+      if (entry.name.length > cur.name.length) cur.name = entry.name;
+      cur.minutes += minutes;
+      if (started) cur.starts += 1;
+      else cur.subs += 1;
+      totals.set(id, cur);
+    }
+  }
+
+  const clubMinutes = coveredMatches * FULL_MATCH_MINUTES;
+  const roster = getPlayersByTeam(teamId);
+  const appeared: SquadUsageRow[] = [...totals.entries()]
+    .map(([lineupPlayerId, t]) => {
+      const player = roster.find((p) => namesMatch(p.name, t.name)) ?? null;
+      const share = clubMinutes > 0 ? t.minutes / clubMinutes : 0;
+      return {
+        lineupPlayerId,
+        name: t.name,
+        player,
+        position: player?.position ?? t.position,
+        minutes: t.minutes,
+        starts: t.starts,
+        substituteAppearances: t.subs,
+        share,
+        role: roleForShare(share),
+      };
+    });
+
+  // Squad members who have not played yet belong here too. Built from the
+  // lineups alone, a goalkeeper who has started every match is the only
+  // goalkeeper at the club, and his page would report "1番手（1人中）" while his
+  // understudy's page reported two — the same ranking, two different answers,
+  // depending on who you happened to be reading about.
+  const appearedPlayerIds = new Set(appeared.map((r) => r.player?.id).filter(Boolean));
+  const neverUsed: SquadUsageRow[] = roster
+    .filter((p) => !appearedPlayerIds.has(p.id))
+    .map((player) => ({
+      // Negative so it cannot collide with a lineup provider id.
+      lineupPlayerId: -player.id,
+      name: player.name,
+      player,
+      position: player.position,
+      minutes: 0,
+      starts: 0,
+      substituteAppearances: 0,
+      share: 0,
+      role: "unused" as UsageRole,
+    }));
+
+  const rows = [...appeared, ...neverUsed].sort(
+    (a, b) => b.minutes - a.minutes || a.name.localeCompare(b.name)
+  );
+
+  return { teamId, coveredMatches, rows };
+});
+
+/**
+ * Competition ranking by minutes: one more than the number of players above him.
+ *
+ * Players level on minutes share a number, which matters most at the bottom —
+ * four squad members who have not played a minute are not fourth, fifth, sixth
+ * and seventh choice, they are all equally unused, and numbering them in name
+ * order would invent an order the data does not have.
+ */
+export function rankByMinutes(rows: SquadUsageRow[], row: SquadUsageRow): number {
+  return 1 + rows.filter((other) => other.minutes > row.minutes).length;
+}
+
+export interface PlayerUsage {
+  coveredMatches: number;
+  minutes: number;
+  share: number;
+  role: UsageRole;
+  starts: number;
+  substituteAppearances: number;
+  /** His place among the club's players in the same position, by minutes. */
+  positionRank: number;
+  positionTotal: number;
+  /** Those players, most minutes first — the comparison the rank is drawn from. */
+  positionPeers: SquadUsageRow[];
+}
+
+// "Is he a regular?" answered against his own club rather than against the league.
+//
+// A player with no minutes at all still gets an answer, because 出場なし is the
+// answer, and a section that disappears for exactly the players a reader is most
+// worried about is the wrong way round.
+export function getPlayerUsage(playerId: number): PlayerUsage | null {
+  const player = getPlayerById(playerId);
+  if (!player) return null;
+
+  const squad = getSquadUsage(player.teamId);
+  if (squad.coveredMatches === 0) return null;
+
+  const mine = squad.rows.find((r) => r.player?.id === playerId);
+  const peers = squad.rows.filter((r) => r.position === player.position);
+  // Zero when he is somehow not in his own club's squad list at all — the rank
+  // is then not a small number, it is a number we do not have.
+  const rank = mine ? rankByMinutes(peers, mine) : 0;
+
+  return {
+    coveredMatches: squad.coveredMatches,
+    minutes: mine?.minutes ?? 0,
+    share: mine?.share ?? 0,
+    role: mine?.role ?? "unused",
+    starts: mine?.starts ?? 0,
+    substituteAppearances: mine?.substituteAppearances ?? 0,
+    positionRank: rank,
+    positionTotal: peers.length,
+    positionPeers: peers,
+  };
+}
+
+export type PlayerRoundStatus = "start" | "sub" | "bench" | "out" | "unknown";
+
+export interface PlayerRoundUsage {
+  matchday: number;
+  matchId: number;
+  opponentId: number;
+  isHome: boolean;
+  homeGoals: number | null;
+  awayGoals: number | null;
+  minutes: number;
+  status: PlayerRoundStatus;
+  goals: number;
+  assists: number;
+  /** When in the match he scored or set one up, as the clock read. */
+  moments: { minute: string; kind: "goal" | "assist" }[];
+}
+
+// Round by round, including the rounds he did not play. A run of minutes is only
+// readable against the rounds it is missing from.
+export function getPlayerRoundUsage(playerId: number): PlayerRoundUsage[] {
+  const player = getPlayerById(playerId);
+  if (!player) return [];
+
+  return getMatchesForTeam(player.teamId)
+    .filter((m) => m.played)
+    .map((match): PlayerRoundUsage => {
+      const isHome = match.homeTeamId === player.teamId;
+      const base = {
+        matchday: match.matchday,
+        matchId: match.id,
+        opponentId: isHome ? match.awayTeamId : match.homeTeamId,
+        isHome,
+        homeGoals: match.homeGoals,
+        awayGoals: match.awayGoals,
+        goals: 0,
+        assists: 0,
+        moments: [] as { minute: string; kind: "goal" | "assist" }[],
+      };
+
+      const lineup = getMatchLineup(match.id);
+      if (!lineup) return { ...base, minutes: 0, status: "unknown" };
+
+      const side = isHome ? lineup.homeTeam : lineup.awayTeam;
+      const entry = [...side.startXI.flat(), ...side.substitutes].find((p) =>
+        namesMatch(p.name, player.name)
+      );
+      if (!entry) return { ...base, minutes: 0, status: "out" };
+
+      const played = computeSquadMinutesByLineupId(lineup, player.teamId).get(entry.id);
+      const moments: { minute: string; kind: "goal" | "assist" }[] = [];
+      for (const e of lineup.events ?? []) {
+        if (e.type !== "Goal" && e.type !== "Penalty") continue;
+        if (e.player && namesMatch(e.player, player.name)) moments.push({ minute: e.minute, kind: "goal" });
+        if (e.assist && namesMatch(e.assist, player.name)) moments.push({ minute: e.minute, kind: "assist" });
+      }
+      moments.sort((a, b) => parseMinute(a.minute) - parseMinute(b.minute));
+
+      return {
+        ...base,
+        minutes: played?.minutes ?? 0,
+        status: played ? (played.started ? "start" : "sub") : "bench",
+        goals: moments.filter((m) => m.kind === "goal").length,
+        assists: moments.filter((m) => m.kind === "assist").length,
+        moments,
+      };
+    })
+    .sort((a, b) => a.matchday - b.matchday);
 }
 
 export function getTopMinutes(limit = 10): { player: Player; minutes: number }[] {
@@ -537,7 +880,7 @@ export function getPlayerAppearances(playerId: number): PlayerAppearance[] {
 // we hold, ordered so whoever played most is first. Minutes stay null (rather than
 // 0) for anyone absent from every covered lineup, so the UI can say "no record"
 // instead of implying they were an unused sub.
-export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
+export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(() => {
   const minutesMap = getPlayerMinutesMap();
   const latest = getLatestResults();
   const round = getRoundStats(latest.matchday);
@@ -568,7 +911,7 @@ export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
       };
     })
     .sort(compareJapaneseSummaries);
-}
+});
 
 // The same player one round back, so the section can report a direction rather
 // than a single week's number. The status is resolved by the same rules as the
@@ -735,7 +1078,7 @@ export function getSampleSize(): {
 // shown as a tie. And clubs do not always have the same number of matches
 // played, which makes a bare position misleading; games in hand are counted so
 // the table can say so.
-export function getStandingsTable(): StandingRow[] {
+export const getStandingsTable: () => StandingRow[] = memo(() => {
   const sorted = [...teams].sort((a, b) => {
     const ra = a.record;
     const rb = b.record;
@@ -792,7 +1135,7 @@ export function getStandingsTable(): StandingRow[] {
       roundPoints: movements.get(team.id)?.pointsGained ?? 0,
     };
   });
-}
+});
 
 // Where the current round stands, in the terms a reader opening the site on a
 // Sunday morning is actually in: how much of it is already over, and when the
@@ -974,7 +1317,7 @@ export interface RoundMovement {
 }
 
 // What this round did to each club: places moved, and points won.
-export function getRoundMovements(): Map<number, RoundMovement> {
+export const getRoundMovements: () => Map<number, RoundMovement> = memo(() => {
   const { matchday } = getLatestResults();
   const movements = new Map<number, RoundMovement>();
   if (matchday <= 1) {
@@ -996,7 +1339,7 @@ export function getRoundMovements(): Map<number, RoundMovement> {
     });
   }
   return movements;
-}
+});
 
 export interface PickReason {
   /** What kind of reason this is, for the chip. */

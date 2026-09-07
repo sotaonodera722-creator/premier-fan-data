@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam, getPlayerAppearances } from "@/lib/data";
+import PlayerUsageSection from "@/components/PlayerUsageSection";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import SectionHeading from "@/components/SectionHeading";
 import DataNote from "@/components/DataNote";
-import SampleSizeNote from "@/components/SampleSizeNote";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { getPositionJa } from "@/lib/positionsJa";
 
@@ -109,43 +109,10 @@ export default async function PlayerDetailPage({
           </div>
         </section>
 
-        {appearances.length > 0 && (
-          <section className="mt-12">
-            <SectionHeading eyebrow="Appearances" title="出場記録" />
-            <div className="glass divide-y divide-border rounded-xl">
-              {appearances.map((a) => {
-                const opponent = getTeamById(a.opponentId);
-                const gf = a.isHome ? a.homeGoals : a.awayGoals;
-                const ga = a.isHome ? a.awayGoals : a.homeGoals;
-                return (
-                  <Link
-                    key={a.matchId}
-                    href={`/matches/${a.matchId}`}
-                    className="flex items-center gap-3 px-4 py-3 text-sm transition hover:bg-surface-2"
-                  >
-                    <span className="w-9 shrink-0 text-xs text-muted">第{a.matchday}節</span>
-                    <span className="w-8 shrink-0 text-xs text-muted">{a.isHome ? "H" : "A"}</span>
-                    {opponent && <TeamBadge team={opponent} size={24} />}
-                    <span className="flex-1 truncate text-foreground">{opponent?.name}</span>
-                    <span className="font-[family-name:var(--font-display)] font-bold text-foreground">
-                      {gf} - {ga}
-                    </span>
-                    <span
-                      className={`rounded-md px-2 py-1 text-[10px] font-semibold ${
-                        a.status === "start"
-                          ? "bg-accent/10 text-accent"
-                          : "bg-surface-2 text-muted"
-                      }`}
-                    >
-                      {a.status === "start" ? "先発" : "途中出場"}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-            <SampleSizeNote derived>ラインナップを取得済みの試合のみの記録です。</SampleSizeNote>
-          </section>
-        )}
+        {/* "Did he play?" the round list answers. "Is he a regular?" is the
+            question straight after it, and until now the page had no answer at
+            all — so the old flat list of appearances is folded into it. */}
+        <PlayerUsageSection player={player} />
 
         {team && teammates.length > 0 && (
           <section className="mt-12">
