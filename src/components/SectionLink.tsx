@@ -15,7 +15,7 @@ export default function SectionLink({
   return (
     <Link
       href={href}
-      className={`-my-3 inline-flex shrink-0 items-center rounded-sm py-3 text-sm font-medium text-accent-2 transition hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${className}`}
+      className={`-my-3 inline-flex min-h-[44px] shrink-0 items-center rounded-sm py-3 text-sm font-medium text-accent-2 transition hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${className}`}
     >
       {children}
     </Link>

@@ -9,10 +9,12 @@ import {
   getForm,
   getMatchLineup,
   getPlayerAppearances,
+  getStandingsTable,
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getClubProfile } from "@/lib/clubProfiles";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { POSITION_NAMES_JA, getPositionJa } from "@/lib/positionsJa";
 import TeamBadge from "@/components/TeamBadge";
@@ -22,6 +24,8 @@ import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
 import KeyTeamStats from "@/components/KeyTeamStats";
 import TeamTabs from "@/components/TeamTabs";
+import ClubBadges from "@/components/ClubBadges";
+import DataNote from "@/components/DataNote";
 import type { Position } from "@/lib/types";
 
 export function generateStaticParams() {
@@ -38,10 +42,12 @@ export async function generateMetadata({
   if (!team) return { title: "チーム | Premier Fan Data" };
 
   const nameJa = getTeamNameJa(team.id);
+  const profile = getClubProfile(team.id);
   const rank = team.record ? `プレミアリーグ${team.record.position}位・勝点${team.record.points}。` : "";
+  const where = profile ? `${profile.city}のクラブ。` : "";
   return {
     title: `${nameJa?.short ?? team.shortName} | Premier Fan Data`,
-    description: `${nameJa?.full ?? team.name} の${rank}所属選手・直近の試合結果・今後の日程・チームスタッツをまとめています。`,
+    description: `${nameJa?.full ?? team.name} の${rank}${where}所属選手・直近の試合結果・今後の日程・チームスタッツをまとめています。`,
   };
 }
 
@@ -70,6 +76,9 @@ export default async function TeamDetailPage({
   const r = team.record;
   const teamColor = getTeamColor(team.id);
   const nameJa = getTeamNameJa(team.id);
+  const profile = getClubProfile(team.id);
+  const inRelegationZone =
+    getStandingsTable().find((row) => row.team.id === team.id)?.provisionalZone === "relegation";
   const appearancesByPlayer = new Map(
     roster.map((p) => {
       const apps = getPlayerAppearances(p.id);
@@ -101,15 +110,16 @@ export default async function TeamDetailPage({
             {/* The crest and every other page still carry the English name, so keep it
                 visible here — otherwise this page is the only place the two don't match. */}
             {nameJa && <p className="mt-1 text-sm text-muted">{team.name}</p>}
+            <ClubBadges profile={profile} inRelegationZone={inRelegationZone} className="mt-2.5" />
             {jpPlayers.length > 0 && (
-              <p className="mt-2 inline-flex items-center gap-1.5 border border-accent-2/50 px-3 py-1 text-xs font-medium text-accent-2">
-                🇯🇵 日本人選手 {jpPlayers.length}名在籍
+              <p className="mt-2.5 inline-flex items-center border border-accent-2/50 px-3 py-1 text-xs font-medium text-accent-2">
+                日本人選手 {jpPlayers.length}名在籍
               </p>
             )}
           </div>
           <Link
             href={`/compare?a=${team.id}`}
-            className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-surface"
+            className="inline-flex min-h-[44px] items-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             対戦成績を比較 →
           </Link>
@@ -120,6 +130,39 @@ export default async function TeamDetailPage({
         initialTab={tab}
         overview={
           <>
+            {profile && (
+              // Before any number on this page means anything, a reader has to
+              // know who they are looking at. That goes first.
+              <section className="mt-8">
+                <SectionHeading eyebrow="Identity" title="このクラブは何者か" />
+                <div className="glass rounded-xl p-5">
+                  <p className="text-sm leading-relaxed text-foreground">{profile.identity}</p>
+                  <dl className="mt-4 grid gap-x-6 gap-y-3 border-t border-border pt-4 text-sm sm:grid-cols-3">
+                    <div>
+                      <dt className="text-[11px] text-muted">本拠地</dt>
+                      <dd className="mt-0.5 text-foreground">{profile.city}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-[11px] text-muted">スタジアム</dt>
+                      <dd className="mt-0.5 text-foreground">
+                        {profile.venueJa}
+                        <span className="block text-[11px] text-muted">{profile.venueEn}</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[11px] text-muted">創設</dt>
+                      <dd className="mt-0.5 tabular-nums text-foreground">
+                        {team.founded ? `${team.founded}年` : "不明"}
+                      </dd>
+                    </div>
+                  </dl>
+                  <DataNote>
+                    クラブの歴史・本拠地・スタジアムは Wikipedia を参考にしています。
+                  </DataNote>
+                </div>
+              </section>
+            )}
+
             {r && (
               <section className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <StatTile label="勝点" value={r.points} hint={`${r.played}試合`} />
@@ -137,7 +180,14 @@ export default async function TeamDetailPage({
               <div>
                 <SectionHeading eyebrow="Club Info" title="クラブ情報" />
                 <div className="glass space-y-3 rounded-xl p-5 text-sm">
-                  {team.venue && <Row label="スタジアム" value={team.venue} />}
+                  {profile ? (
+                    <>
+                      <Row label="本拠地" value={profile.city} />
+                      <Row label="スタジアム" value={profile.venueJa} />
+                    </>
+                  ) : (
+                    team.venue && <Row label="スタジアム" value={team.venue} />
+                  )}
                   {team.founded && <Row label="創設年" value={`${team.founded}年`} />}
                   {team.coach && <Row label="監督" value={team.coach} />}
                   {team.clubColors && <Row label="クラブカラー" value={team.clubColors} />}

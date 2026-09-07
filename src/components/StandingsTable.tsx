@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getForm, getUpcomingFixtures, getTeamById } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getClubProfile } from "@/lib/clubProfiles";
 import { jstShortDate, jstTime } from "@/lib/datetime";
 import type { StandingRow } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
@@ -14,6 +15,22 @@ function goalDiff(value: number): string {
   if (value > 0) return `+${value}`;
   if (value < 0) return String(value);
   return "±0";
+}
+
+// "Hull City are 2nd" is only surprising if you know Hull City have been away
+// for nine years. The table is where that surprise happens, so the marker goes
+// here rather than only on the club page.
+function PromotedMark({ teamId }: { teamId: number }) {
+  const profile = getClubProfile(teamId);
+  if (profile?.promotedAfterYears == null) return null;
+  return (
+    <span
+      title={`今季昇格・${profile.promotedAfterYears}年ぶりの1部`}
+      className="inline-flex shrink-0 items-center rounded-sm border border-border px-1 text-[9px] leading-4 text-muted"
+    >
+      昇格
+    </span>
+  );
 }
 
 function ClubColorBar({ teamId }: { teamId: number }) {
@@ -75,7 +92,10 @@ export function StandingsCardList({
                   <span className="block text-sm font-medium leading-tight text-foreground">
                     {nameJa?.full ?? row.team.name}
                   </span>
-                  <span className="block text-[10px] leading-tight text-muted">{row.team.name}</span>
+                  <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted">
+                    <span className="truncate">{row.team.name}</span>
+                    <PromotedMark teamId={row.team.id} />
+                  </span>
                 </span>
                 <span className="shrink-0 text-right">
                   <span className="block font-[family-name:var(--font-display)] text-lg font-bold leading-none tabular-nums text-foreground">
@@ -166,7 +186,10 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                     <TeamBadge team={row.team} size={28} />
                     <span className="min-w-0">
                       <span className="block font-medium text-foreground">{nameJa?.full ?? row.team.name}</span>
-                      <span className="block text-[11px] leading-tight text-muted">{row.team.name}</span>
+                      <span className="flex items-center gap-1.5 text-[11px] leading-tight text-muted">
+                        {row.team.name}
+                        <PromotedMark teamId={row.team.id} />
+                      </span>
                     </span>
                   </Link>
                 </td>
