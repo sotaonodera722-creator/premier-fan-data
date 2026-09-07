@@ -15,6 +15,7 @@ import MatchTimeline from "@/components/MatchTimeline";
 import MatchStats from "@/components/MatchStats";
 import MatchHeadToHead from "@/components/MatchHeadToHead";
 import SectionHeading from "@/components/SectionHeading";
+import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
 
 export function generateStaticParams() {
@@ -199,7 +200,7 @@ function SubstitutesList({ title, players, teamId }: { title: string; players: L
           const row = (
             <div className="flex items-center gap-3 px-4 py-2.5 text-sm transition hover:bg-surface-2">
               <span className="w-6 text-center text-xs font-bold text-muted">{p.number}</span>
-              <span className="flex-1 text-foreground">{p.name}</span>
+              <span className="flex-1 text-foreground">{(resolved && getPlayerNameJa(resolved.id)) ?? p.name}</span>
               <span className="text-xs text-muted">{p.position}</span>
             </div>
           );

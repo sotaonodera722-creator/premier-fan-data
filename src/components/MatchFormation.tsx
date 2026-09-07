@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { LineupPlayer, MatchLineup, Team } from "@/lib/types";
 import { getTeamColor, getContrastText, colorsClash } from "@/lib/teamColors";
 import { resolveRosterPlayer } from "@/lib/data";
+import { getPlayerNameJa } from "@/lib/playerNamesJa";
 
 function PlayerDot({
   player,
@@ -29,7 +30,7 @@ function PlayerDot({
         {player.number}
       </span>
       <span className="max-w-full truncate text-[10px] font-medium leading-tight text-white transition group-hover:underline sm:text-[11px]">
-        {player.name}
+        {(resolved && getPlayerNameJa(resolved.id)) ?? player.name}
       </span>
     </div>
   );

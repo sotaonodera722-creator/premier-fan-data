@@ -73,7 +73,7 @@ export default function PlayerRankingsExplorer({
               {team && <TeamBadge team={team} size={28} />}
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">
-                  {p.isJapanese && "🇯🇵"} {p.name}
+                  {p.isJapanese && "🇯🇵"} {p.nameJa ?? p.name}
                 </p>
                 <p className="truncate text-xs text-muted">{team?.name}</p>
               </div>

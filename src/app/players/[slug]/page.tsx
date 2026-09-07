@@ -4,6 +4,8 @@ import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam, getPlayerAppe
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import SectionHeading from "@/components/SectionHeading";
+import { getNationalityJa } from "@/lib/nationalitiesJa";
+import { getPositionJa } from "@/lib/positionsJa";
 
 export function generateStaticParams() {
   return getPlayers().map((p) => ({ slug: String(p.id) }));
@@ -21,8 +23,8 @@ export async function generateMetadata({
   const team = getTeamById(player.teamId);
   const where = team ? `${team.shortName}所属の` : "";
   return {
-    title: `${player.name} | Premier Fan Data`,
-    description: `${where}${player.name}（${player.position}）のプロフィールと今季成績。出場記録・ゴール・アシストをまとめています。`,
+    title: `${player.nameJa ?? player.name} | Premier Fan Data`,
+    description: `${where}${player.nameJa ?? player.name}（${getPositionJa(player.position)}）のプロフィールと今季成績。出場記録・ゴール・アシストをまとめています。`,
   };
 }
 
@@ -57,7 +59,7 @@ export default async function PlayerDetailPage({
               {player.isJapanese && <span className="ml-2">🇯🇵 日本人選手</span>}
             </p>
             <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              {player.name}
+              {player.nameJa ?? player.name}
             </h1>
             {team && (
               <Link
@@ -74,7 +76,7 @@ export default async function PlayerDetailPage({
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <section className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatTile label="国籍" value={player.nationality} />
+          <StatTile label="国籍" value={getNationalityJa(player.nationality)} />
           <StatTile label="年齢" value={player.age ? `${player.age}歳` : "-"} />
           <StatTile label="ゴール" value={player.goals ?? "-"} />
           <StatTile label="アシスト" value={player.assists ?? "-"} />
@@ -89,8 +91,8 @@ export default async function PlayerDetailPage({
           <div className="lg:col-span-3">
             <SectionHeading eyebrow="Profile" title="プロフィール" />
             <div className="glass space-y-3 rounded-xl p-5 text-sm">
-              <Row label="国籍" value={player.nationality} />
-              <Row label="ポジション" value={player.position} />
+              <Row label="国籍" value={getNationalityJa(player.nationality)} />
+              <Row label="ポジション" value={getPositionJa(player.position)} />
               <Row label="生年月日" value={player.dateOfBirth} />
               <Row label="年齢" value={player.age ? `${player.age}歳` : "-"} />
               {appearances.length > 0 && (
@@ -151,12 +153,12 @@ export default async function PlayerDetailPage({
                   href={`/players/${p.id}`}
                   className="glass flex flex-col items-center gap-2 rounded-xl px-3 py-4 text-center transition hover:-translate-y-0.5 hover:border-accent/40"
                 >
-                  <span className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-bold text-muted">
+                  <span className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-bold text-muted" title={getPositionJa(p.position)}>
                     {p.position}
                   </span>
                   <p className="truncate text-xs font-medium text-foreground">
                     {p.isJapanese && "🇯🇵 "}
-                    {p.name}
+                    {p.nameJa ?? p.name}
                   </p>
                   <p className="text-[10px] text-muted">{p.age ? `${p.age}歳` : ""}</p>
                 </Link>

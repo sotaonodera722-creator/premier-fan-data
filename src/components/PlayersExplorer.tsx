@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Player, Position, Team } from "@/lib/types";
+import { getNationalityJa } from "@/lib/nationalitiesJa";
 import TeamBadge from "@/components/TeamBadge";
 import { useUrlParams } from "@/lib/useUrlParams";
 
@@ -170,9 +171,9 @@ export default function PlayersExplorer({
                 {p.isJapanese && <span title="日本人選手">🇯🇵</span>}
               </div>
               <div>
-                <p className="truncate text-sm font-semibold text-foreground">{p.name}</p>
+                <p className="truncate text-sm font-semibold text-foreground">{p.nameJa ?? p.name}</p>
                 <p className="text-xs text-muted">
-                  {p.nationality} · {p.age ? `${p.age}歳` : "-"}
+                  {getNationalityJa(p.nationality)} · {p.age ? `${p.age}歳` : "-"}
                 </p>
               </div>
               {team && (

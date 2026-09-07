@@ -51,7 +51,7 @@ function PlayerChips({
               className={`flex min-h-[44px] items-center gap-2 rounded-lg border border-border px-3 py-2 transition hover:bg-surface-2 ${FOCUS_RING}`}
             >
               {team && <TeamBadge team={team} size={18} />}
-              <span className="whitespace-nowrap text-xs text-foreground">{player.name}</span>
+              <span className="whitespace-nowrap text-xs text-foreground">{player.nameJa ?? player.name}</span>
               <span className="whitespace-nowrap text-[11px] text-muted">
                 {minutes ? `今季 ${appearances}試合・${minutes}分` : "出場記録なし"}
               </span>
@@ -100,7 +100,7 @@ export default function JapanesePlayersSection({
                   <span className="whitespace-nowrap text-[10px] text-muted">第{matchday}節</span>
                 </div>
 
-                <p className="text-sm font-semibold leading-snug text-foreground">{player.name}</p>
+                <p className="text-sm font-semibold leading-snug text-foreground">{player.nameJa ?? player.name}</p>
 
                 <div>
                   <p className="flex items-baseline gap-1">
