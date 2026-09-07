@@ -40,7 +40,7 @@ function MatchRow({
   const away = teamById.get(match.awayTeamId);
 
   const content = (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 py-3 text-sm">
+    <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 py-3 text-sm">
       <div className="flex min-w-0 items-center justify-end gap-2 text-right">
         <span className="min-w-0 leading-tight text-foreground">{home && clubLabel(home)}</span>
         {home && <TeamBadge team={home} size={24} />}

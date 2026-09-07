@@ -1,10 +1,13 @@
 import {
+  getJapanesePlayerSummaries,
   getJapaneseRoundSummary,
   getRoundHighlights,
   getTitleRaceSummary,
 } from "@/lib/data";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import StatTile from "@/components/StatTile";
+import TeamBadge from "@/components/TeamBadge";
+import JapaneseSquadDots from "@/components/JapaneseSquadDots";
 import type { Team } from "@/lib/types";
 
 function clubLabel(team: Team): string {
@@ -17,6 +20,7 @@ function clubLabel(team: Team): string {
 // arrives with: did the Japanese players feature, who is on top and by how much,
 // what was worth watching, and what went against form.
 export default function WeekendTiles() {
+  const summaries = getJapanesePlayerSummaries();
   const jp = getJapaneseRoundSummary();
   const { highestScoring, biggestUpset } = getRoundHighlights();
   const title = getTitleRaceSummary();
@@ -33,6 +37,7 @@ export default function WeekendTiles() {
         value={jp.played}
         unit={`/ ${jp.total}人`}
         href="/players"
+        footer={<JapaneseSquadDots summaries={summaries} />}
         hint={
           jp.played > 0
             ? `合計${jp.minutes}分${jpInvolvement.length ? `・${jpInvolvement.join("・")}` : ""}${
@@ -48,6 +53,7 @@ export default function WeekendTiles() {
         <StatTile
           label="首位"
           value={clubLabel(title.leader)}
+          leading={<TeamBadge team={title.leader} size={30} />}
           href={`/teams/${title.leader.id}`}
           hint={
             title.challenger

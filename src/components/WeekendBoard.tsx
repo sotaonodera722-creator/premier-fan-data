@@ -90,7 +90,9 @@ export default function WeekendBoard({
               const awayGoals = m.awayGoals ?? 0;
 
               const body = (
-                <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2">
+                // min-h matches the row height used everywhere else on the site;
+                // at this type size the padding alone lands short of a thumb.
+                <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2">
                   <Side
                     team={home}
                     goals={m.homeGoals}

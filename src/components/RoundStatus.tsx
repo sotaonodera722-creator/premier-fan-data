@@ -52,7 +52,7 @@ export default function RoundStatus() {
           <li>
             <Link
               href="/matches"
-              className="-my-2 inline-flex items-center rounded-sm py-2 text-xs font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="-my-3 inline-flex min-h-[44px] items-center rounded-sm py-3 text-xs font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               日程を見る →
             </Link>
@@ -74,7 +74,7 @@ export default function RoundStatus() {
           <span>から</span>
           <Link
             href="/matches"
-            className="-my-2 inline-flex items-center rounded-sm py-2 font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="-my-3 inline-flex min-h-[44px] items-center rounded-sm py-3 font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             日程を見る →
           </Link>
