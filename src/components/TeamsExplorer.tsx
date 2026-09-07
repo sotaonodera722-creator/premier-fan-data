@@ -188,9 +188,9 @@ export default function TeamsExplorer({
                 <p className="mt-0.5 text-[11px] leading-tight text-muted">{club.team.name}</p>
               </div>
               <div className="shrink-0 text-right">
-                <p className="font-[family-name:var(--font-display)] text-xl font-bold leading-none tabular-nums text-foreground">
+                <p className="font-[family-name:var(--font-display)] text-base font-semibold leading-none tabular-nums text-muted">
                   {club.position ?? "-"}
-                  <span className="ml-0.5 text-[11px] font-normal text-muted">位</span>
+                  <span className="ml-0.5 text-[11px] font-normal">位</span>
                 </p>
                 <p className="mt-1 text-[11px] tabular-nums text-muted">勝点{club.points ?? "-"}</p>
               </div>
@@ -209,7 +209,7 @@ export default function TeamsExplorer({
             )}
 
             {club.profile && (
-              <p className="mt-2.5 text-xs leading-relaxed text-foreground">{club.profile.identity}</p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground">{club.profile.identity}</p>
             )}
 
             <div className="mt-auto space-y-2 border-t border-border pt-3.5">
