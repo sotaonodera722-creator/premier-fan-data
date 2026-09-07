@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getStandings, getTeamById, getHeadToHead } from "@/lib/data";
+import { jstYearMonth } from "@/lib/datetime";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
 import StatTile from "@/components/StatTile";
@@ -31,7 +33,7 @@ export default async function ComparePage({
         <TeamSelect name="b" label="チームB" teams={teams} selected={teamB?.id} />
         <button
           type="submit"
-          className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:brightness-110"
+          className="inline-flex min-h-[44px] items-center rounded-lg bg-accent px-5 text-sm font-semibold text-background transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           比較する
         </button>
@@ -84,7 +86,7 @@ export default async function ComparePage({
                     return (
                       <div key={i} className="flex items-center gap-3 px-4 py-3 text-sm">
                         <span className="w-20 shrink-0 text-xs text-muted">
-                          {new Date(m.utcDate).toLocaleDateString("ja-JP", { year: "numeric", month: "short", timeZone: "Asia/Tokyo" })}
+                          {jstYearMonth(m.utcDate)}
                         </span>
                         <span className="flex-1 truncate text-right text-foreground">{home?.shortName}</span>
                         <span className="font-[family-name:var(--font-display)] font-bold text-foreground">
@@ -121,14 +123,14 @@ function TeamSelect({
       <select
         name={name}
         defaultValue={selected ?? ""}
-        className="rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-foreground"
+        className="min-h-[44px] rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
       >
         <option value="" disabled>
           チームを選択
         </option>
         {teams.map((t) => (
           <option key={t.id} value={t.id}>
-            {t.name}
+            {getTeamNameJa(t.id)?.full ?? t.name}
           </option>
         ))}
       </select>
@@ -143,7 +145,9 @@ function TeamSummary({ team, align = "left" }: { team: ReturnType<typeof getTeam
     <div className={`flex flex-col items-center gap-3 ${align === "right" ? "sm:items-end" : "sm:items-start"}`}>
       <Link href={`/teams/${team.id}`} className="group flex items-center gap-3">
         <TeamBadge team={team} size={40} />
-        <span className="text-lg font-bold text-foreground transition group-hover:text-accent-2">{team.name}</span>
+        <span className="text-lg font-bold leading-tight text-foreground transition group-hover:text-accent-2">
+          {getTeamNameJa(team.id)?.full ?? team.name}
+        </span>
       </Link>
       {r && (
         <div className="grid w-full grid-cols-3 gap-2 sm:max-w-xs">

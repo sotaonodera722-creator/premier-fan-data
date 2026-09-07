@@ -36,7 +36,21 @@ function PlayerDot({
   );
 
   if (!resolved) return content;
-  return <Link href={`/players/${resolved.id}`}>{content}</Link>;
+  const label = (resolved && getPlayerNameJa(resolved.id)) ?? player.name;
+  return (
+    // Without `block` the anchor stays inline and its hit area collapses to a
+    // text line, leaving the shirt number — the largest part of the marker —
+    // untappable. The name is truncated to fit the pitch, so it is repeated in
+    // full for anyone hovering or using a screen reader.
+    <Link
+      href={`/players/${resolved.id}`}
+      title={`${player.number} ${label}`}
+      aria-label={`${label} の選手ページ`}
+      className="block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+    >
+      {content}
+    </Link>
+  );
 }
 
 function Row({ row, teamId, color, outline }: { row: LineupPlayer[]; teamId: number; color: string; outline?: boolean }) {

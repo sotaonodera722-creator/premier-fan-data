@@ -4,6 +4,8 @@ import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam, getPlayerAppe
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import SectionHeading from "@/components/SectionHeading";
+import DataNote from "@/components/DataNote";
+import SampleSizeNote from "@/components/SampleSizeNote";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { getPositionJa } from "@/lib/positionsJa";
 
@@ -81,10 +83,14 @@ export default async function PlayerDetailPage({
           <StatTile label="ゴール" value={player.goals ?? "-"} />
           <StatTile label="アシスト" value={player.assists ?? "-"} />
         </section>
-        {player.goals === null && (
-          <p className="mt-3 text-xs text-muted">
-            ※ ラインナップ取得が済んでいる試合にまだ出場していないため、ゴール・アシストのデータがありません。
-          </p>
+        {player.goals === null ? (
+          <DataNote>
+            ラインナップを取得済みの試合にまだ出場していないため、ゴール・アシストのデータがありません。
+          </DataNote>
+        ) : (
+          <DataNote>
+            ゴールとアシストは試合イベントから算出した値です。公式発表と一致しない場合があります。
+          </DataNote>
         )}
 
         <section className="mt-12 grid gap-8 lg:grid-cols-5">
@@ -137,9 +143,7 @@ export default async function PlayerDetailPage({
                 );
               })}
             </div>
-            <p className="mt-2 text-xs text-muted">
-              ラインナップ取得が済んでいる試合のみの記録です(全試合を網羅しているとは限りません)。
-            </p>
+            <SampleSizeNote derived>ラインナップを取得済みの試合のみの記録です。</SampleSizeNote>
           </section>
         )}
 

@@ -1,6 +1,7 @@
 import { getTeams, getTopScorers, getTopAssists, getTopGoalContributions, getTopMinutes } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import PlayerRankingsExplorer from "@/components/PlayerRankingsExplorer";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export const metadata = {
   title: "選手スタッツ ランキング | Premier Fan Data",
@@ -36,6 +37,7 @@ export default async function PlayerRankingsPage({
         ga={ga}
         minutes={minutes}
       />
+      <SampleSizeNote derived />
     </div>
   );
 }

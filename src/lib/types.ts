@@ -1,3 +1,5 @@
+import type { StandingZone } from "@/lib/leagueRules";
+
 export type Position = "GK" | "DF" | "MF" | "FW";
 export type MatchResultLetter = "W" | "D" | "L";
 
@@ -43,6 +45,24 @@ export interface Player {
   goals: number | null;
   assists: number | null;
   appearances: number | null;
+}
+
+export interface StandingRow {
+  team: Team;
+  /** Position in the table counted densely, 1..20 — never shared, unlike . */
+  rank: number;
+  /** The position the feed reports, which clubs it cannot separate share. */
+  position: number | null;
+  isTied: boolean;
+  tiedCount: number;
+  zone: StandingZone | null;
+  /** The zone this club could still land in when a tie spans a zone edge. */
+  provisionalZone: StandingZone | null;
+  /** True when the clubs sharing this position do not all fall in the same zone. */
+  tieStraddlesZoneBoundary: boolean;
+  played: number | null;
+  /** Matches fewer than the club that has played the most. */
+  gamesInHand: number;
 }
 
 export interface Match {
@@ -167,6 +187,8 @@ export interface JapanesePlayerRoundStat {
   assists: number;
 }
 
+export type JapaneseRoundStatus = "played" | "benched" | "absent" | "pending" | "unknown";
+
 export interface JapanesePlayerSummary {
   player: Player;
   // Season-to-date, summed over every match we hold a lineup for. null when no
@@ -179,7 +201,14 @@ export interface JapanesePlayerSummary {
   // lead with weekend numbers instead of season totals. null when they did not
   // play in it.
   round: JapanesePlayerRoundStat | null;
-  // "pending" means their club has not kicked off in this round yet, which is a
-  // different statement from "absent" (their club played and they did not feature).
-  roundStatus: "played" | "pending" | "absent";
+  // Four genuinely different answers to "did he play?", which a single
+  // "did not play" would flatten into something misleading:
+  //   played   — was on the pitch
+  //   benched  — named among the substitutes but never came on
+  //   absent   — not in the matchday squad at all
+  //   pending  — his club has not kicked off in this round yet
+  //   unknown  — the match is over but we hold no lineup for it
+  roundStatus: JapaneseRoundStatus;
+  /** The club's fixture in this round, so the UI can say when it kicks off. */
+  roundMatch: Match | null;
 }

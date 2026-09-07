@@ -11,6 +11,7 @@ import {
   getPlayerAppearances,
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
+import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { POSITION_NAMES_JA, getPositionJa } from "@/lib/positionsJa";
@@ -242,7 +243,7 @@ export default async function TeamDetailPage({
                   const isHome = m.homeTeamId === team.id;
                   const oppId = isHome ? m.awayTeamId : m.homeTeamId;
                   const opponent = getTeamById(oppId);
-                  const date = new Date(m.utcDate);
+                  const lateNight = lateNightTag(m.utcDate);
                   return (
                     <div key={m.id} className="relative flex items-center gap-3 px-4 py-3 transition hover:bg-surface-2">
                       <Link href={`/matches/${m.id}`} className="absolute inset-0" aria-label="試合詳細を見る" />
@@ -255,8 +256,10 @@ export default async function TeamDetailPage({
                       >
                         {opponent?.name}
                       </Link>
-                      <span className="text-xs text-muted">
-                        {date.toLocaleDateString("ja-JP", { month: "short", day: "numeric", timeZone: "Asia/Tokyo" })}
+                      <span className="shrink-0 text-right text-xs leading-tight text-muted">
+                        <span className="block tabular-nums">{jstShortDate(m.utcDate)}</span>
+                        <span className="block tabular-nums text-foreground">{jstTime(m.utcDate)}</span>
+                        {lateNight && <span className="block text-[10px]">{lateNight}</span>}
                       </span>
                     </div>
                   );

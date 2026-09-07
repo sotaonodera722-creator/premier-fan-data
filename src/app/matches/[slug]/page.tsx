@@ -15,6 +15,8 @@ import MatchTimeline from "@/components/MatchTimeline";
 import MatchStats from "@/components/MatchStats";
 import MatchHeadToHead from "@/components/MatchHeadToHead";
 import SectionHeading from "@/components/SectionHeading";
+import { RelativeKickoff } from "@/components/RelativeTime";
+import { jstLongDate, jstTime, lateNightNote } from "@/lib/datetime";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
 
@@ -64,7 +66,6 @@ export default async function MatchDetailPage({
   // A finished match with no lineup data is a genuine gap, not a future fixture.
   if (!lineup && match.played) notFound();
 
-  const date = new Date(match.utcDate);
   const h2h = getHeadToHead(homeTeam.id, awayTeam.id);
 
   const predictedHome = !lineup ? getPredictedLineup(homeTeam.id, matchId) : undefined;
@@ -77,8 +78,16 @@ export default async function MatchDetailPage({
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
       <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">
-        Matchday {match.matchday} ·{" "}
-        {date.toLocaleDateString("ja-JP", { year: "numeric", month: "short", day: "numeric", timeZone: "Asia/Tokyo" })}
+        Matchday {match.matchday}
+      </p>
+      <p className="mt-1.5 text-center text-sm text-muted">
+        <time dateTime={match.utcDate} className="tabular-nums">
+          {jstLongDate(match.utcDate)} {jstTime(match.utcDate)}
+        </time>
+        <span className="ml-1 text-xs">日本時間</span>
+        {lateNightNote(match.utcDate) && (
+          <span className="ml-1.5 text-xs">— {lateNightNote(match.utcDate)}のキックオフ</span>
+        )}
       </p>
 
       <div className="mt-4 flex items-center justify-center gap-6 sm:gap-10">
@@ -94,9 +103,10 @@ export default async function MatchDetailPage({
         ) : (
           <div className="flex flex-col items-center gap-1">
             <span className="font-[family-name:var(--font-display)] text-3xl font-bold text-muted">vs</span>
-            <span className="text-xs font-medium text-muted">
-              {date.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" })}
+            <span className="text-xs font-medium tabular-nums text-muted">
+              {jstTime(match.utcDate)}
             </span>
+            <RelativeKickoff iso={match.utcDate} className="text-[10px] font-semibold text-accent-2" />
           </div>
         )}
         <Link href={`/teams/${awayTeam.id}`} className="group flex flex-col items-center gap-2">
