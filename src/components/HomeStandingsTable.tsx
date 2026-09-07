@@ -3,6 +3,7 @@ import type { Team } from "@/lib/types";
 import { getForm } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import FormPills from "@/components/FormPills";
 
 export default function HomeStandingsTable({ standings }: { standings: Team[] }) {
@@ -24,6 +25,7 @@ export default function HomeStandingsTable({ standings }: { standings: Team[] })
             const pos = r?.position ?? 0;
             const isCL = pos > 0 && pos <= 4;
             const isRelegation = pos >= standings.length - 2;
+            const nameJa = getTeamNameJa(team.id);
             return (
               <tr key={team.id} className="relative border-t border-border transition hover:bg-surface-2">
                 <td className="relative px-3 py-2">
@@ -38,7 +40,18 @@ export default function HomeStandingsTable({ standings }: { standings: Team[] })
                 <td className="px-3 py-2">
                   <Link href={`/teams/${team.id}`} className="flex items-center gap-2">
                     <TeamBadge team={team} size={20} />
-                    <span className="truncate font-medium text-foreground">{team.shortName}</span>
+                    {/* Stacking the two names is what lets this cell stop truncating: the
+                        column no longer has to hold both spellings side by side. */}
+                    <span className="min-w-0">
+                      {/* The club column is only ~136px at 375px, where a full Japanese name
+                          wraps to three lines and pushes the row past 90px. Wide screens give
+                          it 300px+, so they get the real name and narrow ones get the short form. */}
+                      <span className="block font-medium text-foreground">
+                        <span className="sm:hidden">{nameJa?.short ?? team.shortName}</span>
+                        <span className="hidden sm:inline">{nameJa?.full ?? team.shortName}</span>
+                      </span>
+                      {nameJa && <span className="block text-[10px] leading-tight text-muted">{team.shortName}</span>}
+                    </span>
                     {isCL && <span className="shrink-0 text-[9px] font-bold text-success">CL</span>}
                     {isRelegation && <span className="shrink-0 text-[9px] font-bold text-danger">降格</span>}
                   </Link>

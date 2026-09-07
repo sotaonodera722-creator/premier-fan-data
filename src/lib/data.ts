@@ -3,6 +3,7 @@ import playersJson from "@/data/players.json";
 import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
+import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import type {
   Team,
   Player,
@@ -51,9 +52,11 @@ export function getPlayers(): Player[] {
   const minutesMap = getPlayerMinutesMap();
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
-    if (!minutesMap.has(p.id)) return p;
+    const nameJa = getPlayerNameJa(p.id);
+    const withName = nameJa ? { ...p, nameJa } : p;
+    if (!minutesMap.has(p.id)) return withName;
     const c = contributions.get(p.id);
-    return { ...p, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
+    return { ...withName, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
   });
 }
 

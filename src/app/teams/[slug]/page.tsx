@@ -12,6 +12,8 @@ import {
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getNationalityJa } from "@/lib/nationalitiesJa";
+import { POSITION_NAMES_JA, getPositionJa } from "@/lib/positionsJa";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import WinLossBar from "@/components/WinLossBar";
@@ -44,12 +46,7 @@ export async function generateMetadata({
 
 
 const POSITION_ORDER: Position[] = ["GK", "DF", "MF", "FW"];
-const POSITION_NAMES: Record<Position, string> = {
-  GK: "ゴールキーパー",
-  DF: "ディフェンダー",
-  MF: "ミッドフィルダー",
-  FW: "フォワード",
-};
+
 
 export default async function TeamDetailPage({
   params,
@@ -171,11 +168,11 @@ export default async function TeamDetailPage({
                         href={`/players/${p.id}`}
                         className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-surface-2"
                       >
-                        <span className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-bold text-muted">
+                        <span className="rounded-md border border-border px-1.5 py-0.5 text-[10px] font-bold text-muted" title={getPositionJa(p.position)}>
                           {p.position}
                         </span>
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-foreground">{p.name}</p>
+                          <p className="text-sm font-medium text-foreground">{p.nameJa ?? p.name}</p>
                           <p className="text-xs text-muted">{p.age ? `${p.age}歳` : ""}</p>
                         </div>
                         {p.goals !== null && (
@@ -284,7 +281,7 @@ export default async function TeamDetailPage({
                 return (
                   <div key={pos}>
                     <h3 className="mb-3 text-sm font-semibold text-muted">
-                      {POSITION_NAMES[pos]} <span className="text-xs">({group.length})</span>
+                      {POSITION_NAMES_JA[pos]} <span className="text-xs">({group.length})</span>
                     </h3>
                     <div className="overflow-x-auto rounded-xl border border-border">
                       <table className="w-full min-w-[520px] text-sm">
@@ -307,10 +304,10 @@ export default async function TeamDetailPage({
                                   className="flex items-center gap-1.5 font-medium text-foreground hover:text-accent-2"
                                 >
                                   {p.isJapanese && <span title="日本人選手">🇯🇵</span>}
-                                  {p.name}
+                                  {p.nameJa ?? p.name}
                                 </Link>
                               </td>
-                              <td className="px-4 py-2.5 text-muted">{p.nationality}</td>
+                              <td className="px-4 py-2.5 text-muted">{getNationalityJa(p.nationality)}</td>
                               <td className="px-4 py-2.5 text-center text-muted">{p.age ?? "-"}</td>
                               <td className="px-4 py-2.5 text-center text-muted">
                                 {formatAppearances(appearancesByPlayer.get(p.id))}

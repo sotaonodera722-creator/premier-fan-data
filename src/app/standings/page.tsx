@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getStandings, getCurrentMatchday, getForm, getUpcomingFixtures, getTeamById } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
 
@@ -40,6 +41,7 @@ export default function StandingsPage() {
               const pos = r?.position ?? 0;
               const isCL = pos > 0 && pos <= 4;
               const isRelegation = pos >= standings.length - 2;
+              const nameJa = getTeamNameJa(team.id);
               const nextFixture = getUpcomingFixtures(team.id, 1)[0];
               const nextOpponent = nextFixture
                 ? getTeamById(nextFixture.homeTeamId === team.id ? nextFixture.awayTeamId : nextFixture.homeTeamId)
@@ -61,7 +63,12 @@ export default function StandingsPage() {
                   <td className="px-4 py-3">
                     <Link href={`/teams/${team.id}`} className="flex items-center gap-3">
                       <TeamBadge team={team} size={30} />
-                      <span className="font-medium text-foreground">{team.name}</span>
+                      {/* Japanese leads, with the English official name kept underneath — the
+                          crest and every other football site spell it that way. */}
+                      <span className="min-w-0">
+                        <span className="block font-medium text-foreground">{nameJa?.full ?? team.name}</span>
+                        {nameJa && <span className="block text-[11px] leading-tight text-muted">{team.name}</span>}
+                      </span>
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-center text-muted">{r?.played ?? "-"}</td>

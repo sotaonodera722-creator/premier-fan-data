@@ -29,7 +29,11 @@ export interface Team {
 
 export interface Player {
   id: number;
+  // Always the Latin-script name from the feed. Lineup and event matching keys off
+  // this, so it must not be replaced with a translation — see playerNamesJa.ts.
   name: string;
+  // Kanji name where we have one. Display code prefers it; matching must not.
+  nameJa?: string;
   teamId: number;
   position: Position;
   dateOfBirth: string;
