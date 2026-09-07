@@ -43,7 +43,13 @@ export default function HomeStandingsTable({ standings }: { standings: Team[] })
                     {/* Stacking the two names is what lets this cell stop truncating: the
                         column no longer has to hold both spellings side by side. */}
                     <span className="min-w-0">
-                      <span className="block font-medium text-foreground">{nameJa?.short ?? team.shortName}</span>
+                      {/* The club column is only ~136px at 375px, where a full Japanese name
+                          wraps to three lines and pushes the row past 90px. Wide screens give
+                          it 300px+, so they get the real name and narrow ones get the short form. */}
+                      <span className="block font-medium text-foreground">
+                        <span className="sm:hidden">{nameJa?.short ?? team.shortName}</span>
+                        <span className="hidden sm:inline">{nameJa?.full ?? team.shortName}</span>
+                      </span>
                       {nameJa && <span className="block text-[10px] leading-tight text-muted">{team.shortName}</span>}
                     </span>
                     {isCL && <span className="shrink-0 text-[9px] font-bold text-success">CL</span>}
