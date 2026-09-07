@@ -19,6 +19,7 @@ import type {
   PlayerAppearance,
   JapanesePlayerSummary,
   JapanesePlayerRoundStat,
+  JapaneseRoundStatus,
   StandingRow,
 } from "@/lib/types";
 
@@ -537,28 +538,69 @@ export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
   const minutesMap = getPlayerMinutesMap();
   const latest = getLatestResults();
   const round = getRoundStats(latest.matchday);
-  // Clubs whose fixture in this round has not kicked off yet.
-  const pendingTeamIds = new Set(
-    latest.matches.filter((m) => !m.played).flatMap((m) => [m.homeTeamId, m.awayTeamId])
-  );
+
   return getJapanesePlayers()
     .map((player) => {
       const appearances = getPlayerAppearances(player.id);
       const roundStat = round.get(player.id) ?? null;
+      const roundMatch = latest.matches.find(
+        (m) => m.homeTeamId === player.teamId || m.awayTeamId === player.teamId
+      );
       return {
         player,
         minutes: minutesMap.get(player.id) ?? null,
         appearances: appearances.length,
         starts: appearances.filter((a) => a.status === "start").length,
         round: roundStat,
-        roundStatus: ((roundStat?.minutes ?? 0) > 0
-          ? "played"
-          : pendingTeamIds.has(player.teamId)
-            ? "pending"
-            : "absent") as JapanesePlayerSummary["roundStatus"],
+        roundStatus: resolveRoundStatus(player, roundMatch, roundStat),
+        roundMatch: roundMatch ?? null,
       };
     })
-    .sort((a, b) => (b.round?.minutes ?? -1) - (a.round?.minutes ?? -1) || (b.minutes ?? -1) - (a.minutes ?? -1));
+    .sort(compareJapaneseSummaries);
+}
+
+// "Did not play" hides three different situations from a reader following one
+// player: his club has not kicked off yet, he was on the bench and never used,
+// or he was left out of the squad entirely. Only the last one is bad news, so
+// they are reported separately.
+function resolveRoundStatus(
+  player: Player,
+  match: Match | undefined,
+  roundStat: JapanesePlayerRoundStat | null
+): JapaneseRoundStatus {
+  if ((roundStat?.minutes ?? 0) > 0) return "played";
+  if (!match) return "unknown";
+  if (!match.played) return "pending";
+
+  const lineup = getMatchLineup(match.id);
+  // A finished match with no lineup can't distinguish an unused substitute from
+  // an omission, and guessing either way would be a claim we cannot support.
+  if (!lineup) return "unknown";
+
+  const side = match.homeTeamId === player.teamId ? lineup.homeTeam : lineup.awayTeam;
+  const named = [...side.startXI.flat(), ...side.substitutes].some((p) =>
+    namesMatch(p.name, player.name)
+  );
+  return named ? "benched" : "absent";
+}
+
+// Whoever played most this round leads, then the bench, then the squad
+// omissions, and finally the clubs still to play — so the section opens on what
+// actually happened and the "still to come" tail reads as a preview.
+const ROUND_STATUS_ORDER: Record<JapaneseRoundStatus, number> = {
+  played: 0,
+  benched: 1,
+  absent: 2,
+  unknown: 3,
+  pending: 4,
+};
+
+function compareJapaneseSummaries(a: JapanesePlayerSummary, b: JapanesePlayerSummary): number {
+  return (
+    ROUND_STATUS_ORDER[a.roundStatus] - ROUND_STATUS_ORDER[b.roundStatus] ||
+    (b.round?.minutes ?? -1) - (a.round?.minutes ?? -1) ||
+    (b.minutes ?? -1) - (a.minutes ?? -1)
+  );
 }
 
 // Minutes and goal involvement for a single round, for anyone who took the pitch in
@@ -706,4 +748,131 @@ export function getStandingsTable(): StandingRow[] {
       gamesInHand: maxPlayed - (team.record?.played ?? maxPlayed),
     };
   });
+}
+
+// Where the current round stands, in the terms a reader opening the site on a
+// Sunday morning is actually in: how much of it is already over, and when the
+// rest kicks off. The round is structurally unfinished at that hour — Japanese
+// kickoff times run from Saturday evening to Monday small hours — so "this
+// weekend" has to mean both halves at once.
+export function getRoundProgress(): {
+  matchday: number;
+  total: number;
+  played: number;
+  pending: number;
+  /** Fixtures still to come in this round, earliest first. */
+  remaining: Match[];
+  /** First kickoff of the following round, once this one is over. */
+  nextRoundKickoff: Match | null;
+} {
+  const latest = getLatestResults();
+  const remaining = latest.matches.filter((m) => !m.played);
+  const nextRoundKickoff =
+    remaining.length > 0
+      ? null
+      : (matchesFile.matches
+          .filter((m) => m.matchday > latest.matchday)
+          .sort((a, b) => new Date(a.utcDate).getTime() - new Date(b.utcDate).getTime())[0] ?? null);
+  return {
+    matchday: latest.matchday,
+    total: latest.matches.length,
+    played: latest.played,
+    pending: latest.pending,
+    remaining,
+    nextRoundKickoff,
+  };
+}
+
+// The round through the eyes of someone who came here for the Japanese players:
+// how many of the nine were involved, not how many goals the league scored.
+export function getJapaneseRoundSummary(): {
+  total: number;
+  played: number;
+  benched: number;
+  absent: number;
+  pending: number;
+  minutes: number;
+  goals: number;
+  assists: number;
+} {
+  const summaries = getJapanesePlayerSummaries();
+  const count = (status: JapaneseRoundStatus) =>
+    summaries.filter((s) => s.roundStatus === status).length;
+  return {
+    total: summaries.length,
+    played: count("played"),
+    benched: count("benched"),
+    absent: count("absent") + count("unknown"),
+    pending: count("pending"),
+    minutes: summaries.reduce((sum, s) => sum + (s.round?.minutes ?? 0), 0),
+    goals: summaries.reduce((sum, s) => sum + (s.round?.goals ?? 0), 0),
+    assists: summaries.reduce((sum, s) => sum + (s.round?.assists ?? 0), 0),
+  };
+}
+
+export interface RoundHighlight {
+  match: Match;
+  homeTeam: Team;
+  awayTeam: Team;
+}
+
+// Two things worth pointing at in a finished round, both picked by rule rather
+// than by hand so nothing here depends on someone remembering to write it.
+export function getRoundHighlights(): {
+  highestScoring: (RoundHighlight & { goals: number }) | null;
+  /** The lowest-placed club to beat the highest-placed one, by current table position. */
+  biggestUpset:
+    | (RoundHighlight & { winner: Team; loser: Team; winnerRank: number; loserRank: number; gap: number })
+    | null;
+} {
+  const played = getLatestResults().matches.filter((m) => m.played);
+  const rankByTeam = new Map(getStandingsTable().map((r) => [r.team.id, r.position ?? r.rank]));
+
+  const withTeams = played.flatMap((match) => {
+    const homeTeam = getTeamById(match.homeTeamId);
+    const awayTeam = getTeamById(match.awayTeamId);
+    return homeTeam && awayTeam ? [{ match, homeTeam, awayTeam }] : [];
+  });
+
+  const highestScoring = withTeams
+    .map((h) => ({ ...h, goals: (h.match.homeGoals ?? 0) + (h.match.awayGoals ?? 0) }))
+    .sort((a, b) => b.goals - a.goals)[0];
+
+  const upsets = withTeams.flatMap((h) => {
+    const homeGoals = h.match.homeGoals ?? 0;
+    const awayGoals = h.match.awayGoals ?? 0;
+    if (homeGoals === awayGoals) return [];
+    const winner = homeGoals > awayGoals ? h.homeTeam : h.awayTeam;
+    const loser = homeGoals > awayGoals ? h.awayTeam : h.homeTeam;
+    const winnerRank = rankByTeam.get(winner.id);
+    const loserRank = rankByTeam.get(loser.id);
+    if (winnerRank == null || loserRank == null || winnerRank <= loserRank) return [];
+    return [{ ...h, winner, loser, winnerRank, loserRank, gap: winnerRank - loserRank }];
+  });
+
+  return {
+    highestScoring: highestScoring && highestScoring.goals > 0 ? highestScoring : null,
+    biggestUpset: upsets.sort((a, b) => b.gap - a.gap)[0] ?? null,
+  };
+}
+
+// The gap between the leader and whoever is closest, which is what "首位" means
+// in practice: a three-point lead and a level-on-points lead are different
+// stories told by the same club name.
+export function getTitleRaceSummary(): {
+  leader: Team;
+  points: number;
+  challenger: Team | null;
+  pointsClear: number;
+} | null {
+  const rows = getStandingsTable().filter((r) => r.team.record);
+  const leader = rows[0];
+  if (!leader?.team.record) return null;
+  const challenger = rows[1]?.team ?? null;
+  return {
+    leader: leader.team,
+    points: leader.team.record.points,
+    challenger,
+    pointsClear: leader.team.record.points - (challenger?.record?.points ?? leader.team.record.points),
+  };
 }

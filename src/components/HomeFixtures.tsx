@@ -148,7 +148,7 @@ export default function HomeFixtures({
                 const away = teamById.get(m.awayTeamId);
                 if (!home || !away) return null;
                 const content = (
-                  <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5">
+                  <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5">
                     <Side team={home} align="home" />
                     <span className="flex w-14 flex-col items-center justify-self-center leading-tight">
                       {m.played ? (
