@@ -79,7 +79,7 @@ export default function TeamsExplorer({
             <button
               key={s.key}
               onClick={() => selectSort(s.key)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
+              className={`inline-flex min-h-[44px] items-center rounded-md px-3 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                 sort === s.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}
             >
@@ -91,7 +91,7 @@ export default function TeamsExplorer({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="チーム名で検索"
-          className="ml-auto w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-2 focus:outline-none"
+          className="ml-auto w-full max-w-xs min-h-[44px] rounded-lg border border-border bg-surface px-3.5 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-2 focus:outline-none"
         />
       </div>
 

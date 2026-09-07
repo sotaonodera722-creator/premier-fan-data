@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { getHeadToHead, getTeamById } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
+import SectionLink from "@/components/SectionLink";
 import { jstYearMonth } from "@/lib/datetime";
 import type { Team } from "@/lib/types";
 
@@ -65,12 +65,9 @@ export default function MatchHeadToHead({
         </div>
       )}
 
-      <Link
-        href={`/compare?a=${homeTeam.id}&b=${awayTeam.id}`}
-        className="mt-3 inline-block text-sm font-medium text-accent-2 hover:underline"
-      >
+      <SectionLink href={`/compare?a=${homeTeam.id}&b=${awayTeam.id}`} className="mt-6">
         詳しく比較する →
-      </Link>
+      </SectionLink>
     </div>
   );
 }

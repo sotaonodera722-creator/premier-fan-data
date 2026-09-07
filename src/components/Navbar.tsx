@@ -20,7 +20,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link
+          href="/"
+          className="-my-1 flex min-h-[44px] items-center gap-2.5 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-sm font-bold text-background">
             PL
           </span>
@@ -36,7 +39,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-md px-3.5 py-2 text-sm font-medium transition-colors ${
+                className={`inline-flex min-h-[44px] items-center rounded-md px-3.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                   active
                     ? "bg-surface-2 text-accent"
                     : "text-muted hover:bg-surface hover:text-foreground"
@@ -51,7 +54,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-foreground sm:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-md border border-border text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:hidden"
           aria-label="メニュー"
         >
           <span className="text-lg leading-none">{open ? "×" : "≡"}</span>
@@ -67,7 +70,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-md px-3.5 py-2.5 text-sm font-medium ${
+                className={`inline-flex min-h-[44px] items-center rounded-md px-3.5 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                   active ? "bg-surface-2 text-accent" : "text-muted"
                 }`}
               >

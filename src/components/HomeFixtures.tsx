@@ -1,15 +1,33 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import MatchdayPills from "@/components/MatchdayPills";
+import { RelativeKickoff } from "@/components/RelativeTime";
 import { useUrlParams } from "@/lib/useUrlParams";
-import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { jstShortDate, jstTime, lateNightNote } from "@/lib/datetime";
 
-// Below this many pixels of horizontal movement, a left-button press-and-move is
-// still treated as a click (so tapping a round pill keeps switching rounds).
-const DRAG_THRESHOLD_PX = 5;
+function clubLabel(team: Team): string {
+  return getTeamNameJa(team.id)?.short ?? team.shortName;
+}
+
+/** One side of a fixture. Mirrored for the away club so the score sits centred. */
+function Side({ team, align }: { team: Team; align: "home" | "away" }) {
+  return (
+    <span
+      className={`flex min-w-0 items-center gap-1.5 ${
+        align === "home" ? "justify-end text-right" : "justify-start text-left"
+      }`}
+    >
+      {align === "away" && <TeamBadge team={team} size={20} />}
+      <span className="min-w-0 text-[13px] leading-tight text-foreground">{clubLabel(team)}</span>
+      {align === "home" && <TeamBadge team={team} size={20} />}
+    </span>
+  );
+}
 
 export default function HomeFixtures({
   matches,
@@ -28,9 +46,6 @@ export default function HomeFixtures({
   const [matchday, setMatchdayState] = useState(
     Number.isInteger(parsedInitialRound) && parsedInitialRound >= 1 ? parsedInitialRound : currentMatchday
   );
-  const pillTrackRef = useRef<HTMLDivElement>(null);
-  const pillDragRef = useRef({ pressing: false, dragging: false, startX: 0, startScrollLeft: 0 });
-  const suppressPillClickRef = useRef(false);
   const updateUrl = useUrlParams();
 
   function setMatchday(next: number) {
@@ -42,6 +57,20 @@ export default function HomeFixtures({
   const maxMatchday = useMemo(() => matches.reduce((m, x) => Math.max(m, x.matchday), 1), [matches]);
   const rounds = useMemo(() => Array.from({ length: maxMatchday }, (_, i) => i + 1), [maxMatchday]);
   const roundMatches = useMemo(() => matches.filter((m) => m.matchday === matchday), [matches, matchday]);
+
+  // Grouping by Japanese calendar day is what lets the club names stop
+  // truncating: the date moves out of every row into one header per day, which
+  // hands roughly 60px back to each name.
+  const dayGroups = useMemo(() => {
+    const groups: { date: string; note: string | null; matches: Match[] }[] = [];
+    for (const m of roundMatches) {
+      const date = jstShortDate(m.utcDate);
+      const last = groups[groups.length - 1];
+      if (last && last.date === date) last.matches.push(m);
+      else groups.push({ date, note: lateNightNote(m.utcDate), matches: [m] });
+    }
+    return groups;
+  }, [roundMatches]);
 
   // The list opens on the next unplayed round, but any round is one pill away —
   // so the header has to say what the rows below actually are rather than always
@@ -82,100 +111,76 @@ export default function HomeFixtures({
           </svg>
         </button>
         {roundStatus && (
-          <span className="ml-1 shrink-0 rounded-md border border-border px-1.5 py-0.5 text-[10px] font-semibold text-muted">
+          <span className="shrink-0 rounded-md border border-border px-1.5 py-0.5 text-[10px] font-semibold text-muted">
             {roundStatus}
           </span>
         )}
-      </div>
-
-      <div
-        ref={pillTrackRef}
-        className="no-scrollbar mb-3 flex cursor-grab gap-1.5 overflow-x-auto select-none active:cursor-grabbing"
-        onClickCapture={(e) => {
-          if (!suppressPillClickRef.current) return;
-          suppressPillClickRef.current = false;
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onPointerDown={(e) => {
-          if (e.button !== 0) return;
-          pillDragRef.current.pressing = true;
-          pillDragRef.current.startX = e.clientX;
-          pillDragRef.current.startScrollLeft = pillTrackRef.current?.scrollLeft ?? 0;
-        }}
-        onPointerMove={(e) => {
-          const state = pillDragRef.current;
-          if (!state.pressing) return;
-          const delta = e.clientX - state.startX;
-          if (!state.dragging) {
-            if (Math.abs(delta) < DRAG_THRESHOLD_PX) return;
-            state.dragging = true;
-            e.currentTarget.setPointerCapture(e.pointerId);
-          }
-          if (pillTrackRef.current) pillTrackRef.current.scrollLeft = state.startScrollLeft - delta;
-        }}
-        onPointerUp={(e) => {
-          const state = pillDragRef.current;
-          if (state.dragging) {
-            suppressPillClickRef.current = true;
-            e.currentTarget.releasePointerCapture(e.pointerId);
-          }
-          state.pressing = false;
-          state.dragging = false;
-        }}
-        onPointerCancel={() => {
-          pillDragRef.current.pressing = false;
-          pillDragRef.current.dragging = false;
-        }}
-        onDragStart={(e) => e.preventDefault()}
-      >
-        {rounds.map((r) => (
+        {matchday !== currentMatchday && (
+          // Thirty-eight rounds is a long way to wander. One tap always comes back.
           <button
-            key={r}
-            onClick={() => setMatchday(r)}
-            className={`inline-flex min-h-[44px] shrink-0 items-center rounded-full px-3.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-              r === matchday
-                ? "bg-accent font-semibold text-background"
-                : "border border-border text-muted hover:text-foreground"
-            }`}
+            type="button"
+            onClick={() => setMatchday(currentMatchday)}
+            className="-my-2 ml-auto shrink-0 rounded-sm py-2 text-xs font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            第{r}節
+            第{currentMatchday}節へ戻る
           </button>
-        ))}
+        )}
       </div>
 
-      <div className="glass divide-y divide-border overflow-hidden rounded-xl">
-        {roundMatches.length === 0 && <p className="p-4 text-sm text-muted">この節の試合データがありません。</p>}
-        {roundMatches.map((m) => {
-          const home = teamById.get(m.homeTeamId);
-          const away = teamById.get(m.awayTeamId);
-          if (!home || !away) return null;
-          const content = (
-            <div className="flex items-center gap-2.5 px-4 py-2.5 text-sm">
-              <span className="w-16 shrink-0 text-[11px] leading-tight text-muted">
-                <span className="block tabular-nums">{jstShortDate(m.utcDate)}</span>
-                {lateNightTag(m.utcDate) && <span className="block text-[10px]">{lateNightTag(m.utcDate)}</span>}
-              </span>
-              <span className="flex flex-1 items-center justify-end gap-1.5 truncate">
-                <span className="truncate text-foreground">{home.shortName}</span>
-                <TeamBadge team={home} size={20} />
-              </span>
-              <span className="w-10 shrink-0 text-center font-[family-name:var(--font-display)] text-xs font-bold text-muted">
-                {m.played ? `${m.homeGoals}-${m.awayGoals}` : jstTime(m.utcDate)}
-              </span>
-              <span className="flex flex-1 items-center gap-1.5 truncate">
-                <TeamBadge team={away} size={20} />
-                <span className="truncate text-foreground">{away.shortName}</span>
-              </span>
+      <div className="mb-3">
+        <MatchdayPills rounds={rounds} matchday={matchday} onChange={setMatchday} />
+      </div>
+
+      {roundMatches.length === 0 && (
+        <p className="glass rounded-xl p-4 text-sm text-muted">この節の試合データがありません。</p>
+      )}
+
+      <div className="space-y-3">
+        {dayGroups.map((group) => (
+          <div key={group.date} className="glass overflow-hidden rounded-xl">
+            <p className="flex items-baseline gap-2 border-b border-border bg-background-alt px-3 py-1.5 text-[11px] font-semibold text-foreground">
+              <span className="tabular-nums">{group.date}</span>
+              {group.note && <span className="font-normal text-muted">{group.note}</span>}
+            </p>
+            <div className="divide-y divide-border">
+              {group.matches.map((m) => {
+                const home = teamById.get(m.homeTeamId);
+                const away = teamById.get(m.awayTeamId);
+                if (!home || !away) return null;
+                const content = (
+                  <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5">
+                    <Side team={home} align="home" />
+                    <span className="flex w-14 flex-col items-center justify-self-center leading-tight">
+                      {m.played ? (
+                        <span className="font-[family-name:var(--font-display)] text-sm font-bold tabular-nums text-foreground">
+                          {m.homeGoals}-{m.awayGoals}
+                        </span>
+                      ) : (
+                        <>
+                          <span className="text-xs font-medium tabular-nums text-foreground">
+                            {jstTime(m.utcDate)}
+                          </span>
+                          <RelativeKickoff iso={m.utcDate} className="text-[9px] text-accent-2" />
+                        </>
+                      )}
+                    </span>
+                    <Side team={away} align="away" />
+                  </div>
+                );
+                if (!clickableMatchIds.has(m.id)) return <div key={m.id}>{content}</div>;
+                return (
+                  <Link
+                    key={m.id}
+                    href={`/matches/${m.id}`}
+                    className="block transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
+                  >
+                    {content}
+                  </Link>
+                );
+              })}
             </div>
-          );
-          if (!clickableMatchIds.has(m.id)) return <div key={m.id}>{content}</div>;
-          return (
-            <Link key={m.id} href={`/matches/${m.id}`} className="block transition hover:bg-surface-2">
-              {content}
-            </Link>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

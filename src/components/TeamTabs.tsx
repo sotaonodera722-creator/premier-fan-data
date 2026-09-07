@@ -38,7 +38,7 @@ export default function TeamTabs({
             <button
               key={t.key}
               onClick={() => selectTab(t.key)}
-              className={`shrink-0 border-b-2 px-4 py-3 text-sm font-medium transition ${
+              className={`inline-flex min-h-[44px] shrink-0 items-center border-b-2 px-4 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                 tab === t.key
                   ? "border-accent text-foreground"
                   : "border-transparent text-muted hover:text-foreground"
