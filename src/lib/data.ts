@@ -15,6 +15,8 @@ import type {
   HeadToHead,
   HeadToHeadFile,
   PlayerAppearance,
+  JapanesePlayerSummary,
+  JapanesePlayerRoundStat,
 } from "@/lib/types";
 
 const teams = teamsJson as Team[];
@@ -520,4 +522,82 @@ export function getPlayerAppearances(playerId: number): PlayerAppearance[] {
     });
   }
   return appearances;
+}
+
+// Japanese players with the playing time we can actually derive from the lineups
+// we hold, ordered so whoever played most is first. Minutes stay null (rather than
+// 0) for anyone absent from every covered lineup, so the UI can say "no record"
+// instead of implying they were an unused sub.
+export function getJapanesePlayerSummaries(): JapanesePlayerSummary[] {
+  const minutesMap = getPlayerMinutesMap();
+  const latest = getLatestResults();
+  const round = getRoundStats(latest.matchday);
+  // Clubs whose fixture in this round has not kicked off yet.
+  const pendingTeamIds = new Set(
+    latest.matches.filter((m) => !m.played).flatMap((m) => [m.homeTeamId, m.awayTeamId])
+  );
+  return getJapanesePlayers()
+    .map((player) => {
+      const appearances = getPlayerAppearances(player.id);
+      const roundStat = round.get(player.id) ?? null;
+      return {
+        player,
+        minutes: minutesMap.get(player.id) ?? null,
+        appearances: appearances.length,
+        starts: appearances.filter((a) => a.status === "start").length,
+        round: roundStat,
+        roundStatus: ((roundStat?.minutes ?? 0) > 0
+          ? "played"
+          : pendingTeamIds.has(player.teamId)
+            ? "pending"
+            : "absent") as JapanesePlayerSummary["roundStatus"],
+      };
+    })
+    .sort((a, b) => (b.round?.minutes ?? -1) - (a.round?.minutes ?? -1) || (b.minutes ?? -1) - (a.minutes ?? -1));
+}
+
+// Minutes and goal involvement for a single round, for anyone who took the pitch in
+// it. Same derivation as the season-wide maps, just scoped to one matchday so a
+// weekend view isn't forced to quote season totals.
+function getRoundStats(matchday: number): Map<number, JapanesePlayerRoundStat> {
+  const stats = new Map<number, JapanesePlayerRoundStat>();
+  for (const m of matchesFile.matches.filter((x) => x.matchday === matchday)) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    for (const [playerId, minutes] of computeMatchMinutes(lineup)) {
+      const cur = stats.get(playerId) ?? { matchday, minutes: 0, goals: 0, assists: 0 };
+      cur.minutes += minutes;
+      stats.set(playerId, cur);
+    }
+    for (const [playerId, c] of computeMatchGoalContributions(lineup)) {
+      const cur = stats.get(playerId) ?? { matchday, minutes: 0, goals: 0, assists: 0 };
+      cur.goals += c.goals;
+      cur.assists += c.assists;
+      stats.set(playerId, cur);
+    }
+  }
+  return stats;
+}
+
+// The most recent round we have results for, limited to the matches actually
+// played. The remaining fixtures in that round are reported as a count instead,
+// so the results strip never mixes scores with kickoff times.
+export function getLatestResults(): { matches: Match[]; matchday: number; played: number; pending: number } {
+  const round = getActiveRoundMatches();
+  const played = round.filter((m) => m.played);
+  return {
+    matches: round,
+    matchday: played[0]?.matchday ?? round[0]?.matchday ?? getCurrentMatchday(),
+    played: played.length,
+    pending: round.length - played.length,
+  };
+}
+
+// First round with no results yet — what the fixtures list should open on, so it
+// shows what is coming rather than repeating the results strip above it.
+export function getNextFixtureRound(): number {
+  const all = matchesFile.matches;
+  const matchdays = [...new Set(all.map((m) => m.matchday))].sort((a, b) => a - b);
+  const upcoming = matchdays.find((md) => all.filter((m) => m.matchday === md).every((m) => !m.played));
+  return upcoming ?? matchdays[matchdays.length - 1] ?? getCurrentMatchday();
 }

@@ -37,41 +37,75 @@ function matchDate(utcDate: string): string {
   });
 }
 
+// One side of a result. The losing side is muted so the outcome reads at a glance
+// without needing to compare the two numbers.
+function Side({ team, goals, lost }: { team: Team; goals: number | null; lost: boolean }) {
+  const tone = lost ? "text-muted" : "text-foreground";
+  return (
+    <>
+      <TeamBadge team={team} size={18} />
+      <span className={`whitespace-nowrap text-xs ${tone}`}>{team.shortName}</span>
+      <span className={`font-[family-name:var(--font-display)] text-sm font-bold tabular-nums ${tone}`}>
+        {goals ?? "-"}
+      </span>
+    </>
+  );
+}
+
 function Ticket({
   match,
   teamById,
   clickable,
+  duplicate,
 }: {
   match: Match;
   teamById: Record<number, Team>;
   clickable: boolean;
+  // The strip renders its ticket list twice so the auto-scroll can loop
+  // seamlessly. The second copy is decoration: it stays clickable under the
+  // pointer but is taken out of the tab order and hidden from screen readers,
+  // so the round isn't announced or tabbed through twice.
+  duplicate: boolean;
 }) {
   const home = teamById[match.homeTeamId];
   const away = teamById[match.awayTeamId];
   if (!home || !away) return null;
 
+  const homeGoals = match.homeGoals ?? 0;
+  const awayGoals = match.awayGoals ?? 0;
+
   const content = (
-    <div className="marquee-ticket flex shrink-0 select-none items-center gap-2.5 border border-border bg-surface px-3.5 py-2.5 transition">
-      <TeamBadge team={home} size={22} />
-      <div className="flex flex-col items-center gap-0.5">
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
-          {matchDate(match.utcDate)}
-        </span>
-        <span
-          className={`font-[family-name:var(--font-display)] text-sm font-bold ${
-            match.played ? "text-foreground" : "text-muted"
-          }`}
-        >
-          {match.played ? `${match.homeGoals} - ${match.awayGoals}` : kickoffTime(match.utcDate)}
-        </span>
+    <div
+      // A dashed edge and a kickoff time in place of a score mark the fixtures in
+      // this round that haven't been played yet, so the strip can carry the whole
+      // round without a reader mistaking a kickoff time for a scoreline.
+      className={`marquee-ticket flex shrink-0 select-none flex-col gap-1.5 border bg-surface px-3.5 py-2.5 transition ${
+        match.played ? "border-border" : "border-dashed border-border"
+      }`}
+    >
+      <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
+        {matchDate(match.utcDate)}
+        {!match.played && <span className="normal-case">{kickoffTime(match.utcDate)} キックオフ</span>}
+      </span>
+      <div className="grid grid-cols-[18px_1fr_auto] items-center gap-x-2 gap-y-1">
+        <Side team={home} goals={match.homeGoals} lost={match.played && awayGoals > homeGoals} />
+        <Side team={away} goals={match.awayGoals} lost={match.played && homeGoals > awayGoals} />
       </div>
-      <TeamBadge team={away} size={22} />
     </div>
   );
 
-  if (!clickable) return content;
+  const label = match.played
+    ? `${home.name} ${homeGoals} - ${awayGoals} ${away.name} の詳細`
+    : `${home.name} 対 ${away.name}（${matchDate(match.utcDate)} ${kickoffTime(match.utcDate)} キックオフ）の詳細`;
+
+  if (!clickable) return duplicate ? <div aria-hidden="true">{content}</div> : content;
   return (
-    <Link href={`/matches/${match.id}`} className="shrink-0">
+    <Link
+      href={`/matches/${match.id}`}
+      className="shrink-0 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      aria-label={label}
+      {...(duplicate ? { tabIndex: -1, "aria-hidden": true } : {})}
+    >
       {content}
     </Link>
   );
@@ -81,11 +115,17 @@ export default function LatestResultsMarquee({
   matches,
   teamById,
   matchday,
+  played,
+  pending,
   clickableMatchIds,
 }: {
   matches: Match[];
   teamById: Record<number, Team>;
   matchday: number;
+  // Split of `matches` for the label above the strip, so a reader can tell at a
+  // glance how much of the round is already in the books.
+  played: number;
+  pending: number;
   clickableMatchIds: Set<number>;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -190,7 +230,14 @@ export default function LatestResultsMarquee({
 
   return (
     <div className="mt-8">
-      <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted">第{matchday}節</p>
+      <p className="mb-2.5 text-xs font-semibold tracking-[0.15em] text-muted">
+        第{matchday}節
+        <span className="tracking-normal">
+          {" · "}
+          {played}試合終了
+          {pending > 0 && `、残り${pending}試合`}
+        </span>
+      </p>
       <div
         ref={wrapperRef}
         className="-mx-4 overflow-hidden px-4 sm:mx-0 sm:px-0"
@@ -236,7 +283,13 @@ export default function LatestResultsMarquee({
       >
         <div ref={rowRef} className="flex w-max gap-2">
           {[...matches, ...matches].map((m, i) => (
-            <Ticket key={`${m.id}-${i}`} match={m} teamById={teamById} clickable={clickableMatchIds.has(m.id)} />
+            <Ticket
+              key={`${m.id}-${i}`}
+              match={m}
+              teamById={teamById}
+              clickable={clickableMatchIds.has(m.id)}
+              duplicate={i >= matches.length}
+            />
           ))}
         </div>
       </div>

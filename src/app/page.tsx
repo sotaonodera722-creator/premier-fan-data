@@ -4,10 +4,11 @@ import {
   getTopScorers,
   getTopAssists,
   getCurrentMatchday,
-  getJapanesePlayers,
+  getJapanesePlayerSummaries,
   getTeams,
   getAllMatches,
-  getActiveRoundMatches,
+  getLatestResults,
+  getNextFixtureRound,
   getClickableMatchIds,
   getTeamStatAverage,
 } from "@/lib/data";
@@ -28,12 +29,12 @@ export default async function Home({
   const { round } = await searchParams;
   const standings = getStandings();
   const matchday = getCurrentMatchday();
-  const jpPlayers = getJapanesePlayers();
+  const jpSummaries = getJapanesePlayerSummaries();
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
   const allMatches = getAllMatches();
-  const latestResults = getActiveRoundMatches();
-  const latestMatchday = latestResults[0]?.matchday ?? matchday;
+  const results = getLatestResults();
+  const nextFixtureRound = getNextFixtureRound();
   const clickableMatchIds = new Set(getClickableMatchIds());
 
   const topScorers = getTopScorers(3).map((p) => ({ player: p, value: p.goals ?? 0 }));
@@ -66,31 +67,51 @@ export default async function Home({
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href="/teams"
-            className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-background transition hover:brightness-110"
+            className="rounded-md bg-accent px-5 py-3 text-sm font-semibold text-background transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             チーム一覧を見る
           </Link>
           <Link
             href="/players"
-            className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-surface"
+            className="rounded-md border border-border px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             選手名鑑を見る
           </Link>
         </div>
 
         <LatestResultsMarquee
-          matches={latestResults}
+          matches={results.matches}
           teamById={teamById}
-          matchday={latestMatchday}
+          matchday={results.matchday}
+          played={results.played}
+          pending={results.pending}
           clickableMatchIds={clickableMatchIds}
         />
       </section>
 
-      <section className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <section className="mt-12">
+        <SectionHeading
+          eyebrow="Japanese Players"
+          title="日本人選手の週末"
+          action={
+            <Link
+              href="/players"
+              // -my-3 cancels the padding's effect on layout, so the link keeps its
+              // baseline alignment with the heading while the tap target reaches 44px.
+              className="-my-3 inline-flex items-center rounded-sm py-3 text-sm font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              選手名鑑へ →
+            </Link>
+          }
+        />
+        <JapanesePlayersSection summaries={jpSummaries} matchday={results.matchday} teamById={teamById} />
+      </section>
+
+      <section className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="首位チーム" value={leader?.shortName ?? "-"} hint={leader?.record ? `${leader.record.points}pt` : ""} />
         <StatTile label="総ゴール数" value={totalGoals} hint={`平均 ${avgGoals} 点/試合`} />
         <StatTile label="消化試合数" value={Math.round(totalMatches)} hint={`第${matchday}節時点`} />
-        <StatTile label="日本人選手" value={jpPlayers.length} hint="プレミアリーグ在籍" />
+        <StatTile label="日本人選手" value={jpSummaries.length} hint="プレミアリーグ在籍" />
       </section>
 
       <section className="mt-14 grid gap-8 lg:grid-cols-2">
@@ -109,7 +130,7 @@ export default async function Home({
         <div className="min-w-0">
           <SectionHeading
             eyebrow="Fixtures"
-            title="ラウンド別試合日程"
+            title="試合日程"
             action={
               <Link href="/matches" className="text-sm font-medium text-accent-2 hover:underline">
                 試合一覧へ →
@@ -119,7 +140,7 @@ export default async function Home({
           <HomeFixtures
             matches={allMatches}
             teams={teams}
-            currentMatchday={latestMatchday}
+            currentMatchday={nextFixtureRound}
             initialRound={round}
             clickableMatchIds={clickableMatchIds}
           />
@@ -153,19 +174,6 @@ export default async function Home({
           emptyLabel="アシスト"
           moreHref="/players/rankings?tab=assists"
         />
-      </section>
-
-      <section className="mt-14">
-        <SectionHeading
-          eyebrow="🇯🇵 Japanese Players"
-          title="日本人選手フォーカス"
-          action={
-            <Link href="/players" className="text-sm font-medium text-accent-2 hover:underline">
-              選手名鑑へ →
-            </Link>
-          }
-        />
-        <JapanesePlayersSection players={jpPlayers} teamById={teamById} />
       </section>
     </div>
   );

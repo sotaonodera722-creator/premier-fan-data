@@ -50,6 +50,17 @@ export default function HomeFixtures({
   const rounds = useMemo(() => Array.from({ length: maxMatchday }, (_, i) => i + 1), [maxMatchday]);
   const roundMatches = useMemo(() => matches.filter((m) => m.matchday === matchday), [matches, matchday]);
 
+  // The list opens on the next unplayed round, but any round is one pill away —
+  // so the header has to say what the rows below actually are rather than always
+  // claiming they're upcoming fixtures.
+  const roundStatus = useMemo(() => {
+    if (roundMatches.length === 0) return null;
+    const played = roundMatches.filter((m) => m.played).length;
+    if (played === 0) return "これから";
+    if (played === roundMatches.length) return "結果";
+    return "開催中";
+  }, [roundMatches]);
+
   return (
     <div>
       <div className="mb-3 flex items-center gap-2">
@@ -58,24 +69,30 @@ export default function HomeFixtures({
           onClick={() => setMatchday(Math.max(1, matchday - 1))}
           disabled={matchday <= 1}
           aria-label="前の節"
-          className="shrink-0 rounded-full border border-border p-1.5 text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
             <path d="M12 5l-5 5 5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <span className="w-14 shrink-0 text-center text-sm font-semibold text-foreground">第{matchday}節</span>
+        {/* min-width rather than a fixed one so the arrows don't shift between 第1節 and 第10節 */}
+        <span className="min-w-14 shrink-0 text-center text-sm font-semibold text-foreground">第{matchday}節</span>
         <button
           type="button"
           onClick={() => setMatchday(Math.min(maxMatchday, matchday + 1))}
           disabled={matchday >= maxMatchday}
           aria-label="次の節"
-          className="shrink-0 rounded-full border border-border p-1.5 text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
             <path d="M8 5l5 5-5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
+        {roundStatus && (
+          <span className="ml-1 shrink-0 rounded-md border border-border px-1.5 py-0.5 text-[10px] font-semibold text-muted">
+            {roundStatus}
+          </span>
+        )}
       </div>
 
       <div
@@ -123,7 +140,7 @@ export default function HomeFixtures({
           <button
             key={r}
             onClick={() => setMatchday(r)}
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+            className={`inline-flex min-h-[44px] shrink-0 items-center rounded-full px-3.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
               r === matchday
                 ? "bg-accent font-semibold text-background"
                 : "border border-border text-muted hover:text-foreground"
