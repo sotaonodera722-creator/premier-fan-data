@@ -5,7 +5,6 @@ import {
   getMatchLineup,
   getClickableMatchIds,
   getTeamById,
-  getHeadToHead,
   getPredictedLineup,
   resolveRosterPlayer,
 } from "@/lib/data";
@@ -13,6 +12,7 @@ import TeamBadge from "@/components/TeamBadge";
 import MatchFormation from "@/components/MatchFormation";
 import MatchTimeline from "@/components/MatchTimeline";
 import MatchStats from "@/components/MatchStats";
+import MatchExpectedGoals from "@/components/MatchExpectedGoals";
 import MatchHeadToHead from "@/components/MatchHeadToHead";
 import SectionHeading from "@/components/SectionHeading";
 import { RelativeKickoff } from "@/components/RelativeTime";
@@ -66,7 +66,13 @@ export default async function MatchDetailPage({
   // A finished match with no lineup data is a genuine gap, not a future fixture.
   if (!lineup && match.played) notFound();
 
-  const h2h = getHeadToHead(homeTeam.id, awayTeam.id);
+  // One match in thirty is missing the Expected Goals category entirely, and the
+  // section is named after whatever it can actually show.
+  const hasExpectedGoals = Boolean(
+    lineup?.statistics &&
+      lineup.statistics.homeTeam.statistics.some((s) => s.displayName === "Expected Goals") &&
+      lineup.statistics.awayTeam.statistics.some((s) => s.displayName === "Expected Goals")
+  );
 
   const predictedHome = !lineup ? getPredictedLineup(homeTeam.id, matchId) : undefined;
   const predictedAway = !lineup ? getPredictedLineup(awayTeam.id, matchId) : undefined;
@@ -116,13 +122,9 @@ export default async function MatchDetailPage({
         </Link>
       </div>
 
-      {lineup?.statistics && (
-        <section className="mt-10">
-          <SectionHeading eyebrow="Stats" title="トップ統計" />
-          <MatchStats statistics={lineup.statistics} homeTeam={homeTeam} awayTeam={awayTeam} />
-        </section>
-      )}
-
+      {/* What happened, before why it happened. The page used to open on a
+          column of percentages, which is the answer to a question nobody has
+          until they know how the ninety minutes went. */}
       {lineup?.events && lineup.events.length > 0 && (
         <section className="mt-10">
           <SectionHeading eyebrow="Timeline" title="タイムライン" />
@@ -133,6 +135,30 @@ export default async function MatchDetailPage({
             homeSquad={lineup.homeTeam}
             awaySquad={lineup.awayTeam}
           />
+        </section>
+      )}
+
+      {lineup?.statistics && (
+        <section className="mt-10">
+          <SectionHeading
+            eyebrow={hasExpectedGoals ? "Expected Goals" : "Stats"}
+            title={hasExpectedGoals ? "xGとスコアの乖離" : "トップ統計"}
+          />
+          {hasExpectedGoals && (
+            <MatchExpectedGoals
+              match={match}
+              statistics={lineup.statistics}
+              events={lineup.events}
+              homeTeam={homeTeam}
+              awayTeam={awayTeam}
+            />
+          )}
+          <div className={hasExpectedGoals ? "mt-4" : ""}>
+            {hasExpectedGoals && (
+              <h3 className="mb-2.5 text-sm font-semibold text-muted">そのほかの主要スタッツ</h3>
+            )}
+            <MatchStats statistics={lineup.statistics} homeTeam={homeTeam} awayTeam={awayTeam} />
+          </div>
         </section>
       )}
 
@@ -188,12 +214,13 @@ export default async function MatchDetailPage({
         </>
       )}
 
-      {h2h && h2h.numberOfMatches > 0 && (
-        <section className="mt-10">
-          <SectionHeading eyebrow="History" title="対戦成績" />
-          <MatchHeadToHead homeTeam={homeTeam} awayTeam={awayTeam} excludeUtcDate={match.utcDate} />
-        </section>
-      )}
+      {/* Rendered even when the two have never met. For a fixture still to come,
+          "no history" is part of judging whether to watch it, and a section that
+          silently disappears reads as a bug. */}
+      <section className="mt-10">
+        <SectionHeading eyebrow="History" title="対戦成績" />
+        <MatchHeadToHead homeTeam={homeTeam} awayTeam={awayTeam} excludeUtcDate={match.utcDate} />
+      </section>
 
       {(lineup || predictedLineup) && <p className="mt-10 text-center text-xs text-muted">Lineup data by Highlightly</p>}
     </div>

@@ -6,6 +6,7 @@ import h2hJson from "@/data/h2h.json";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
+import { getClubProfile } from "@/lib/clubProfiles";
 import type {
   Team,
   Player,
@@ -997,6 +998,176 @@ export function getRoundMovements(): Map<number, RoundMovement> {
   return movements;
 }
 
+export interface PickReason {
+  /** What kind of reason this is, for the chip. */
+  label: string;
+  /** The figure that earned it. Every reason carries one — see getMatchPicks. */
+  detail: string;
+}
+
+export interface MatchPick {
+  match: Match;
+  homeTeam: Team;
+  awayTeam: Team;
+  homePosition: number | null;
+  awayPosition: number | null;
+  score: number;
+  reasons: PickReason[];
+  /** Japanese players at either club, whoever has played most this season first. */
+  japanesePlayers: Player[];
+}
+
+// How much each reason is worth. Written out rather than buried in the function
+// so the ranking can be argued with: every point a match scores is visible to
+// the reader as a reason with a number attached, and no point is awarded that
+// the page does not show.
+const PICK_WEIGHTS = {
+  bothTopSix: 3,
+  closeInTable: 2,
+  bothBigSix: 3,
+  evenHistory: 2,
+  highScoring: 2,
+  japanesePlayer: 3,
+  /** Each Japanese player beyond the first, capped — three of them is rare. */
+  extraJapanesePlayer: 1,
+} as const;
+
+/** Fewer meetings than this and a head-to-head record is an anecdote, not a pattern. */
+const MEANINGFUL_HISTORY = 5;
+/** Combined goals per game at or above this is a fixture that tends to produce goals. */
+const HIGH_SCORING_COMBINED = 3.0;
+
+// The fixtures the picks are chosen from: whatever is still to be played.
+//
+// A match that has already kicked off cannot answer "what should I watch next",
+// which is the question this feature exists for. On a Sunday morning that means
+// the rest of this round; once the round is over it means the next one.
+export function getPickCandidates(): { matchday: number; isCurrentRound: boolean; matches: Match[] } {
+  const latest = getLatestResults();
+  const pending = latest.matches.filter((m) => !m.played);
+  if (pending.length > 0) {
+    return { matchday: latest.matchday, isCurrentRound: true, matches: pending };
+  }
+
+  const next = getNextFixtureRound();
+  return {
+    matchday: next,
+    isCurrentRound: false,
+    matches: matchesFile.matches.filter((m) => m.matchday === next && !m.played),
+  };
+}
+
+// Three matches worth staying up for, chosen by rule.
+//
+// Rule-based on purpose: a hand-picked list is a list that stops being updated,
+// and a stale "見どころ" is worse than none. The reasons are the output, not the
+// score — a reader should be able to disagree with the ranking and still learn
+// something from why each fixture is on it, so every point awarded is shown.
+//
+// What it cannot see: rivalry. A Manchester derby between 1st and 11th scores
+// only as a meeting of two big clubs, because nothing in the data knows the two
+// of them share a city. That is S10's ライバル・因縁マップ.
+export function getMatchPicks(limit = 3): {
+  matchday: number;
+  isCurrentRound: boolean;
+  considered: number;
+  picks: MatchPick[];
+} | null {
+  const { matchday, isCurrentRound, matches } = getPickCandidates();
+  if (matches.length === 0) return null;
+
+  const japanese = getJapanesePlayers();
+  const minutes = getPlayerMinutesMap();
+
+  const scored = matches.flatMap((match) => {
+    const homeTeam = getTeamById(match.homeTeamId);
+    const awayTeam = getTeamById(match.awayTeamId);
+    if (!homeTeam || !awayTeam) return [];
+
+    const home = homeTeam.record;
+    const away = awayTeam.record;
+    const reasons: PickReason[] = [];
+    let score = 0;
+
+    if (home && away) {
+      if (home.position <= 6 && away.position <= 6) {
+        score += PICK_WEIGHTS.bothTopSix;
+        reasons.push({ label: "上位対決", detail: `${home.position}位と${away.position}位の対戦` });
+      }
+      const gap = Math.abs(home.position - away.position);
+      if (gap <= 3) {
+        score += PICK_WEIGHTS.closeInTable;
+        reasons.push({
+          label: "順位が近い",
+          detail: gap === 0 ? `同じ${home.position}位で並んでいる` : `順位差${gap}の直接対決`,
+        });
+      }
+      const combined = home.goalsFor / Math.max(1, home.played) + away.goalsFor / Math.max(1, away.played);
+      if (combined >= HIGH_SCORING_COMBINED) {
+        score += PICK_WEIGHTS.highScoring;
+        // Written as a sentence, not as a labelled quantity: the reader this is
+        // for does not already know what "合計3.7" is the total of.
+        reasons.push({
+          label: "点が入る",
+          detail: `両クラブ合わせて1試合平均${combined.toFixed(1)}点`,
+        });
+      }
+    }
+
+    if (getClubProfile(homeTeam.id)?.tier === "big6" && getClubProfile(awayTeam.id)?.tier === "big6") {
+      score += PICK_WEIGHTS.bothBigSix;
+      reasons.push({ label: "名門対決", detail: "ビッグ6と呼ばれる6クラブ同士" });
+    }
+
+    const h2h = getHeadToHead(homeTeam.id, awayTeam.id);
+    if (h2h && h2h.numberOfMatches >= MEANINGFUL_HISTORY && Math.abs(h2h.teamAWins - h2h.teamBWins) <= 1) {
+      score += PICK_WEIGHTS.evenHistory;
+      reasons.push({
+        label: "五分の相性",
+        detail: `過去${h2h.numberOfMatches}試合で${clubShortJa(homeTeam)}の${h2h.teamAWins}勝${h2h.draws}分${h2h.teamBWins}敗`,
+      });
+    }
+
+    const japanesePlayers = japanese
+      .filter((p) => p.teamId === homeTeam.id || p.teamId === awayTeam.id)
+      .sort((a, b) => (minutes.get(b.id) ?? 0) - (minutes.get(a.id) ?? 0));
+    if (japanesePlayers.length > 0) {
+      score +=
+        PICK_WEIGHTS.japanesePlayer +
+        Math.min(2, japanesePlayers.length - 1) * PICK_WEIGHTS.extraJapanesePlayer;
+      // Leads the list rather than joining the end of it. It is the reason this
+      // site exists, and it is the reason most likely to be the one a reader
+      // came for — it should not be the one that falls off a narrow card.
+      reasons.unshift({
+        label: "日本人選手",
+        detail: japanesePlayers.map((p) => p.nameJa ?? p.name).join("・"),
+      });
+    }
+
+    return [
+      {
+        match,
+        homeTeam,
+        awayTeam,
+        homePosition: home?.position ?? null,
+        awayPosition: away?.position ?? null,
+        score,
+        reasons,
+        japanesePlayers,
+      },
+    ];
+  });
+
+  const picks = scored
+    .filter((p) => p.reasons.length > 0)
+    // Level on score, the one that kicks off first is the one a reader can still
+    // catch, so it leads.
+    .sort((a, b) => b.score - a.score || new Date(a.match.utcDate).getTime() - new Date(b.match.utcDate).getTime())
+    .slice(0, limit);
+
+  return { matchday, isCurrentRound, considered: matches.length, picks };
+}
+
 export interface RoundSummary {
   matchday: number;
   /** Nothing came before this round, so no clause here can be a comparison. */
@@ -1148,6 +1319,11 @@ function describeJapaneseInvolvement(complete: boolean): string | null {
 
 function clubNameJa(team: Team): string {
   return getTeamNameJa(team.id)?.full ?? team.name;
+}
+
+/** The spoken short form, for running text where the full name would crowd. */
+function clubShortJa(team: Team): string {
+  return getTeamNameJa(team.id)?.short ?? team.shortName;
 }
 
 function pointsInRound(teamId: number, matchday: number): number {
