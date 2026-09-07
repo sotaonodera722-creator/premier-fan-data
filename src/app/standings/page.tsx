@@ -5,6 +5,7 @@ import TeamBadge from "@/components/TeamBadge";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export const metadata = {
   title: "順位表 | Premier Fan Data",
@@ -108,6 +109,7 @@ export default function StandingsPage() {
         </span>
         <span className="text-muted">左端の色帯はクラブカラーです</span>
       </div>
+      <SampleSizeNote />
     </div>
   );
 }

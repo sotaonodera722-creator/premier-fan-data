@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { RelativeKickoff } from "@/components/RelativeTime";
+import { jstShortDate, jstTime, jstKickoffLong, lateNightTag } from "@/lib/datetime";
 
 const DURATION_MS = 32000;
 const HOVER_PLAYBACK_RATE = 0.5;
@@ -19,22 +21,6 @@ function wrapOffset(value: number, half: number): number {
   if (half <= 0) return 0;
   const m = value % half;
   return m > 0 ? m - half : m;
-}
-
-function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Tokyo",
-  });
-}
-
-function matchDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", {
-    month: "numeric",
-    day: "numeric",
-    timeZone: "Asia/Tokyo",
-  });
 }
 
 // One side of a result. The losing side is muted so the outcome reads at a glance
@@ -83,9 +69,15 @@ function Ticket({
         match.played ? "border-border" : "border-dashed border-border"
       }`}
     >
-      <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
-        {matchDate(match.utcDate)}
-        {!match.played && <span className="normal-case">{kickoffTime(match.utcDate)} キックオフ</span>}
+      <span className="flex flex-wrap items-center gap-x-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
+        <span className="tabular-nums">{jstShortDate(match.utcDate)}</span>
+        {!match.played && (
+          <>
+            <span className="normal-case tabular-nums text-foreground">{jstTime(match.utcDate)}</span>
+            {lateNightTag(match.utcDate) && <span className="normal-case">{lateNightTag(match.utcDate)}</span>}
+            <RelativeKickoff iso={match.utcDate} className="normal-case text-accent-2" />
+          </>
+        )}
       </span>
       <div className="grid grid-cols-[18px_1fr_auto] items-center gap-x-2 gap-y-1">
         <Side team={home} goals={match.homeGoals} lost={match.played && awayGoals > homeGoals} />
@@ -96,7 +88,7 @@ function Ticket({
 
   const label = match.played
     ? `${home.name} ${homeGoals} - ${awayGoals} ${away.name} の詳細`
-    : `${home.name} 対 ${away.name}（${matchDate(match.utcDate)} ${kickoffTime(match.utcDate)} キックオフ）の詳細`;
+    : `${home.name} 対 ${away.name}（${jstKickoffLong(match.utcDate)} キックオフ・日本時間）の詳細`;
 
   if (!clickable) return duplicate ? <div aria-hidden="true">{content}</div> : content;
   return (

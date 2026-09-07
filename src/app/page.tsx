@@ -20,6 +20,7 @@ import HomeStandingsTable from "@/components/HomeStandingsTable";
 import HomeFixtures from "@/components/HomeFixtures";
 import PlayerRankingList from "@/components/PlayerRankingList";
 import TeamStatCard from "@/components/TeamStatCard";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export default async function Home({
   searchParams,
@@ -113,6 +114,7 @@ export default async function Home({
         <StatTile label="消化試合数" value={Math.round(totalMatches)} hint={`第${matchday}節時点`} />
         <StatTile label="日本人選手" value={jpSummaries.length} hint="プレミアリーグ在籍" />
       </section>
+      <SampleSizeNote />
 
       <section className="mt-14 grid gap-8 lg:grid-cols-2">
         <div className="min-w-0">

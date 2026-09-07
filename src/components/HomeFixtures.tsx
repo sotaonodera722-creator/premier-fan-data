@@ -5,18 +5,11 @@ import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import { useUrlParams } from "@/lib/useUrlParams";
+import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 
 // Below this many pixels of horizontal movement, a left-button press-and-move is
 // still treated as a click (so tapping a round pill keeps switching rounds).
 const DRAG_THRESHOLD_PX = 5;
-
-function shortDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric", timeZone: "Asia/Tokyo" });
-}
-
-function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
-}
 
 export default function HomeFixtures({
   matches,
@@ -159,13 +152,16 @@ export default function HomeFixtures({
           if (!home || !away) return null;
           const content = (
             <div className="flex items-center gap-2.5 px-4 py-2.5 text-sm">
-              <span className="w-16 shrink-0 text-[11px] text-muted">{shortDate(m.utcDate)}</span>
+              <span className="w-16 shrink-0 text-[11px] leading-tight text-muted">
+                <span className="block tabular-nums">{jstShortDate(m.utcDate)}</span>
+                {lateNightTag(m.utcDate) && <span className="block text-[10px]">{lateNightTag(m.utcDate)}</span>}
+              </span>
               <span className="flex flex-1 items-center justify-end gap-1.5 truncate">
                 <span className="truncate text-foreground">{home.shortName}</span>
                 <TeamBadge team={home} size={20} />
               </span>
               <span className="w-10 shrink-0 text-center font-[family-name:var(--font-display)] text-xs font-bold text-muted">
-                {m.played ? `${m.homeGoals}-${m.awayGoals}` : kickoffTime(m.utcDate)}
+                {m.played ? `${m.homeGoals}-${m.awayGoals}` : jstTime(m.utcDate)}
               </span>
               <span className="flex flex-1 items-center gap-1.5 truncate">
                 <TeamBadge team={away} size={20} />

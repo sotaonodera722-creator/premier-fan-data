@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import { useUrlParams } from "@/lib/useUrlParams";
+import { jstFullDate, jstLongDate, jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 
 type Mode = "date" | "matchday" | "team";
 
@@ -14,32 +15,6 @@ const MODES: { key: Mode; label: string }[] = [
   { key: "team", label: "チーム別" },
 ];
 
-function dateKey(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-    timeZone: "Asia/Tokyo",
-  });
-}
-
-function rangeDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", { month: "long", day: "numeric", timeZone: "Asia/Tokyo" });
-}
-
-function kickoffTime(utcDate: string): string {
-  return new Date(utcDate).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tokyo" });
-}
-
-function shortDate(utcDate: string): string {
-  return new Date(utcDate).toLocaleDateString("ja-JP", {
-    month: "numeric",
-    day: "numeric",
-    weekday: "short",
-    timeZone: "Asia/Tokyo",
-  });
-}
 
 function MatchRow({
   match,
@@ -62,13 +37,18 @@ function MatchRow({
         {home && <TeamBadge team={home} size={24} />}
       </div>
       <div className="flex flex-col items-center justify-self-center">
-        {showDate && <span className="text-[10px] text-muted">{shortDate(match.utcDate)}</span>}
+        {showDate && <span className="text-[10px] text-muted">{jstShortDate(match.utcDate)}</span>}
         {match.played ? (
           <span className="font-[family-name:var(--font-display)] text-sm font-bold text-foreground">
             {match.homeGoals} - {match.awayGoals}
           </span>
         ) : (
-          <span className="text-xs font-medium text-muted">{kickoffTime(match.utcDate)}</span>
+          <span className="flex flex-col items-center leading-tight">
+            <span className="text-xs font-medium tabular-nums text-foreground">{jstTime(match.utcDate)}</span>
+            {lateNightTag(match.utcDate) && (
+              <span className="text-[9px] text-muted">{lateNightTag(match.utcDate)}</span>
+            )}
+          </span>
         )}
       </div>
       <div className="flex items-center gap-2 truncate">
@@ -208,7 +188,7 @@ export default function MatchesExplorer({
   const dateGroups = useMemo(() => {
     const groups: { label: string; matches: Match[] }[] = [];
     for (const m of matchdayMatches) {
-      const label = dateKey(m.utcDate);
+      const label = jstFullDate(m.utcDate);
       const last = groups[groups.length - 1];
       if (last && last.label === label) last.matches.push(m);
       else groups.push({ label, matches: [m] });
@@ -218,8 +198,8 @@ export default function MatchesExplorer({
 
   const dateRangeLabel = useMemo(() => {
     if (matchdayMatches.length === 0) return "";
-    const start = rangeDate(matchdayMatches[0].utcDate);
-    const end = rangeDate(matchdayMatches[matchdayMatches.length - 1].utcDate);
+    const start = jstLongDate(matchdayMatches[0].utcDate);
+    const end = jstLongDate(matchdayMatches[matchdayMatches.length - 1].utcDate);
     return start === end ? start : `${start} - ${end}`;
   }, [matchdayMatches]);
 

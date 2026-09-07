@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getStandings, getTeamById, getHeadToHead } from "@/lib/data";
+import { jstYearMonth } from "@/lib/datetime";
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
 import StatTile from "@/components/StatTile";
@@ -84,7 +85,7 @@ export default async function ComparePage({
                     return (
                       <div key={i} className="flex items-center gap-3 px-4 py-3 text-sm">
                         <span className="w-20 shrink-0 text-xs text-muted">
-                          {new Date(m.utcDate).toLocaleDateString("ja-JP", { year: "numeric", month: "short", timeZone: "Asia/Tokyo" })}
+                          {jstYearMonth(m.utcDate)}
                         </span>
                         <span className="flex-1 truncate text-right text-foreground">{home?.shortName}</span>
                         <span className="font-[family-name:var(--font-display)] font-bold text-foreground">

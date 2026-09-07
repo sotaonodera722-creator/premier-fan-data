@@ -604,3 +604,39 @@ export function getNextFixtureRound(): number {
   const upcoming = matchdays.find((md) => all.filter((m) => m.matchday === md).every((m) => !m.played));
   return upcoming ?? matchdays[matchdays.length - 1] ?? getCurrentMatchday();
 }
+
+// How stale the site is. The three feeds refresh independently and at different
+// rates, so a single figure would either overstate or understate one of them.
+// The headline is the scores-and-table feed — that is what a reader means by
+// "last updated" — and every feed is listed with its own timestamp beside it.
+export function getDataFreshness(): {
+  lastUpdated: string;
+  sources: { label: string; provider: string; lastUpdated: string }[];
+} {
+  const sources = [
+    { label: "試合・順位表・選手", provider: "Football-Data.org", lastUpdated: matchesFile.meta.lastUpdated },
+    { label: "ラインナップ・試合イベント", provider: "Highlightly", lastUpdated: lineupsFile.meta.lastUpdated },
+    { label: "過去の対戦成績", provider: "Football-Data.org", lastUpdated: h2hFile.meta.lastUpdated },
+  ].filter((s) => Boolean(s.lastUpdated));
+
+  return { lastUpdated: matchesFile.meta.lastUpdated, sources };
+}
+
+// The denominator behind every season-to-date number on the site. Quoted next to
+// aggregates so three rounds of data are never mistaken for a settled season.
+export function getSampleSize(): {
+  matchday: number;
+  playedMatches: number;
+  totalMatches: number;
+  /** Matches we hold a lineup for — the sample behind minutes and goal involvement. */
+  coveredMatches: number;
+} {
+  const all = matchesFile.matches;
+  const played = all.filter((m) => m.played);
+  return {
+    matchday: getCurrentMatchday(),
+    playedMatches: played.length,
+    totalMatches: all.length,
+    coveredMatches: played.filter((m) => Boolean(getMatchLineup(m.id))).length,
+  };
+}

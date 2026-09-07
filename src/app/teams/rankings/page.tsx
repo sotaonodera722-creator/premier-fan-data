@@ -6,6 +6,7 @@ import {
 } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import TeamStatsExplorer from "@/components/TeamStatsExplorer";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export const metadata = {
   title: "チームスタッツ ランキング | Premier Fan Data",
@@ -54,6 +55,7 @@ export default async function TeamStatsRankingsPage({
         xg={xg}
         shots={shots}
       />
+      <SampleSizeNote derived />
     </div>
   );
 }
