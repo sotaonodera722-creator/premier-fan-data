@@ -13,6 +13,9 @@ import {
 import SectionHeading from "@/components/SectionHeading";
 import SectionLink from "@/components/SectionLink";
 import RoundStatus from "@/components/RoundStatus";
+import RoundSummaryLede from "@/components/RoundSummaryLede";
+import MovementLegend from "@/components/MovementLegend";
+import MatchPicks from "@/components/MatchPicks";
 import WeekendTiles from "@/components/WeekendTiles";
 import JapanesePlayersSection from "@/components/JapanesePlayersSection";
 import WeekendBoard from "@/components/WeekendBoard";
@@ -52,6 +55,8 @@ export default async function Home({
       <section className="border-b border-border pb-7 pt-2 sm:pt-10">
         <RoundStatus />
 
+        <RoundSummaryLede />
+
         <div className="mt-2 sm:mt-4">
           <WeekendBoard
             matches={results.matches}
@@ -75,6 +80,12 @@ export default async function Home({
         <JapanesePlayersSection summaries={jpSummaries} matchday={results.matchday} teamById={teamById} />
       </section>
 
+      {/* The reader who was caught by a name in the section above needs somewhere
+          to go next, and "which of the ten do I watch" is the question they have
+          at that moment. It sits between the weekend that happened and the table
+          that explains it. */}
+      <MatchPicks />
+
       <section className="mt-14 grid items-start gap-8 lg:grid-cols-2">
         <div className="min-w-0">
           <SectionHeading
@@ -82,6 +93,7 @@ export default async function Home({
             title="順位表"
             action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
           />
+          <MovementLegend className="mb-2.5" />
           <HomeStandingsTable rows={standingsRows} />
         </div>
         <div className="min-w-0">

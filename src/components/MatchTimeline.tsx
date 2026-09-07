@@ -1,6 +1,19 @@
 import Link from "next/link";
 import type { MatchEvent, TeamLineup } from "@/lib/types";
 import { resolveRosterPlayer, isKnownMatchParticipant } from "@/lib/data";
+import { getPlayerNameJa } from "@/lib/playerNamesJa";
+
+// The reader came for one of nine names. Finding out whether that name did
+// anything should not mean reading twenty rows of Latin script looking for it,
+// so a Japanese player is written in kanji, set in a heavier weight, and
+// carries the same bordered chip idiom the table uses for promoted clubs.
+function JapaneseMark() {
+  return (
+    <span className="ml-1 inline-flex shrink-0 items-center rounded-sm border border-border px-1 align-middle text-[9px] leading-4 text-muted">
+      日本
+    </span>
+  );
+}
 
 // True if `name` can be tied to an actual person in this match — either a roster
 // player (resolveRosterPlayer) or, failing that, someone who was at least in this
@@ -58,10 +71,26 @@ function PlayerLink({
   const resolved = resolveRosterPlayer(name, teamId) ?? (fallbackTeamId != null ? resolveRosterPlayer(name, fallbackTeamId) : undefined);
   if (!resolved) return <>{name}</>;
   return (
-    <Link href={`/players/${resolved.id}`} className="transition hover:text-accent-2 hover:underline">
-      {name}
+    <Link
+      href={`/players/${resolved.id}`}
+      className={`transition hover:text-accent-2 hover:underline ${resolved.isJapanese ? "font-semibold" : ""}`}
+    >
+      {/* resolveRosterPlayer reads the raw roster, which has no kanji on it —
+          the name map is the one place that does. */}
+      {resolved.isJapanese ? (getPlayerNameJa(resolved.id) ?? name) : name}
+      {resolved.isJapanese && <JapaneseMark />}
     </Link>
   );
+}
+
+/** True when any of the names on this event belongs to a Japanese player. */
+function involvesJapanesePlayer(event: MatchEvent, homeTeamId: number, awayTeamId: number): boolean {
+  const otherTeamId = event.teamId === homeTeamId ? awayTeamId : homeTeamId;
+  return [event.player, event.assist, event.substitutedFor].some((name) => {
+    if (!name) return false;
+    const resolved = resolveRosterPlayer(name, event.teamId) ?? resolveRosterPlayer(name, otherTeamId);
+    return Boolean(resolved?.isJapanese);
+  });
 }
 
 function EventIcon({ type }: { type: string }) {
@@ -147,12 +176,16 @@ export default function MatchTimeline({
     <div className="glass space-y-1 rounded-xl p-5">
       {sorted.map((e, i) => {
         const isHome = e.teamId === homeTeamId;
+        // A card's own tone wins — it is the more urgent thing about the row —
+        // so the Japanese marker only takes over rows that have no tone yet.
         const tone =
           e.type === "Red Card"
             ? "border-danger/30 bg-danger/5"
             : e.type === "Yellow Card"
               ? "border-yellow-400/30 bg-yellow-400/5"
-              : "border-transparent";
+              : involvesJapanesePlayer(e, homeTeamId, awayTeamId)
+                ? "border-border bg-surface-2"
+                : "border-transparent";
         const icon = <EventIcon type={e.type} />;
         return (
           <div

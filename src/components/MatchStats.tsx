@@ -2,11 +2,15 @@ import type { MatchStatistics, Team } from "@/lib/types";
 import { getTeamColor, colorsClash } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
 
+// Expected goals is not here on purpose: it has its own block above this one,
+// where the comparison that matters is against the scoreline rather than against
+// the other side. Goalkeeper saves take its place — the other half of the story
+// a side that failed to convert its chances was part of.
 const DISPLAY_STATS: { key: string; label: string; isPercent?: boolean; decimals?: number }[] = [
   { key: "Possession", label: "ポゼッション", isPercent: true },
-  { key: "Expected Goals", label: "期待得点 (xG)", decimals: 2 },
   { key: "Shots on target", label: "枠内シュート" },
   { key: "Big Chances Created", label: "ビッグチャンス創出" },
+  { key: "Goalkeeper saves", label: "GKセーブ" },
   { key: "Corners", label: "コーナーキック" },
 ];
 

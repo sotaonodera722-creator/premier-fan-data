@@ -38,6 +38,86 @@ const GROUPS: { status: JapaneseRoundStatus; heading: string; note: string }[] =
   },
 ];
 
+// Where a player stands compared with a week ago. The four statuses are ordered
+// by how close they put him to the pitch, so a change between them has a
+// direction: coming off the bench is progress, dropping out of the squad is not.
+const STATUS_LABELS: Record<JapaneseRoundStatus, string> = {
+  played: "出場",
+  benched: "ベンチ",
+  absent: "メンバー外",
+  pending: "未消化",
+  unknown: "不明",
+};
+
+const CLOSENESS_TO_PITCH: Record<JapaneseRoundStatus, number> = {
+  played: 2,
+  benched: 1,
+  absent: 0,
+  // Not yet knowable rather than worse — these two compare against nothing.
+  pending: -1,
+  unknown: -1,
+};
+
+const TONE_CLASS = {
+  up: "text-success",
+  down: "text-danger",
+  flat: "text-muted",
+} as const;
+
+/** Roughly a substitution. Below this, a minutes change is timing, not selection. */
+const MEANINGFUL_MINUTES_CHANGE = 15;
+
+function lastRoundNote(
+  summary: JapanesePlayerSummary
+): { text: string; tone: keyof typeof TONE_CLASS } | null {
+  const prev = summary.previousRound;
+  if (!prev) return null;
+
+  const now = summary.roundStatus;
+  const nowRank = CLOSENESS_TO_PITCH[now];
+  const prevRank = CLOSENESS_TO_PITCH[prev.status];
+
+  // On the pitch in both rounds, so the change worth reporting is how long for.
+  if (now === "played" && prev.status === "played") {
+    const delta = prev.minutesChange ?? 0;
+    const text = delta > 0 ? `前節比 +${delta}分` : delta < 0 ? `前節比 ${delta}分` : "前節比 ±0分";
+    // Coming off in stoppage time instead of playing the ninety is not a change
+    // in his role, and colouring it as one would put a red mark on noise. Below
+    // a substitution's worth of minutes the figure is printed without a verdict.
+    const tone = Math.abs(delta) < MEANINGFUL_MINUTES_CHANGE ? "flat" : delta > 0 ? "up" : "down";
+    return { text, tone };
+  }
+
+  const from = prev.status === "played" ? `出場${prev.minutes}分` : STATUS_LABELS[prev.status];
+
+  // Either nothing has happened yet this round, or he is exactly where he was.
+  if (nowRank < 0 || prevRank === nowRank) {
+    return {
+      text: prev.status === "played" ? `前節は${from}` : `前節も${from}`,
+      tone: "flat",
+    };
+  }
+
+  return { text: `${from} → ${STATUS_LABELS[now]}`, tone: nowRank > prevRank ? "up" : "down" };
+}
+
+/** One line answering "is he getting closer to the pitch or further from it?" */
+function LastRoundNote({
+  summary,
+  className = "",
+}: {
+  summary: JapanesePlayerSummary;
+  className?: string;
+}) {
+  const note = lastRoundNote(summary);
+  if (!note) return null;
+  return (
+    <span className={`whitespace-nowrap text-[10px] leading-tight ${TONE_CLASS[note.tone]} ${className}`}>
+      {note.text}
+    </span>
+  );
+}
+
 function clubLabel(team: Team): string {
   return getTeamNameJa(team.id)?.short ?? team.shortName;
 }
@@ -96,6 +176,7 @@ function PlayedCard({
         <div className="mt-1.5 h-1 w-full bg-surface-2" aria-hidden="true">
           <div className="h-full bg-foreground" style={{ width: `${fill}%` }} />
         </div>
+        <LastRoundNote summary={summary} className="mt-1.5 block" />
       </div>
 
       <dl className="flex flex-col gap-1 border-t border-border pt-2.5">
@@ -141,7 +222,8 @@ function StatusGroup({
       </h3>
       <p className="mt-0.5 text-[11px] leading-relaxed text-muted">{note}</p>
       <ul className="glass mt-2.5 divide-y divide-border overflow-hidden rounded-xl">
-        {players.map(({ player, minutes, appearances, roundMatch }) => {
+        {players.map((summary) => {
+          const { player, minutes, appearances, roundMatch } = summary;
           const team = teamById[player.teamId];
           return (
             <li key={player.id}>
@@ -154,8 +236,9 @@ function StatusGroup({
                   <span className="block text-[13px] leading-tight text-foreground">
                     {player.nameJa ?? player.name}
                   </span>
-                  <span className="block text-[10px] leading-tight text-muted">
-                    {team ? clubLabel(team) : ""}
+                  <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted">
+                    <span className="truncate">{team ? clubLabel(team) : ""}</span>
+                    <LastRoundNote summary={summary} />
                   </span>
                 </span>
                 {showKickoff && roundMatch ? (

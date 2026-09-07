@@ -63,6 +63,15 @@ export interface StandingRow {
   played: number | null;
   /** Matches fewer than the club that has played the most. */
   gamesInHand: number;
+  /**
+   * Where this club stood when the previous round finished, counted the same
+   * way as `position`. null in the opening round, when there is no before.
+   */
+  previousPosition: number | null;
+  /** Places gained since then. Positive is upward; null when there is no before. */
+  positionChange: number | null;
+  /** Points won in the current round alone. */
+  roundPoints: number;
 }
 
 export interface Match {
@@ -211,4 +220,22 @@ export interface JapanesePlayerSummary {
   roundStatus: JapaneseRoundStatus;
   /** The club's fixture in this round, so the UI can say when it kicks off. */
   roundMatch: Match | null;
+  /**
+   * The same player a round earlier. A reader following one player is asking
+   * whether he is getting closer to the pitch or further from it, and a single
+   * round's minutes cannot answer that on its own.
+   */
+  previousRound: JapanesePlayerPreviousRound | null;
+}
+
+export interface JapanesePlayerPreviousRound {
+  matchday: number;
+  status: JapaneseRoundStatus;
+  minutes: number;
+  /**
+   * Minutes gained on the previous round. Only meaningful when he was on the
+   * pitch in both, so it is null whenever either round has him off it — a
+   * "-90分" for a player who was dropped says less than the drop itself.
+   */
+  minutesChange: number | null;
 }
