@@ -75,13 +75,6 @@ body {
   color: var(--accent-2);
 }
 
-/* JS-managed hover highlight for LatestResultsMarquee's sliding tickets — see the
-   comment in that component for why this can't just be a plain :hover style. */
-.marquee-ticket.is-active {
-  border-color: var(--accent-2);
-  background-color: var(--surface-2);
-}
-
 ::-webkit-scrollbar {
   height: 8px;
   width: 8px;

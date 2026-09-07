@@ -187,6 +187,8 @@ export interface JapanesePlayerRoundStat {
   assists: number;
 }
 
+export type JapaneseRoundStatus = "played" | "benched" | "absent" | "pending" | "unknown";
+
 export interface JapanesePlayerSummary {
   player: Player;
   // Season-to-date, summed over every match we hold a lineup for. null when no
@@ -199,7 +201,14 @@ export interface JapanesePlayerSummary {
   // lead with weekend numbers instead of season totals. null when they did not
   // play in it.
   round: JapanesePlayerRoundStat | null;
-  // "pending" means their club has not kicked off in this round yet, which is a
-  // different statement from "absent" (their club played and they did not feature).
-  roundStatus: "played" | "pending" | "absent";
+  // Four genuinely different answers to "did he play?", which a single
+  // "did not play" would flatten into something misleading:
+  //   played   — was on the pitch
+  //   benched  — named among the substitutes but never came on
+  //   absent   — not in the matchday squad at all
+  //   pending  — his club has not kicked off in this round yet
+  //   unknown  — the match is over but we hold no lineup for it
+  roundStatus: JapaneseRoundStatus;
+  /** The club's fixture in this round, so the UI can say when it kicks off. */
+  roundMatch: Match | null;
 }
