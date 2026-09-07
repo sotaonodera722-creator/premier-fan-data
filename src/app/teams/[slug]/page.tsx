@@ -11,6 +11,7 @@ import {
   getPlayerAppearances,
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
 import WinLossBar from "@/components/WinLossBar";
@@ -33,10 +34,11 @@ export async function generateMetadata({
   const team = getTeamById(Number(slug));
   if (!team) return { title: "チーム | Premier Fan Data" };
 
+  const nameJa = getTeamNameJa(team.id);
   const rank = team.record ? `プレミアリーグ${team.record.position}位・勝点${team.record.points}。` : "";
   return {
-    title: `${team.shortName} | Premier Fan Data`,
-    description: `${team.name} の${rank}所属選手・直近の試合結果・今後の日程・チームスタッツをまとめています。`,
+    title: `${nameJa?.short ?? team.shortName} | Premier Fan Data`,
+    description: `${nameJa?.full ?? team.name} の${rank}所属選手・直近の試合結果・今後の日程・チームスタッツをまとめています。`,
   };
 }
 
@@ -69,6 +71,7 @@ export default async function TeamDetailPage({
   const jpPlayers = roster.filter((p) => p.isJapanese);
   const r = team.record;
   const teamColor = getTeamColor(team.id);
+  const nameJa = getTeamNameJa(team.id);
   const appearancesByPlayer = new Map(
     roster.map((p) => {
       const apps = getPlayerAppearances(p.id);
@@ -95,8 +98,11 @@ export default async function TeamDetailPage({
               {r ? `第${r.position}位` : "プレミアリーグ"}
             </p>
             <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              {team.name}
+              {nameJa?.full ?? team.name}
             </h1>
+            {/* The crest and every other page still carry the English name, so keep it
+                visible here — otherwise this page is the only place the two don't match. */}
+            {nameJa && <p className="mt-1 text-sm text-muted">{team.name}</p>}
             {jpPlayers.length > 0 && (
               <p className="mt-2 inline-flex items-center gap-1.5 border border-accent-2/50 px-3 py-1 text-xs font-medium text-accent-2">
                 🇯🇵 日本人選手 {jpPlayers.length}名在籍
