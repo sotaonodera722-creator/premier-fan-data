@@ -37,9 +37,19 @@ export default function JapaneseSquadDots({ summaries }: { summaries: JapanesePl
 
   return (
     <span className="mt-2 block">
-      <span className="flex flex-wrap gap-1" aria-hidden="true">
+      <span
+        role="img"
+        aria-label={`日本人選手${summaries.length}人の内訳: ${present
+          .map((g) => `${STATUS_LABEL[g.status]}${g.count}人`)
+          .join("、")}`}
+        className="flex flex-wrap gap-1"
+      >
         {summaries.map((s) => (
-          <span key={s.player.id} className={`h-2 w-2 rounded-[1px] ${MARK[s.roundStatus]}`} />
+          <span
+            key={s.player.id}
+            aria-hidden="true"
+            className={`h-2 w-2 rounded-[1px] ${MARK[s.roundStatus]}`}
+          />
         ))}
       </span>
       <span className="mt-1.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] leading-tight text-muted">
