@@ -31,7 +31,7 @@ export default function RoundStatus() {
       </p>
 
       {pending > 0 ? (
-        <ul className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs">
+        <ul className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs">
           <li className="text-muted">残り{pending}試合</li>
           {remaining.map((m) => (
             <li
@@ -61,7 +61,7 @@ export default function RoundStatus() {
       ) : nextRoundKickoff ? (
         // With the round over, the useful next sentence is when to come back —
         // not a restatement of the line above.
-        <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 text-xs text-muted">
+        <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5 text-xs text-muted">
           <span>次は第{nextRoundKickoff.matchday}節、</span>
           <RelativeDay iso={nextRoundKickoff.utcDate} className="font-medium text-accent-2" />
           <span className="tabular-nums">{jstShortDate(nextRoundKickoff.utcDate)}</span>
