@@ -40,11 +40,9 @@ export default function WeekendTiles() {
         footer={<JapaneseSquadDots summaries={summaries} />}
         hint={
           jp.played > 0
-            ? `合計${jp.minutes}分${jpInvolvement.length ? `・${jpInvolvement.join("・")}` : ""}${
-                jp.pending > 0 ? `／${jp.pending}人はこれから` : ""
-              }`
+            ? `合計${jp.minutes}分${jpInvolvement.length ? `・${jpInvolvement.join("・")}` : ""}`
             : jp.pending > 0
-              ? `${jp.pending}人の所属クラブはこれから`
+              ? "所属クラブの試合がこれから始まります"
               : "この節はまだ出場記録がありません"
         }
       />
@@ -72,6 +70,12 @@ export default function WeekendTiles() {
           label="今節いちばん点が入った試合"
           value={`${highestScoring.match.homeGoals}-${highestScoring.match.awayGoals}`}
           unit={`計${highestScoring.goals}点`}
+          leading={
+            <span className="flex shrink-0 items-center -space-x-1">
+              <TeamBadge team={highestScoring.homeTeam} size={24} />
+              <TeamBadge team={highestScoring.awayTeam} size={24} />
+            </span>
+          }
           href={`/matches/${highestScoring.match.id}`}
           hint={`${clubLabel(highestScoring.homeTeam)} 対 ${clubLabel(highestScoring.awayTeam)}`}
         />
@@ -84,6 +88,7 @@ export default function WeekendTiles() {
           label="今節の番狂わせ"
           value={biggestUpset.gap}
           unit="順位差"
+          leading={<TeamBadge team={biggestUpset.winner} size={24} />}
           href={`/matches/${biggestUpset.match.id}`}
           hint={`${biggestUpset.winnerRank}位の${clubLabel(biggestUpset.winner)}が${
             biggestUpset.loserRank

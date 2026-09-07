@@ -49,10 +49,10 @@ export default async function Home({
         played overnight, some still to come tonight — and that fact is the
         whole reason this site exists, so it goes above everything else.
       */}
-      <section className="border-b border-border pb-7 pt-7 sm:pt-10">
+      <section className="border-b border-border pb-7 pt-2 sm:pt-10">
         <RoundStatus />
 
-        <div className="mt-5">
+        <div className="mt-2 sm:mt-4">
           <WeekendBoard
             matches={results.matches}
             teamById={teamById}

@@ -72,10 +72,13 @@ export default function WeekendBoard({
   }
 
   return (
-    <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-0 sm:grid-cols-2 sm:gap-2 lg:grid-cols-3">
       {days.map((day) => (
-        <div key={day.date} className="glass overflow-hidden rounded-xl">
-          <p className="flex items-baseline gap-2 border-b border-border bg-background-alt px-3 py-1.5 text-[11px] font-semibold text-foreground">
+        <div
+          key={day.date}
+          className="glass overflow-hidden border-t-0 first:rounded-t-xl first:border-t last:rounded-b-xl sm:rounded-xl sm:border-t"
+        >
+          <p className="flex items-baseline gap-2 border-b border-border bg-background-alt px-3 py-0.5 text-[10px] font-semibold leading-4 text-foreground">
             <span className="tabular-nums">{day.date}</span>
             <span className="ml-auto font-normal tabular-nums text-muted">
               {day.matches.length}試合
@@ -116,7 +119,7 @@ export default function WeekendBoard({
                       </>
                     )}
                     {lateNightTag(m.utcDate) && (
-                      <span className="mt-0.5 text-[9px] text-muted">{lateNightTag(m.utcDate)}</span>
+                      <span className="text-[9px] leading-tight text-muted">{lateNightTag(m.utcDate)}</span>
                     )}
                   </span>
                   <Side
