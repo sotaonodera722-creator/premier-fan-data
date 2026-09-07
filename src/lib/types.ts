@@ -155,3 +155,27 @@ export interface PlayerAppearance {
   awayGoals: number | null;
   status: "start" | "bench";
 }
+
+export interface JapanesePlayerRoundStat {
+  matchday: number;
+  minutes: number;
+  goals: number;
+  assists: number;
+}
+
+export interface JapanesePlayerSummary {
+  player: Player;
+  // Season-to-date, summed over every match we hold a lineup for. null when no
+  // covered match has this player in a lineup — distinct from 0, which would mean
+  // "named in a lineup but never actually on the pitch".
+  minutes: number | null;
+  appearances: number;
+  starts: number;
+  // The most recent completed round only, so a section headed "this weekend" can
+  // lead with weekend numbers instead of season totals. null when they did not
+  // play in it.
+  round: JapanesePlayerRoundStat | null;
+  // "pending" means their club has not kicked off in this round yet, which is a
+  // different statement from "absent" (their club played and they did not feature).
+  roundStatus: "played" | "pending" | "absent";
+}
