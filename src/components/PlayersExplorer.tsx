@@ -93,12 +93,12 @@ export default function PlayersExplorer({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="選手名で検索"
-          className="w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-2 focus:outline-none"
+          className="w-full max-w-xs min-h-[44px] rounded-lg border border-border bg-surface px-3.5 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-2 focus:outline-none"
         />
         <select
           value={teamId}
           onChange={(e) => selectTeamId(e.target.value)}
-          className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-2 focus:outline-none"
+          className="min-h-[44px] rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-2 focus:outline-none"
         >
           <option value="all">全チーム</option>
           {teams.map((t) => (
@@ -110,7 +110,7 @@ export default function PlayersExplorer({
         <div className="flex gap-1 rounded-lg border border-border bg-surface p-1">
           <button
             onClick={() => selectPosition("all")}
-            className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+            className={`inline-flex min-h-[44px] items-center rounded-md px-2.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
               position === "all" ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
           >
@@ -120,7 +120,7 @@ export default function PlayersExplorer({
             <button
               key={pos}
               onClick={() => selectPosition(pos)}
-              className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+              className={`inline-flex min-h-[44px] items-center rounded-md px-2.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                 position === pos ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}
             >
@@ -130,7 +130,7 @@ export default function PlayersExplorer({
         </div>
         <button
           onClick={toggleJapaneseOnly}
-          className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
+          className={`inline-flex min-h-[44px] items-center rounded-lg border px-3 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
             japaneseOnly
               ? "border-accent-2/50 bg-accent-2/15 text-accent-2"
               : "border-border bg-surface text-muted hover:text-foreground"
@@ -143,7 +143,7 @@ export default function PlayersExplorer({
             <button
               key={s.key}
               onClick={() => selectSort(s.key)}
-              className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+              className={`inline-flex min-h-[44px] items-center rounded-md px-2.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
                 sort === s.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
               }`}
             >

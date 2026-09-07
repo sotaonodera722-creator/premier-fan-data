@@ -55,7 +55,7 @@ export default function TeamStatsExplorer({
           <button
             key={t.key}
             onClick={() => selectTab(t.key)}
-            className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition ${
+            className={`inline-flex min-h-[44px] items-center rounded-md px-3.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
               tab === t.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
           >

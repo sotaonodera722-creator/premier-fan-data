@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { jstRelativeKickoff } from "@/lib/datetime";
+import { jstRelativeDay, jstRelativeKickoff } from "@/lib/datetime";
 
 // Relative wording ("今夜", "3時間前") can only be computed against the reader's
 // actual clock. The site is statically generated and redeployed every few hours,
@@ -53,6 +53,18 @@ export function TimeAgo({
   if (!now) return null;
   const label = timeAgo(iso, now);
   return <span className={className}>{parenthesized ? `（${label}）` : label}</span>;
+}
+
+/**
+ * Just the day word — "今夜", "明日未明" — for places that already print the
+ * clock time themselves and only want the relative half in front of it.
+ */
+export function RelativeDay({ iso, className }: { iso: string; className?: string }) {
+  const now = useNow();
+  if (!now) return null;
+  const label = jstRelativeDay(iso, now);
+  if (!label) return null;
+  return <span className={className}>{label}</span>;
 }
 
 /**

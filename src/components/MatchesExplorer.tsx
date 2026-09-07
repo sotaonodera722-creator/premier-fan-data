@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import MatchdayPills from "@/components/MatchdayPills";
+import { RelativeKickoff } from "@/components/RelativeTime";
 import { useUrlParams } from "@/lib/useUrlParams";
+import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { jstFullDate, jstLongDate, jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 
 type Mode = "date" | "matchday" | "team";
@@ -15,6 +18,12 @@ const MODES: { key: Mode; label: string }[] = [
   { key: "team", label: "チーム別" },
 ];
 
+
+// Japanese club names run about 1.6x the pixel width of their English
+// counterparts, so the short forms are what fit here without truncating.
+function clubLabel(team: Team): string {
+  return getTeamNameJa(team.id)?.short ?? team.shortName;
+}
 
 function MatchRow({
   match,
@@ -31,9 +40,9 @@ function MatchRow({
   const away = teamById.get(match.awayTeamId);
 
   const content = (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-3 text-sm">
-      <div className="flex items-center justify-end gap-2 truncate text-right">
-        <span className="truncate text-foreground">{home?.name}</span>
+    <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 py-3 text-sm">
+      <div className="flex min-w-0 items-center justify-end gap-2 text-right">
+        <span className="min-w-0 leading-tight text-foreground">{home && clubLabel(home)}</span>
         {home && <TeamBadge team={home} size={24} />}
       </div>
       <div className="flex flex-col items-center justify-self-center">
@@ -48,19 +57,23 @@ function MatchRow({
             {lateNightTag(match.utcDate) && (
               <span className="text-[9px] text-muted">{lateNightTag(match.utcDate)}</span>
             )}
+            <RelativeKickoff iso={match.utcDate} className="text-[9px] text-accent-2" />
           </span>
         )}
       </div>
-      <div className="flex items-center gap-2 truncate">
+      <div className="flex min-w-0 items-center gap-2">
         {away && <TeamBadge team={away} size={24} />}
-        <span className="truncate text-foreground">{away?.name}</span>
+        <span className="min-w-0 leading-tight text-foreground">{away && clubLabel(away)}</span>
       </div>
     </div>
   );
 
   if (!clickable) return <div>{content}</div>;
   return (
-    <Link href={`/matches/${match.id}`} className="block transition hover:bg-surface-2">
+    <Link
+      href={`/matches/${match.id}`}
+      className="block transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
+    >
       {content}
     </Link>
   );
@@ -70,32 +83,57 @@ function MatchdayPager({
   label,
   matchday,
   maxMatchday,
+  currentMatchday,
   onChange,
 }: {
   label: string;
   matchday: number;
   maxMatchday: number;
+  currentMatchday: number;
   onChange: (matchday: number) => void;
 }) {
+  const rounds = Array.from({ length: maxMatchday }, (_, i) => i + 1);
   return (
-    <div className="mb-4 flex items-center justify-center gap-4">
-      <button
-        onClick={() => onChange(Math.max(1, matchday - 1))}
-        disabled={matchday <= 1}
-        className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-surface disabled:opacity-30"
-        aria-label="前の節"
-      >
-        ‹
-      </button>
-      <span className="font-[family-name:var(--font-display)] text-lg font-bold text-foreground">{label}</span>
-      <button
-        onClick={() => onChange(Math.min(maxMatchday, matchday + 1))}
-        disabled={matchday >= maxMatchday}
-        className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-surface disabled:opacity-30"
-        aria-label="次の節"
-      >
-        ›
-      </button>
+    <div className="mb-4">
+      <div className="flex items-center justify-center gap-4">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(1, matchday - 1))}
+          disabled={matchday <= 1}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-surface disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label="前の節"
+        >
+          <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+            <path d="M12 5l-5 5 5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <span className="min-w-0 text-center font-[family-name:var(--font-display)] text-lg font-bold text-foreground">
+          {label}
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(maxMatchday, matchday + 1))}
+          disabled={matchday >= maxMatchday}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-surface disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label="次の節"
+        >
+          <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+            <path d="M8 5l5 5-5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+      <div className="mt-2">
+        <MatchdayPills rounds={rounds} matchday={matchday} onChange={onChange} />
+      </div>
+      {matchday !== currentMatchday && (
+        <button
+          type="button"
+          onClick={() => onChange(currentMatchday)}
+          className="mt-1.5 rounded-sm py-2 text-xs font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          第{currentMatchday}節へ戻る
+        </button>
+      )}
     </div>
   );
 }
@@ -215,7 +253,7 @@ export default function MatchesExplorer({
           <button
             key={m.key}
             onClick={() => selectMode(m.key)}
-            className={`rounded-md px-3.5 py-1.5 text-xs font-medium transition ${
+            className={`inline-flex min-h-[44px] flex-1 items-center justify-center rounded-md px-3.5 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
               mode === m.key ? "bg-accent text-background" : "text-muted hover:text-foreground"
             }`}
           >
@@ -226,7 +264,13 @@ export default function MatchesExplorer({
 
       {mode === "date" && (
         <div>
-          <MatchdayPager label={dateRangeLabel} matchday={matchday} maxMatchday={maxMatchday} onChange={changeMatchday} />
+          <MatchdayPager
+            label={dateRangeLabel}
+            matchday={matchday}
+            maxMatchday={maxMatchday}
+            currentMatchday={currentMatchday}
+            onChange={changeMatchday}
+          />
           <div className="space-y-6">
             {dateGroups.map((g) => (
               <div key={g.label}>
@@ -246,6 +290,7 @@ export default function MatchesExplorer({
             label={`第${matchday}節`}
             matchday={matchday}
             maxMatchday={maxMatchday}
+            currentMatchday={currentMatchday}
             onChange={changeMatchday}
           />
           <MatchList matches={matchdayMatches} teamById={teamById} clickableMatchIds={clickableSet} showDate />
@@ -257,11 +302,11 @@ export default function MatchesExplorer({
           <select
             value={teamId}
             onChange={(e) => selectTeamId(Number(e.target.value))}
-            className="mb-4 w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground focus:border-accent-2 focus:outline-none"
+            className="mb-4 min-h-[44px] w-full max-w-xs rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground focus:border-accent-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
           >
             {teams.map((t) => (
               <option key={t.id} value={t.id}>
-                {t.name}
+                {getTeamNameJa(t.id)?.full ?? t.name}
               </option>
             ))}
           </select>
