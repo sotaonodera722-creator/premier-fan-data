@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { getForm, getUpcomingFixtures, getTeamById } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
@@ -33,18 +34,33 @@ function ClubColorBar({ teamId }: { teamId: number }) {
 export function StandingsCardList({
   rows,
   className = "lg:hidden",
+  omittedAfterIndex,
 }: {
   rows: StandingRow[];
   /** Overridden where the list is the only layout, as on the homepage. */
   className?: string;
+  /**
+   * Index after which the caller has cut the middle of the table out. Marking
+   * the cut keeps the list honest: without it, ninth place appearing directly
+   * under sixth reads as the actual order.
+   */
+  omittedAfterIndex?: number;
 }) {
   return (
     <ul className={`glass divide-y divide-border overflow-hidden rounded-xl ${className}`}>
-      {rows.map((row) => {
+      {rows.map((row, index) => {
         const r = row.team.record;
         const nameJa = getTeamNameJa(row.team.id);
+        // Counted in the numbers actually printed in the rows, not in dense
+        // ranks — otherwise the label can claim to have hidden a position that
+        // is visible in the very next row, since tied clubs share a number.
+        const omittedHere =
+          omittedAfterIndex === index && rows[index + 1]
+            ? { from: (rows[index].position ?? rows[index].rank) + 1, to: (rows[index + 1].position ?? rows[index + 1].rank) - 1 }
+            : null;
         return (
-          <li key={row.team.id} className="relative">
+          <Fragment key={row.team.id}>
+          <li className="relative">
             <ClubColorBar teamId={row.team.id} />
             <Link
               href={`/teams/${row.team.id}`}
@@ -83,6 +99,14 @@ export function StandingsCardList({
               </div>
             </Link>
           </li>
+          {omittedHere && (
+            <li className="bg-background-alt px-4 py-1.5 text-center text-[10px] tracking-[0.2em] text-muted">
+              <span className="tabular-nums">
+                {omittedHere.from}〜{omittedHere.to}位は省略
+              </span>
+            </li>
+          )}
+          </Fragment>
         );
       })}
     </ul>
@@ -105,7 +129,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
             <th scope="col" className="px-2 py-3 text-center font-medium">得点</th>
             <th scope="col" className="px-2 py-3 text-center font-medium">失点</th>
             <th scope="col" className="px-2 py-3 text-center font-medium">得失点差</th>
-            <th scope="col" className="px-2 py-3 text-center font-medium">勝点</th>
+            <th scope="col" className="bg-surface-2/60 px-2 py-3 text-center font-semibold text-foreground">勝点</th>
             <th scope="col" className="px-3 py-3 font-medium">直近5試合</th>
             <th scope="col" className="px-3 py-3 font-medium">次戦</th>
           </tr>
@@ -165,7 +189,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                 <td className="px-2 py-2.5 text-center tabular-nums text-foreground">
                   {r ? goalDiff(r.goalDiff) : "-"}
                 </td>
-                <td className="px-2 py-2.5 text-center font-bold tabular-nums text-foreground">
+                <td className="bg-surface-2/60 px-2 py-2.5 text-center font-[family-name:var(--font-display)] text-base font-bold tabular-nums text-foreground">
                   {r?.points ?? "-"}
                 </td>
                 <td className="px-3 py-2.5">

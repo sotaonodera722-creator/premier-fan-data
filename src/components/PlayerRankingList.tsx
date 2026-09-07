@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Player, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
+import SectionLink from "@/components/SectionLink";
 
 export type RankingEntry = { player: Player; value: number };
 
@@ -29,9 +30,7 @@ export default function PlayerRankingList({
         title={title}
         action={
           moreHref && (
-            <Link href={moreHref} className="text-sm font-medium text-accent-2 hover:underline">
-              もっと見る →
-            </Link>
+            <SectionLink href={moreHref}>もっと見る →</SectionLink>
           )
         }
       />

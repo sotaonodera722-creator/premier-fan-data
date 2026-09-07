@@ -14,6 +14,7 @@ import {
   getTeamStatAverage,
 } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
+import SectionLink from "@/components/SectionLink";
 import StatTile from "@/components/StatTile";
 import JapanesePlayersSection from "@/components/JapanesePlayersSection";
 import LatestResultsMarquee from "@/components/LatestResultsMarquee";
@@ -97,14 +98,7 @@ export default async function Home({
           eyebrow="Japanese Players"
           title="日本人選手の週末"
           action={
-            <Link
-              href="/players"
-              // -my-3 cancels the padding's effect on layout, so the link keeps its
-              // baseline alignment with the heading while the tap target reaches 44px.
-              className="-my-3 inline-flex items-center rounded-sm py-3 text-sm font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              選手名鑑へ →
-            </Link>
+            <SectionLink href="/players">選手名鑑へ →</SectionLink>
           }
         />
         <JapanesePlayersSection summaries={jpSummaries} matchday={results.matchday} teamById={teamById} />
@@ -118,15 +112,13 @@ export default async function Home({
       </section>
       <SampleSizeNote />
 
-      <section className="mt-14 grid gap-8 lg:grid-cols-2">
+      <section className="mt-14 grid items-start gap-8 lg:grid-cols-2">
         <div className="min-w-0">
           <SectionHeading
             eyebrow="Standings"
             title="順位表"
             action={
-              <Link href="/standings" className="text-sm font-medium text-accent-2 hover:underline">
-                全順位を見る →
-              </Link>
+              <SectionLink href="/standings">全順位を見る →</SectionLink>
             }
           />
           <HomeStandingsTable rows={standingsRows} />
@@ -136,9 +128,7 @@ export default async function Home({
             eyebrow="Fixtures"
             title="試合日程"
             action={
-              <Link href="/matches" className="text-sm font-medium text-accent-2 hover:underline">
-                試合一覧へ →
-              </Link>
+              <SectionLink href="/matches">試合一覧へ →</SectionLink>
             }
           />
           <HomeFixtures
