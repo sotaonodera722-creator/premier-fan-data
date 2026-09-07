@@ -1,3 +1,5 @@
+import type { StandingZone } from "@/lib/leagueRules";
+
 export type Position = "GK" | "DF" | "MF" | "FW";
 export type MatchResultLetter = "W" | "D" | "L";
 
@@ -43,6 +45,24 @@ export interface Player {
   goals: number | null;
   assists: number | null;
   appearances: number | null;
+}
+
+export interface StandingRow {
+  team: Team;
+  /** Position in the table counted densely, 1..20 — never shared, unlike . */
+  rank: number;
+  /** The position the feed reports, which clubs it cannot separate share. */
+  position: number | null;
+  isTied: boolean;
+  tiedCount: number;
+  zone: StandingZone | null;
+  /** The zone this club could still land in when a tie spans a zone edge. */
+  provisionalZone: StandingZone | null;
+  /** True when the clubs sharing this position do not all fall in the same zone. */
+  tieStraddlesZoneBoundary: boolean;
+  played: number | null;
+  /** Matches fewer than the club that has played the most. */
+  gamesInHand: number;
 }
 
 export interface Match {

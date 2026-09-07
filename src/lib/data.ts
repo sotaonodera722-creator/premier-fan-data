@@ -4,6 +4,7 @@ import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { zoneForRank } from "@/lib/leagueRules";
 import type {
   Team,
   Player,
@@ -18,6 +19,7 @@ import type {
   PlayerAppearance,
   JapanesePlayerSummary,
   JapanesePlayerRoundStat,
+  StandingRow,
 } from "@/lib/types";
 
 const teams = teamsJson as Team[];
@@ -639,4 +641,69 @@ export function getSampleSize(): {
     totalMatches: all.length,
     coveredMatches: played.filter((m) => Boolean(getMatchLineup(m.id))).length,
   };
+}
+
+// The table as rows, with everything the UI needs to render it honestly.
+//
+// Two things the raw feed gets wrong on its own. It reports a shared position
+// number for clubs it cannot separate — this season two clubs are both "17th",
+// so there is no 18th, and a zone test written against that number puts only
+// two clubs in a three-club relegation zone. Ranks here are therefore positional
+// (1..20, always dense), and the shared number is kept alongside so a tie can be
+// shown as a tie. And clubs do not always have the same number of matches
+// played, which makes a bare position misleading; games in hand are counted so
+// the table can say so.
+export function getStandingsTable(): StandingRow[] {
+  const sorted = [...teams].sort((a, b) => {
+    const ra = a.record;
+    const rb = b.record;
+    if (!ra || !rb) return (ra ? 0 : 1) - (rb ? 0 : 1);
+    return (
+      ra.position - rb.position ||
+      rb.points - ra.points ||
+      rb.goalDiff - ra.goalDiff ||
+      rb.goalsFor - ra.goalsFor ||
+      a.name.localeCompare(b.name)
+    );
+  });
+
+  const total = sorted.length;
+  const maxPlayed = sorted.reduce((max, t) => Math.max(max, t.record?.played ?? 0), 0);
+
+  // Ranks held by each shared position number, so a tie can be reported as one.
+  const ranksByPosition = new Map<number, number[]>();
+  sorted.forEach((t, index) => {
+    const pos = t.record?.position;
+    if (pos == null) return;
+    const ranks = ranksByPosition.get(pos) ?? [];
+    ranks.push(index + 1);
+    ranksByPosition.set(pos, ranks);
+  });
+
+  return sorted.map((team, index) => {
+    const rank = index + 1;
+    const position = team.record?.position ?? null;
+    const tiedRanks = position == null ? [rank] : (ranksByPosition.get(position) ?? [rank]);
+    const zone = zoneForRank(rank, total);
+    // A tie matters most when it spans a zone edge: which of the level clubs is
+    // "in the drop" then rests on a tiebreak the feed has not applied, so the
+    // table has to say the boundary is provisional rather than draw a hard line.
+    // Both clubs carry the marker — the one that happens to have sorted above
+    // the line is exactly as undecided as the one below it.
+    const tieZones = tiedRanks.map((r) => zoneForRank(r, total));
+    const tieStraddlesZoneBoundary = tieZones.some((z) => z !== zone);
+
+    return {
+      team,
+      rank,
+      position,
+      isTied: tiedRanks.length > 1,
+      tiedCount: tiedRanks.length,
+      zone,
+      provisionalZone: zone ?? tieZones.find((z) => z !== null) ?? null,
+      tieStraddlesZoneBoundary,
+      played: team.record?.played ?? null,
+      gamesInHand: maxPlayed - (team.record?.played ?? maxPlayed),
+    };
+  });
 }

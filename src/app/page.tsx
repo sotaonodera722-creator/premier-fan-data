@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   getStandings,
+  getStandingsTable,
   getTopScorers,
   getTopAssists,
   getCurrentMatchday,
@@ -29,6 +30,7 @@ export default async function Home({
 }) {
   const { round } = await searchParams;
   const standings = getStandings();
+  const standingsRows = getStandingsTable();
   const matchday = getCurrentMatchday();
   const jpSummaries = getJapanesePlayerSummaries();
   const teams = getTeams();
@@ -127,7 +129,7 @@ export default async function Home({
               </Link>
             }
           />
-          <HomeStandingsTable standings={standings} />
+          <HomeStandingsTable rows={standingsRows} />
         </div>
         <div className="min-w-0">
           <SectionHeading
