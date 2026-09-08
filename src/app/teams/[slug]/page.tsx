@@ -10,6 +10,7 @@ import {
   getMatchLineup,
   getPlayerAppearances,
   getStandingsTable,
+  getSeasonMovement,
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
@@ -77,6 +78,16 @@ export default async function TeamDetailPage({
   const teamColor = getTeamColor(team.id);
   const nameJa = getTeamNameJa(team.id);
   const profile = getClubProfile(team.id);
+  const movement = getSeasonMovement(team.id);
+  // The tile said "プレミアリーグ", which the reader already knows from the page
+  // they are on. Last season's finish is the one figure that makes this one mean
+  // something, so it takes the slot.
+  const seasonHint =
+    movement.kind === "promoted" && movement.last
+      ? `昨季は2部${movement.last.position}位`
+      : movement.last
+        ? `昨季 ${movement.last.position}位`
+        : "プレミアリーグ";
   const inRelegationZone =
     getStandingsTable().find((row) => row.team.id === team.id)?.provisionalZone === "relegation";
   const appearancesByPlayer = new Map(
@@ -155,6 +166,21 @@ export default async function TeamDetailPage({
                         {team.founded ? `${team.founded}年` : "不明"}
                       </dd>
                     </div>
+                    {movement.last && (
+                      // Where they finished in May. A club identity that stops at
+                      // the founding year leaves out the only part of it a reader
+                      // can check against this season.
+                      <div>
+                        <dt className="text-[11px] text-muted">昨季</dt>
+                        <dd className="mt-0.5 tabular-nums text-foreground">
+                          {movement.last.tier === 1 ? "" : "2部 "}
+                          {movement.last.position}位
+                          <span className="block text-[11px] text-muted">
+                            {movement.last.played}試合・勝点{movement.last.points}
+                          </span>
+                        </dd>
+                      </div>
+                    )}
                   </dl>
                   <DataNote>
                     クラブの歴史・本拠地・スタジアムは Wikipedia を参考にしています。
@@ -172,7 +198,7 @@ export default async function TeamDetailPage({
                   hint={`${r.goalsFor}得点 / ${r.goalsAgainst}失点`}
                 />
                 <StatTile label="勝率" value={`${r.winRate}%`} hint={`${r.wins}勝`} />
-                <StatTile label="順位" value={r.position} hint="プレミアリーグ" />
+                <StatTile label="順位" value={r.position} hint={seasonHint} />
               </section>
             )}
 

@@ -239,3 +239,54 @@ export interface JapanesePlayerPreviousRound {
    */
   minutesChange: number | null;
 }
+
+/** One club's finishing position in the season before this one. */
+export interface PastSeasonRecord {
+  teamId: number;
+  name: string;
+  /** 1 = Premier League, 2 = Championship. */
+  tier: number;
+  divisionJa: string;
+  position: number;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  points: number;
+}
+
+export interface PastSeasonsFile {
+  meta: {
+    season: string;
+    seasonStartYear: number;
+    fetchedAt: string;
+    source: string;
+    note: string;
+  };
+  teams: Record<string, PastSeasonRecord>;
+}
+
+/**
+ * Where a club has come from since May.
+ *
+ * Deliberately not the same shape as the round-on-round movement in
+ * `StandingRow`. That one compares two Premier League positions and can always
+ * subtract them; this one has to cope with a club whose previous position was
+ * in a different division, where no subtraction is meaningful — Coventry did
+ * not climb nineteen places, they were promoted.
+ */
+export type SeasonMovementKind = "up" | "down" | "level" | "promoted" | "unknown";
+
+export interface SeasonMovement {
+  kind: SeasonMovementKind;
+  /** The club's finish last season, or null when we hold no record for it. */
+  last: PastSeasonRecord | null;
+  position: number | null;
+  /**
+   * Places gained on last season's finish. Positive is upward. null whenever
+   * the two positions are not comparable — a promoted club, or a missing record.
+   */
+  change: number | null;
+}
