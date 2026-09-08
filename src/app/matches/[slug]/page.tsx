@@ -19,6 +19,7 @@ import { RelativeKickoff } from "@/components/RelativeTime";
 import { jstLongDate, jstTime, lateNightNote } from "@/lib/datetime";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
+import { getRivalry, RIVALRY_KIND_LABELS } from "@/lib/rivalries";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
 
 export function generateStaticParams() {
@@ -64,6 +65,10 @@ export default async function MatchDetailPage({
   const homeTeam = getTeamById(match.homeTeamId);
   const awayTeam = getTeamById(match.awayTeamId);
   if (!homeTeam || !awayTeam) notFound();
+
+  // Named here rather than only on the club pages: a reader who arrived at this
+  // fixture from the homepage has no other way to learn it is a derby.
+  const rivalry = getRivalry(homeTeam.id, awayTeam.id);
 
   const lineup = getMatchLineup(matchId);
   // A finished match with no lineup data is a genuine gap, not a future fixture.
@@ -114,6 +119,20 @@ export default async function MatchDetailPage({
           <span className="ml-1.5 text-xs">— {lateNightNote(match.utcDate)}のキックオフ</span>
         )}
       </p>
+
+      {rivalry && (
+        // Above the crests, because it changes how the two names below it read.
+        // A 1st-versus-11th fixture looks like a mismatch until you know the two
+        // clubs share a city.
+        <div className="mt-3.5 flex justify-center">
+          <p className="max-w-md border border-foreground px-3 py-2 text-center">
+            <span className="block text-[11px] font-bold tracking-[0.08em] text-foreground">
+              {rivalry.name ?? `${RIVALRY_KIND_LABELS[rivalry.kind]}のある対戦`}
+            </span>
+            <span className="mt-1 block text-[11px] leading-relaxed text-muted">{rivalry.why}</span>
+          </p>
+        </div>
+      )}
 
       <div className="mt-4 flex items-center justify-center gap-6 sm:gap-10">
         <Link href={`/teams/${homeTeam.id}`} className="group flex flex-col items-center gap-2">

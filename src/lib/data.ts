@@ -8,6 +8,9 @@ import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import { getClubProfile } from "@/lib/clubProfiles";
+import { STYLE_AXES, STYLE_GROUPS } from "@/lib/teamStyle";
+import { getRivalry, RIVALRY_KIND_LABELS } from "@/lib/rivalries";
+import type { AxisReading, StyleGroup, TeamStyle } from "@/lib/teamStyle";
 import type {
   Team,
   Player,
@@ -1375,6 +1378,14 @@ const PICK_WEIGHTS = {
   bothBigSix: 3,
   evenHistory: 2,
   highScoring: 2,
+  /**
+   * A derby outscores a meeting of two big clubs, because it is the one
+   * reason on this list that survives both clubs being out of form. S08 had to
+   * settle for club tier as a stand-in and said so; this replaces it.
+   */
+  fiercestRivalry: 5,
+  strongRivalry: 3,
+  mildRivalry: 1,
   japanesePlayer: 3,
   /** Each Japanese player beyond the first, capped — three of them is rare. */
   extraJapanesePlayer: 1,
@@ -1460,6 +1471,25 @@ export function getMatchPicks(limit = 3): {
           detail: `両クラブ合わせて1試合平均${combined.toFixed(1)}点`,
         });
       }
+    }
+
+    const rivalry = getRivalry(homeTeam.id, awayTeam.id);
+    if (rivalry) {
+      score +=
+        rivalry.intensity === 3
+          ? PICK_WEIGHTS.fiercestRivalry
+          : rivalry.intensity === 2
+            ? PICK_WEIGHTS.strongRivalry
+            : PICK_WEIGHTS.mildRivalry;
+      reasons.push({
+        label: rivalry.name ?? "因縁の対戦",
+        detail:
+          rivalry.kind === "sameCity"
+            ? "同じ街の2クラブ"
+            : rivalry.kind === "regional"
+              ? "同じ地方の2クラブ"
+              : RIVALRY_KIND_LABELS[rivalry.kind] + "のある対戦",
+      });
     }
 
     if (getClubProfile(homeTeam.id)?.tier === "big6" && getClubProfile(awayTeam.id)?.tier === "big6") {
@@ -1768,4 +1798,116 @@ export const getRelegatedFromLastSeason: () => PastSeasonRecord[] = memo(() => {
   return Object.values(pastSeasonsFile.teams)
     .filter((r) => r.tier === 1 && !current.has(r.teamId))
     .sort((a, b) => a.position - b.position);
+});
+
+// ---------------------------------------------------------------------------
+// Team style
+//
+// Averages every club's statistics once, then reads each axis off that table.
+// Computed as a whole because an axis is only meaningful against the other
+// nineteen clubs: a club's own figure says nothing until the league is behind it.
+// ---------------------------------------------------------------------------
+
+/** Per club, per category: the mean over the matches that carry that category. */
+const getTeamStatMeans: () => Map<number, Map<string, { mean: number; n: number }>> = memo(() => {
+  const out = new Map<number, Map<string, { mean: number; n: number }>>();
+  const totals = new Map<number, Map<string, { sum: number; n: number }>>();
+
+  for (const lineup of Object.values(lineupsFile.lineups)) {
+    if (!lineup.statistics) continue;
+    const match = getMatchById(lineup.matchId);
+    if (!match) continue;
+    const sides: [number, typeof lineup.statistics.homeTeam][] = [
+      [match.homeTeamId, lineup.statistics.homeTeam],
+      [match.awayTeamId, lineup.statistics.awayTeam],
+    ];
+    for (const [teamId, side] of sides) {
+      if (!totals.has(teamId)) totals.set(teamId, new Map());
+      const forTeam = totals.get(teamId)!;
+      for (const stat of side.statistics) {
+        const cur = forTeam.get(stat.displayName) ?? { sum: 0, n: 0 };
+        cur.sum += stat.value;
+        cur.n += 1;
+        forTeam.set(stat.displayName, cur);
+      }
+    }
+  }
+
+  for (const [teamId, forTeam] of totals) {
+    const means = new Map<string, { mean: number; n: number }>();
+    for (const [name, { sum, n }] of forTeam) means.set(name, { mean: sum / n, n });
+    out.set(teamId, means);
+  }
+  return out;
+});
+
+/** Every club's value on every axis, so one club can be placed among them. */
+const getAxisTable: () => Map<string, { teamId: number; value: number; n: number }[]> = memo(() => {
+  const means = getTeamStatMeans();
+  const table = new Map<string, { teamId: number; value: number; n: number }[]>();
+
+  for (const axis of STYLE_AXES) {
+    const rows: { teamId: number; value: number; n: number }[] = [];
+    for (const team of teams) {
+      const forTeam = means.get(team.id);
+      if (!forTeam) continue;
+      const get = (name: string) => forTeam.get(name)?.mean ?? null;
+      // The sample behind an axis is the smallest sample behind the categories
+      // it is built from — a ratio is only as well evidenced as its scarcer half.
+      const sizes = axis.needs.map((name) => forTeam.get(name)?.n ?? 0);
+      if (sizes.some((n) => n === 0)) continue;
+      const value = axis.compute(get);
+      if (value == null || !Number.isFinite(value)) continue;
+      rows.push({ teamId: team.id, value, n: Math.min(...sizes) });
+    }
+    // Descending, so rank 1 is the highest figure on the axis.
+    rows.sort((a, b) => b.value - a.value || a.teamId - b.teamId);
+    table.set(axis.key, rows);
+  }
+  return table;
+});
+
+export const getTeamStyle: (teamId: number) => TeamStyle | null = memoByKey((teamId: number) => {
+  const team = getTeamById(teamId);
+  if (!team) return null;
+  const table = getAxisTable();
+
+  const readings = new Map<string, AxisReading>();
+  for (const axis of STYLE_AXES) {
+    const rows = table.get(axis.key) ?? [];
+    const index = rows.findIndex((r) => r.teamId === teamId);
+    if (index === -1) continue;
+    const ascending = [...rows].map((r) => r.value).sort((a, b) => a - b);
+    readings.set(axis.key, {
+      axis,
+      value: rows[index].value,
+      rank: index + 1,
+      outOf: rows.length,
+      distribution: ascending,
+      median: ascending[Math.floor(ascending.length / 2)],
+      sampleSize: rows[index].n,
+    });
+  }
+
+  if (readings.size === 0) return null;
+
+  const groups: StyleGroup[] = STYLE_GROUPS.map((g) => ({
+    key: g.key,
+    label: g.label,
+    readings: STYLE_AXES.filter((a) => a.group === g.key)
+      .map((a) => readings.get(a.key))
+      .filter((r): r is AxisReading => r !== undefined),
+  })).filter((g) => g.readings.length > 0);
+
+  const all = [...readings.values()];
+  // Only the ends of the league say something a reader could not have guessed.
+  const axisOrder = new Map(STYLE_AXES.map((a, i) => [a.key, i]));
+  const extremes = all
+    .filter((r) => r.rank === 1 || r.rank === r.outOf)
+    .sort((x, y) => (axisOrder.get(x.axis.key) ?? 0) - (axisOrder.get(y.axis.key) ?? 0));
+
+  const basic = readings.get("possession")?.sampleSize ?? 0;
+  const extended = readings.get("xg")?.sampleSize ?? basic;
+
+  return { team, groups, sampleSize: basic, extendedSampleSize: extended, extremes };
 });
