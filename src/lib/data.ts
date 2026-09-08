@@ -3,6 +3,7 @@ import playersJson from "@/data/players.json";
 import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
+import pastSeasonsJson from "@/data/past-seasons.json";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
@@ -26,9 +27,12 @@ import type {
   Position,
   LineupPlayer,
   StandingRow,
+  PastSeasonsFile,
+  PastSeasonRecord,
+  SeasonMovement,
 } from "@/lib/types";
 
-// Every figure on this site is derived from four static JSON files that never
+// Every figure on this site is derived from five static JSON files that never
 // change while the process is running, so anything computed from them is
 // computed once. Without this the player pages rebuilt the whole season's
 // minutes for each of the 548 of them and the build timed out.
@@ -60,6 +64,7 @@ const players = playersJson as Player[];
 const matchesFile = matchesJson as MatchesFile;
 const lineupsFile = lineupsJson as LineupsFile;
 const h2hFile = h2hJson as HeadToHeadFile;
+const pastSeasonsFile = pastSeasonsJson as PastSeasonsFile;
 
 export function getTeams(): Team[] {
   return teams;
@@ -1681,3 +1686,86 @@ function pointsInRound(teamId: number, matchday: number): number {
       return sum;
     }, 0);
 }
+
+// ---------------------------------------------------------------------------
+// Last season
+//
+// A position is only news against the position it replaced. The site already
+// answers "what changed since last week"; this answers "what changed since May",
+// which is the question a reader who stopped watching in the spring is actually
+// carrying — and the one that makes a promoted club sitting third read as the
+// surprise it is rather than as a row in a table.
+// ---------------------------------------------------------------------------
+
+export function getPastSeasonMeta() {
+  return pastSeasonsFile.meta;
+}
+
+export function getLastSeasonRecord(teamId: number): PastSeasonRecord | null {
+  return pastSeasonsFile.teams[String(teamId)] ?? null;
+}
+
+/**
+ * How far a club has moved since last season finished.
+ *
+ * A club promoted from the Championship gets "promoted" rather than a number:
+ * finishing 6th in the division below and 3rd in this one is not a three-place
+ * climb, and printing one would be arithmetic performed on two different scales.
+ */
+export function getSeasonMovement(teamId: number): SeasonMovement {
+  const last = getLastSeasonRecord(teamId);
+  const position = getTeamById(teamId)?.record?.position ?? null;
+
+  if (!last || position == null) return { kind: "unknown", last, position, change: null };
+  if (last.tier !== 1) return { kind: "promoted", last, position, change: null };
+
+  const change = last.position - position;
+  return { kind: change > 0 ? "up" : change < 0 ? "down" : "level", last, position, change };
+}
+
+export interface SeasonMovers {
+  climbed: SeasonMovement[];
+  fell: SeasonMovement[];
+  promoted: SeasonMovement[];
+}
+
+/**
+ * The clubs whose season looks least like their last one.
+ *
+ * Twenty rows of "moved one place" is not a story, so the section shows only
+ * the ends of the distribution. Promoted clubs are listed separately rather
+ * than being ranked against movement figures they cannot have.
+ */
+export const getSeasonMovers: () => SeasonMovers = memo(() => {
+  const all = getStandingsTable()
+    .map((row) => getSeasonMovement(row.team.id))
+    .filter((m) => m.kind !== "unknown");
+
+  const withChange = all.filter((m) => m.change != null);
+  // Clubs that moved the same distance are common — Chelsea and Newcastle have
+  // both climbed six — so the order between them cannot be left to whatever
+  // order the table happened to produce. The higher club goes first, which is
+  // both stable across refreshes and the one the reader is more likely to know.
+  const bySize = (a: SeasonMovement, b: SeasonMovement) =>
+    Math.abs(b.change!) - Math.abs(a.change!) || (a.position ?? 0) - (b.position ?? 0);
+
+  return {
+    climbed: withChange.filter((m) => m.change! > 0).sort(bySize).slice(0, 3),
+    fell: withChange.filter((m) => m.change! < 0).sort(bySize).slice(0, 3),
+    promoted: all.filter((m) => m.kind === "promoted").sort((a, b) => (a.position ?? 0) - (b.position ?? 0)),
+  };
+});
+
+/**
+ * The clubs that were in the Premier League last season and are not in it now.
+ *
+ * A reader coming back after a season away notices the unfamiliar names in the
+ * table; the names that have gone missing take longer to spot, and are the
+ * other half of the same fact.
+ */
+export const getRelegatedFromLastSeason: () => PastSeasonRecord[] = memo(() => {
+  const current = new Set(teams.map((t) => t.id));
+  return Object.values(pastSeasonsFile.teams)
+    .filter((r) => r.tier === 1 && !current.has(r.teamId))
+    .sort((a, b) => a.position - b.position);
+});

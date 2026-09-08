@@ -40,6 +40,14 @@ const TEAM_NAMES_JA: Record<number, TeamNameJa> = {
   73: { full: "トッテナム・ホットスパー", short: "トッテナム" },
   63: { full: "フラム", short: "フラム" },
   1076: { full: "コヴェントリー・シティ", short: "コヴェントリー" },
+
+  // Relegated in May, so not in this season's twenty and not in teams.json — but
+  // "昨季から何が変わったか" names them, and a reader who left in the spring is
+  // the one most likely to be looking for them. A club leaving the division is
+  // no reason for its name to revert to English.
+  563: { full: "ウェスト・ハム・ユナイテッド", short: "ウェスト・ハム" },
+  328: { full: "バーンリー", short: "バーンリー" },
+  76: { full: "ウルヴァーハンプトン・ワンダラーズ", short: "ウルヴァーハンプトン" },
 };
 
 // Returns undefined for a club we have no translation for — a promoted side the
