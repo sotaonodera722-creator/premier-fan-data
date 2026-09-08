@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { getForm, getUpcomingFixtures, getTeamById } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
-import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getTeamNameJa, teamNameFull } from "@/lib/teamNamesJa";
 import { getClubProfile } from "@/lib/clubProfiles";
 import { jstShortDate, jstTime } from "@/lib/datetime";
 import type { StandingRow } from "@/lib/types";
@@ -230,7 +230,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                   {nextOpponent && nextFixture ? (
                     <Link
                       href={`/matches/${nextFixture.id}`}
-                      title={`${nextOpponent.name}戦 ${jstShortDate(nextFixture.utcDate)} ${jstTime(nextFixture.utcDate)}（日本時間）`}
+                      title={`${teamNameFull(nextOpponent)}戦 ${jstShortDate(nextFixture.utcDate)} ${jstTime(nextFixture.utcDate)}（日本時間）`}
                       className="flex items-center gap-2 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <TeamBadge team={nextOpponent} size={22} />

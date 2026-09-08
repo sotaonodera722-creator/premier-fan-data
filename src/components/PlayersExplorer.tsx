@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Player, Position, Team } from "@/lib/types";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 import { useUrlParams } from "@/lib/useUrlParams";
 
 type SortKey = "goals" | "assists" | "age";
@@ -103,7 +104,7 @@ export default function PlayersExplorer({
           <option value="all">全チーム</option>
           {teams.map((t) => (
             <option key={t.id} value={String(t.id)}>
-              {t.name}
+              {teamNameFull(t)}
             </option>
           ))}
         </select>
@@ -177,12 +178,18 @@ export default function PlayersExplorer({
                 </p>
               </div>
               {team && (
-                <div className="flex items-center gap-2 border-t border-border pt-2.5">
-                  <TeamBadge team={team} size={22} />
-                  <span className="truncate text-xs text-muted">{team.shortName}</span>
-                  <span className="ml-auto text-xs text-muted">
+                // Two cards to a row at 375px leaves about 132px inside the card.
+                // A crest, a club name and a goals figure on one line left 68px
+                // for the name: enough for Brentford, not for ブレントフォード.
+                // The goals take their own line so the club name gets the width.
+                <div className="border-t border-border pt-2.5">
+                  <div className="flex items-center gap-2">
+                    <TeamBadge team={team} size={22} />
+                    <span className="truncate text-xs text-muted">{teamNameShort(team)}</span>
+                  </div>
+                  <p className="mt-1.5 text-right text-xs tabular-nums text-muted">
                     {p.goals !== null ? `${p.goals}G ${p.assists ?? 0}A` : "-"}
-                  </span>
+                  </p>
                 </div>
               )}
             </Link>

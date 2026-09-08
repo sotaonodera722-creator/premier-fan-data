@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Player, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort } from "@/lib/teamNamesJa";
 import SectionHeading from "@/components/SectionHeading";
 import SectionLink from "@/components/SectionLink";
 
@@ -49,7 +50,7 @@ export default function PlayerRankingList({
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">
                   {p.isJapanese && "🇯🇵"} {p.nameJa ?? p.name}
                 </p>
-                <p className="truncate text-xs text-muted">{team?.name}</p>
+                <p className="truncate text-xs text-muted">{team && teamNameShort(team)}</p>
               </div>
               <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
                 {value}

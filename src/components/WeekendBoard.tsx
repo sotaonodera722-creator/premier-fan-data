@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import { RelativeDay } from "@/components/RelativeTime";
-import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getTeamNameJa, teamNameShort } from "@/lib/teamNamesJa";
 import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
 
 function clubLabel(team: Team): string {
@@ -141,8 +141,8 @@ export default function WeekendBoard({
                   href={`/matches/${m.id}`}
                   aria-label={
                     m.played
-                      ? `${home.name} ${homeGoals} - ${awayGoals} ${away.name} の詳細`
-                      : `${home.name} 対 ${away.name}（${jstShortDate(m.utcDate)} ${jstTime(m.utcDate)} 日本時間 キックオフ）の詳細`
+                      ? `${teamNameShort(home)} ${homeGoals} - ${awayGoals} ${teamNameShort(away)} の詳細`
+                      : `${teamNameShort(home)} 対 ${teamNameShort(away)}（${jstShortDate(m.utcDate)} ${jstTime(m.utcDate)} 日本時間 キックオフ）の詳細`
                   }
                   className={`block transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${wrapper}`}
                 >

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort } from "@/lib/teamNamesJa";
 import type { RankingEntry } from "@/components/PlayerRankingList";
 import { useUrlParams } from "@/lib/useUrlParams";
 
@@ -75,7 +76,7 @@ export default function PlayerRankingsExplorer({
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">
                   {p.isJapanese && "🇯🇵"} {p.nameJa ?? p.name}
                 </p>
-                <p className="truncate text-xs text-muted">{team?.name}</p>
+                <p className="truncate text-xs text-muted">{team && teamNameShort(team)}</p>
               </div>
               <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
                 {value}

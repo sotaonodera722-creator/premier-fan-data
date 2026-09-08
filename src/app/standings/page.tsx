@@ -1,5 +1,6 @@
 import { getStandingsTable, getCurrentMatchday } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
+import { teamNameShort } from "@/lib/teamNamesJa";
 import SampleSizeNote from "@/components/SampleSizeNote";
 import StandingsTable from "@/components/StandingsTable";
 import ZoneLegend from "@/components/ZoneLegend";
@@ -27,7 +28,7 @@ export default function StandingsPage() {
         <p className="mb-4 rounded-lg border border-border bg-background-alt px-3.5 py-2.5 text-xs leading-relaxed text-muted">
           <span className="font-medium text-foreground">消化試合数が揃っていません。</span>{" "}
           {clubsWithGamesInHand
-            .map((r) => `${r.team.shortName}（${r.gamesInHand}試合少ない）`)
+            .map((r) => `${teamNameShort(r.team)}（${r.gamesInHand}試合少ない）`)
             .join("・")}
           。試合を消化すれば順位が入れ替わる可能性があります。
         </p>

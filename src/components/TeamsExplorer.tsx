@@ -6,6 +6,7 @@ import type { MatchResultLetter, Team } from "@/lib/types";
 import type { ClubProfile, ClubTier } from "@/lib/clubProfiles";
 import { TIER_LABELS } from "@/lib/clubProfiles";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort } from "@/lib/teamNamesJa";
 import FormPills from "@/components/FormPills";
 import ClubBadges from "@/components/ClubBadges";
 import { useUrlParams } from "@/lib/useUrlParams";
@@ -221,7 +222,7 @@ export default function TeamsExplorer({
                 <span className="text-[11px] text-muted">次戦</span>
                 {club.nextOpponent ? (
                   <span className="flex items-center gap-1.5 text-[11px] font-medium text-foreground">
-                    {club.nextOpponent.shortName}
+                    {teamNameShort(club.nextOpponent)}
                     <TeamBadge team={club.nextOpponent} size={18} />
                   </span>
                 ) : (

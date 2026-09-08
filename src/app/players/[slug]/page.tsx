@@ -8,6 +8,7 @@ import SectionHeading from "@/components/SectionHeading";
 import DataNote from "@/components/DataNote";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { getPositionJa } from "@/lib/positionsJa";
+import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 
 export function generateStaticParams() {
   return getPlayers().map((p) => ({ slug: String(p.id) }));
@@ -23,7 +24,7 @@ export async function generateMetadata({
   if (!player) return { title: "選手 | Premier Fan Data" };
 
   const team = getTeamById(player.teamId);
-  const where = team ? `${team.shortName}所属の` : "";
+  const where = team ? `${teamNameFull(team)}所属の` : "";
   return {
     title: `${player.nameJa ?? player.name} | Premier Fan Data`,
     description: `${where}${player.nameJa ?? player.name}（${getPositionJa(player.position)}）のプロフィールと今季成績。出場記録・ゴール・アシストをまとめています。`,
@@ -69,7 +70,7 @@ export default async function PlayerDetailPage({
                 className="mt-2 inline-flex items-center gap-2 text-sm text-muted hover:text-accent-2"
               >
                 <TeamBadge team={team} size={22} />
-                {team.name}
+                {teamNameFull(team)}
               </Link>
             )}
           </div>
@@ -104,7 +105,7 @@ export default async function PlayerDetailPage({
               {appearances.length > 0 && (
                 <Row label="出場試合" value={subApps > 0 ? `${starts}(${subApps})` : starts} />
               )}
-              <Row label="所属クラブ" value={team?.name ?? "-"} />
+              <Row label="所属クラブ" value={team ? teamNameFull(team) : "-"} />
             </div>
           </div>
         </section>
@@ -116,7 +117,7 @@ export default async function PlayerDetailPage({
 
         {team && teammates.length > 0 && (
           <section className="mt-12">
-            <SectionHeading eyebrow="Squad" title={`${team.shortName}の他の選手`} />
+            <SectionHeading eyebrow="Squad" title={`${teamNameShort(team)}の他の選手`} />
             <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-6">
               {teammates.map((p) => (
                 <Link
