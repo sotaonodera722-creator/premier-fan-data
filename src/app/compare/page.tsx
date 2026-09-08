@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getStandings, getTeamById, getHeadToHead } from "@/lib/data";
 import { jstYearMonth } from "@/lib/datetime";
 import { getTeamNameJa, teamNameShort } from "@/lib/teamNamesJa";
-null
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
 import StatTile from "@/components/StatTile";
