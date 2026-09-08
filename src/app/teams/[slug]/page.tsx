@@ -14,7 +14,7 @@ import {
 } from "@/lib/data";
 import { getTeamColor } from "@/lib/teamColors";
 import { jstShortDate, jstTime, lateNightTag } from "@/lib/datetime";
-import { getTeamNameJa } from "@/lib/teamNamesJa";
+import { getTeamNameJa, teamNameShort } from "@/lib/teamNamesJa";
 import { getClubProfile } from "@/lib/clubProfiles";
 import { getNationalityJa } from "@/lib/nationalitiesJa";
 import { POSITION_NAMES_JA, getPositionJa } from "@/lib/positionsJa";
@@ -115,7 +115,10 @@ export default async function TeamDetailPage({
             >
               {r ? `第${r.position}位` : "プレミアリーグ"}
             </p>
-            <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            {/* 30px x 8 full-width characters is 240px, and the 72px crest beside
+                it leaves 221px — 「ブレントフォード」, the longest club name we
+                carry, broke across two lines. It steps down a size until sm. */}
+            <h1 className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
               {nameJa?.full ?? team.name}
             </h1>
             {/* The crest and every other page still carry the English name, so keep it
@@ -294,7 +297,7 @@ export default async function TeamDetailPage({
                         href={opponent ? `/teams/${opponent.id}` : "#"}
                         className="relative flex-1 truncate text-sm text-foreground hover:underline"
                       >
-                        {opponent?.name}
+                        {opponent && teamNameShort(opponent)}
                       </Link>
                       <span className="font-[family-name:var(--font-display)] text-sm font-bold text-foreground">
                         {gf} - {ga}
@@ -330,7 +333,7 @@ export default async function TeamDetailPage({
                         href={opponent ? `/teams/${opponent.id}` : "#"}
                         className="relative flex-1 truncate text-sm text-foreground hover:underline"
                       >
-                        {opponent?.name}
+                        {opponent && teamNameShort(opponent)}
                       </Link>
                       <span className="shrink-0 text-right text-xs leading-tight text-muted">
                         <span className="block tabular-nums">{jstShortDate(m.utcDate)}</span>

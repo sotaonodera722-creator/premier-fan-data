@@ -18,6 +18,7 @@ import SectionHeading from "@/components/SectionHeading";
 import { RelativeKickoff } from "@/components/RelativeTime";
 import { jstLongDate, jstTime, lateNightNote } from "@/lib/datetime";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
 
 export function generateStaticParams() {
@@ -37,7 +38,9 @@ export async function generateMetadata({
   const away = getTeamById(match.awayTeamId);
   if (!home || !away) return { title: "試合 | Premier Fan Data" };
 
-  const fixture = `${home.shortName} vs ${away.shortName}`;
+  // Nothing competes for width in a tab title or a search result, so this is the
+  // one place the full name fits.
+  const fixture = `${teamNameFull(home)} vs ${teamNameFull(away)}`;
   const score = match.played ? ` ${match.homeGoals}-${match.awayGoals}` : "";
   return {
     title: `${fixture}${score} | Premier Fan Data`,
@@ -80,6 +83,22 @@ export default async function MatchDetailPage({
     predictedHome && predictedAway
       ? { matchId: match.id, homeTeam: predictedHome.teamLineup, awayTeam: predictedAway.teamLineup }
       : null;
+  // The club each side last faced, named so the note under a predicted lineup
+  // can say where the prediction came from.
+  const predictedHomeOpponent = predictedHome
+    ? getTeamById(
+        predictedHome.match.homeTeamId === homeTeam.id
+          ? predictedHome.match.awayTeamId
+          : predictedHome.match.homeTeamId
+      )
+    : undefined;
+  const predictedAwayOpponent = predictedAway
+    ? getTeamById(
+        predictedAway.match.homeTeamId === awayTeam.id
+          ? predictedAway.match.awayTeamId
+          : predictedAway.match.homeTeamId
+      )
+    : undefined;
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
@@ -99,7 +118,7 @@ export default async function MatchDetailPage({
       <div className="mt-4 flex items-center justify-center gap-6 sm:gap-10">
         <Link href={`/teams/${homeTeam.id}`} className="group flex flex-col items-center gap-2">
           <TeamBadge team={homeTeam} size={52} />
-          <span className="text-sm font-medium text-foreground transition group-hover:text-accent-2">{homeTeam.name}</span>
+          <span className="text-sm font-medium text-foreground transition group-hover:text-accent-2">{teamNameShort(homeTeam)}</span>
           <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">ホーム</span>
         </Link>
         {match.played ? (
@@ -117,7 +136,7 @@ export default async function MatchDetailPage({
         )}
         <Link href={`/teams/${awayTeam.id}`} className="group flex flex-col items-center gap-2">
           <TeamBadge team={awayTeam} size={52} />
-          <span className="text-sm font-medium text-foreground transition group-hover:text-accent-2">{awayTeam.name}</span>
+          <span className="text-sm font-medium text-foreground transition group-hover:text-accent-2">{teamNameShort(awayTeam)}</span>
           <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">アウェイ</span>
         </Link>
       </div>
@@ -170,8 +189,8 @@ export default async function MatchDetailPage({
           </section>
 
           <section className="mt-10 grid gap-8 sm:grid-cols-2">
-            <SubstitutesList title={`${awayTeam.shortName} · 控え選手`} players={lineup.awayTeam.substitutes} teamId={awayTeam.id} />
-            <SubstitutesList title={`${homeTeam.shortName} · 控え選手`} players={lineup.homeTeam.substitutes} teamId={homeTeam.id} />
+            <SubstitutesList title={`${teamNameShort(awayTeam)} · 控え選手`} players={lineup.awayTeam.substitutes} teamId={awayTeam.id} />
+            <SubstitutesList title={`${teamNameShort(homeTeam)} · 控え選手`} players={lineup.homeTeam.substitutes} teamId={homeTeam.id} />
           </section>
         </>
       )}
@@ -183,17 +202,13 @@ export default async function MatchDetailPage({
             <p className="mb-3 -mt-2 text-xs text-muted">
               前節のスタメンより予想 ·{" "}
               <Link href={`/matches/${predictedHome.match.id}`} className="hover:text-accent-2 hover:underline">
-                {homeTeam.shortName}: 第{predictedHome.match.matchday}節 vs{" "}
-                {getTeamById(
-                  predictedHome.match.homeTeamId === homeTeam.id ? predictedHome.match.awayTeamId : predictedHome.match.homeTeamId
-                )?.shortName}
+                {teamNameShort(homeTeam)}: 第{predictedHome.match.matchday}節 vs{" "}
+                {predictedHomeOpponent && teamNameShort(predictedHomeOpponent)}
               </Link>{" "}
               ·{" "}
               <Link href={`/matches/${predictedAway.match.id}`} className="hover:text-accent-2 hover:underline">
-                {awayTeam.shortName}: 第{predictedAway.match.matchday}節 vs{" "}
-                {getTeamById(
-                  predictedAway.match.homeTeamId === awayTeam.id ? predictedAway.match.awayTeamId : predictedAway.match.homeTeamId
-                )?.shortName}
+                {teamNameShort(awayTeam)}: 第{predictedAway.match.matchday}節 vs{" "}
+                {predictedAwayOpponent && teamNameShort(predictedAwayOpponent)}
               </Link>
             </p>
             <MatchFormation lineup={predictedLineup} homeTeam={homeTeam} awayTeam={awayTeam} />
@@ -201,12 +216,12 @@ export default async function MatchDetailPage({
 
           <section className="mt-10 grid gap-8 sm:grid-cols-2">
             <SubstitutesList
-              title={`${awayTeam.shortName} · 予想控え選手`}
+              title={`${teamNameShort(awayTeam)} · 予想控え選手`}
               players={predictedAway.teamLineup.substitutes}
               teamId={awayTeam.id}
             />
             <SubstitutesList
-              title={`${homeTeam.shortName} · 予想控え選手`}
+              title={`${teamNameShort(homeTeam)} · 予想控え選手`}
               players={predictedHome.teamLineup.substitutes}
               teamId={homeTeam.id}
             />

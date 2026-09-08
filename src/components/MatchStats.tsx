@@ -1,6 +1,7 @@
 import type { MatchStatistics, Team } from "@/lib/types";
 import { getTeamColor, colorsClash } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort } from "@/lib/teamNamesJa";
 
 // Expected goals is not here on purpose: it has its own block above this one,
 // where the comparison that matters is against the scoreline rather than against
@@ -49,12 +50,12 @@ export default function MatchStats({
     <div className="glass space-y-4 rounded-xl p-5">
       <div className="flex items-center justify-between border-b border-border pb-3 text-xs font-medium">
         <span className="flex items-center gap-2" style={{ color: homeColor }}>
-          <TeamBadge team={homeTeam} size={20} /> {homeTeam.shortName}
+          <TeamBadge team={homeTeam} size={20} /> {teamNameShort(homeTeam)}
           <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-muted">HOME</span>
         </span>
         <span className="flex items-center gap-2" style={{ color: awayColor }}>
           <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-muted">AWAY</span>
-          {awayTeam.shortName} <TeamBadge team={awayTeam} size={20} />
+          {teamNameShort(awayTeam)} <TeamBadge team={awayTeam} size={20} />
         </span>
       </div>
       {rows.map((r) => {

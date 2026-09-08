@@ -1,12 +1,22 @@
 // Japanese club names, keyed by the football-data.org team id.
 //
-// Only `full` is in use right now, on the team detail page. The rest of the site
-// stays on the English names on purpose: a Japanese short name runs about 1.6x
-// the pixel width of its English counterpart (「ブレントフォード」is eight
-// full-width characters against Brentford's ten half-width ones), and the
-// standings table and fixtures list already truncate club names at 375px. Those
-// layouts have to be rebuilt around the wider strings before `short` can be used
-// there — until then, swapping them in would make the mobile problem worse.
+// Both forms are in use across the site. That was not always true: `short` was
+// held back while the standings table and fixtures list still truncated club
+// names at 375px, and the note here said so long after those layouts had been
+// rebuilt — which is its own small trap, since the next person to read it stops
+// looking for the English names still on the screen.
+//
+// The width problem the note described is real and has not gone away. A Japanese
+// name runs about 1.6x the pixel width of its English counterpart —
+// 「ブレントフォード」is eight full-width characters against Brentford's ten
+// half-width ones — so any layout that fitted the English name may not fit this
+// one. Two of them did not: the head-to-head summary broke the club name across
+// two lines, and its list of past meetings truncated it. Both had to be
+// restructured. Check the 375px width when putting either form somewhere new.
+//
+// English names deliberately remain in two places, under the Japanese name and
+// set smaller: the standings table and the club cards on /teams. Those are
+// bilingual pairs, not untranslated strings.
 //
 // Conventions settled with the user: ヴ over ブ/バ throughout (リヴァプール,
 // エヴァートン, アストン・ヴィラ, コヴェントリー); マンC / マンU for the two
@@ -55,4 +65,20 @@ const TEAM_NAMES_JA: Record<number, TeamNameJa> = {
 // rather than rendering a blank heading.
 export function getTeamNameJa(teamId: number): TeamNameJa | undefined {
   return TEAM_NAMES_JA[teamId];
+}
+
+/**
+ * The name to print where space is tight — beside a crest, in a table row, in a
+ * legend. Falls back to the English short name for a club we have no entry for.
+ *
+ * The same three lines had been written out in each component that needed them;
+ * having one of them drift is how a single screen ends up half-translated.
+ */
+export function teamNameShort(team: { id: number; shortName: string }): string {
+  return getTeamNameJa(team.id)?.short ?? team.shortName;
+}
+
+/** The full name, for headings and page titles where the width is not fought over. */
+export function teamNameFull(team: { id: number; name: string }): string {
+  return getTeamNameJa(team.id)?.full ?? team.name;
 }

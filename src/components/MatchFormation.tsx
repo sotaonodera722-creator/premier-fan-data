@@ -3,6 +3,7 @@ import type { LineupPlayer, MatchLineup, Team } from "@/lib/types";
 import { getTeamColor, getContrastText, colorsClash } from "@/lib/teamColors";
 import { resolveRosterPlayer } from "@/lib/data";
 import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { teamNameShort } from "@/lib/teamNamesJa";
 
 function PlayerDot({
   player,
@@ -84,13 +85,13 @@ export default function MatchFormation({
     <div className="overflow-hidden rounded-2xl border border-border">
       <div className="flex items-center justify-between bg-surface px-4 py-2 text-xs">
         <span className="flex items-center gap-1.5 font-medium" style={{ color: awayColor }}>
-          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: awayColor }} /> {awayTeam.shortName} ·{" "}
+          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: awayColor }} /> {teamNameShort(awayTeam)} ·{" "}
           {lineup.awayTeam.formation}
           <span className="rounded bg-background px-1.5 py-0.5 text-[9px] font-semibold text-muted">AWAY</span>
         </span>
         <span className="flex items-center gap-1.5 font-medium" style={{ color: homeColor }}>
           <span className="rounded bg-background px-1.5 py-0.5 text-[9px] font-semibold text-muted">HOME</span>
-          {homeTeam.shortName} · {lineup.homeTeam.formation}{" "}
+          {teamNameShort(homeTeam)} · {lineup.homeTeam.formation}{" "}
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: homeColor }} />
         </span>
       </div>

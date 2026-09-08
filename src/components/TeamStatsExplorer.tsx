@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
+import { teamNameShort } from "@/lib/teamNamesJa";
 import { useUrlParams } from "@/lib/useUrlParams";
 
 export type TeamStatRow = { team: Team; display: string };
@@ -73,7 +74,7 @@ export default function TeamStatsExplorer({
           >
             <span className="w-6 text-sm font-bold text-muted">{i + 1}</span>
             <TeamBadge team={row.team} size={28} />
-            <span className="flex-1 truncate font-medium text-foreground">{row.team.name}</span>
+            <span className="flex-1 truncate font-medium text-foreground">{teamNameShort(row.team)}</span>
             <span className="font-[family-name:var(--font-display)] text-xl font-bold text-accent">
               {row.display}
             </span>
