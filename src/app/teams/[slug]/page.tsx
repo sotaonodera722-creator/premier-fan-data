@@ -25,6 +25,8 @@ import FormPills from "@/components/FormPills";
 import SectionHeading from "@/components/SectionHeading";
 import KeyTeamStats from "@/components/KeyTeamStats";
 import TeamTabs from "@/components/TeamTabs";
+import ClubRivalries from "@/components/ClubRivalries";
+import TeamStyleSection from "@/components/TeamStyleSection";
 import ClubBadges from "@/components/ClubBadges";
 import DataNote from "@/components/DataNote";
 import type { Position } from "@/lib/types";
@@ -204,6 +206,10 @@ export default async function TeamDetailPage({
                 <StatTile label="順位" value={r.position} hint={seasonHint} />
               </section>
             )}
+
+            <TeamStyleSection teamId={team.id} />
+
+            <ClubRivalries club={team} />
 
             <section className="mt-12 grid gap-8 pb-12 lg:grid-cols-2">
               <div>
