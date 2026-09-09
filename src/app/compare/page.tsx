@@ -25,7 +25,7 @@ export default async function ComparePage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow="Head to Head" title="チーム対戦成績比較" />
+      <SectionHeading title="チーム対戦成績比較" />
 
       <form className="glass flex flex-wrap items-end gap-3 rounded-xl p-4" action="/compare">
         <TeamSelect name="a" label="チームA" teams={teams} selected={teamA?.id} />
@@ -56,7 +56,7 @@ export default async function ComparePage({
           </section>
 
           <section className="mt-10">
-            <SectionHeading eyebrow="History" title="過去の対戦成績" />
+            <SectionHeading title="過去の対戦成績" />
             {!h2h || h2h.numberOfMatches === 0 ? (
               <p className="glass rounded-xl p-5 text-sm text-muted">
                 過去の対戦データが見つかりませんでした(プレミアリーグでの直接対戦がまだ無い可能性があります)。

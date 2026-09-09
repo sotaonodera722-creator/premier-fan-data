@@ -8,7 +8,6 @@ import SectionLink from "@/components/SectionLink";
 export type RankingEntry = { player: Player; value: number; rank: number };
 
 export default function PlayerRankingList({
-  eyebrow,
   title,
   entries,
   teamById,
@@ -16,7 +15,6 @@ export default function PlayerRankingList({
   valueSuffix,
   moreHref,
 }: {
-  eyebrow: string;
   title: string;
   entries: RankingEntry[];
   teamById: Record<number, Team>;
@@ -27,7 +25,6 @@ export default function PlayerRankingList({
   return (
     <div>
       <SectionHeading
-        eyebrow={eyebrow}
         title={title}
         action={
           moreHref && (

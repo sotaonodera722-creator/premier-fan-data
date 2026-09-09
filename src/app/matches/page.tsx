@@ -19,7 +19,7 @@ export default async function MatchesPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow="Fixtures & Results" title="試合" />
+      <SectionHeading title="試合" />
       <MatchesExplorer
         matches={matches}
         teams={teams}

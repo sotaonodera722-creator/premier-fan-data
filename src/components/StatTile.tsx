@@ -20,18 +20,18 @@ function TileBody({
 }) {
   return (
     <>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted">{label}</p>
-      <p className="mt-1.5 flex items-center gap-2">
+      <p className="text-micro font-label tracking-[0.08em] text-muted">{label}</p>
+      <p className="mt-hair flex items-center gap-inline">
         {leading}
-        <span className="flex items-baseline gap-1">
-          <span className="font-[family-name:var(--font-display)] text-2xl font-bold leading-none tracking-tight text-foreground sm:text-3xl">
+        <span className="flex items-baseline gap-hair">
+          <span className="font-numeral text-stat font-stat tracking-tight text-foreground">
             {value}
           </span>
-          {unit && <span className="text-xs text-muted">{unit}</span>}
+          {unit && <span className="text-note text-muted">{unit}</span>}
         </span>
       </p>
       {footer}
-      {hint && <p className="mt-1.5 text-[11px] leading-snug text-muted">{hint}</p>}
+      {hint && <p className="mt-hair text-micro text-muted">{hint}</p>}
     </>
   );
 }

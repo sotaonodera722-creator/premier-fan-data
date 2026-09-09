@@ -230,7 +230,7 @@ export default function PlayerUsageSection({ player }: { player: Player }) {
 
   return (
     <section className="mt-12">
-      <SectionHeading eyebrow="Playing Time" title="起用のされ方" />
+      <SectionHeading title="起用のされ方" />
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="min-w-0">

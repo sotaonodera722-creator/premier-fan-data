@@ -114,7 +114,7 @@ function NoRivalInLeague({ club }: { club: Team }) {
 
   return (
     <section className="mt-12">
-      <SectionHeading eyebrow="Rivalries" title="因縁のある相手" />
+      <SectionHeading title="因縁のある相手" />
       <div className="glass rounded-xl p-5">
         <p className="text-sm leading-relaxed text-foreground">
           {shortName(club)}が最も意識する相手
@@ -138,7 +138,7 @@ export default function ClubRivalries({ club }: { club: Team }) {
 
   return (
     <section className="mt-12">
-      <SectionHeading eyebrow="Rivalries" title="因縁のある相手" />
+      <SectionHeading title="因縁のある相手" />
       <p className="mb-4 text-sm leading-relaxed text-foreground">
         順位表では隣り合わないこともあるのに、
         {rivalries.length === 1 ? "この1試合" : `この${rivalries.length}試合`}

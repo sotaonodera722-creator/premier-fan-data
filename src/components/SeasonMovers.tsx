@@ -201,7 +201,7 @@ export default function SeasonMovers() {
 
   return (
     <section className="mt-12">
-      <SectionHeading eyebrow="Since May" title="昨季から何が変わったか" />
+      <SectionHeading title="昨季から何が変わったか" />
 
       {sentence && (
         <p className="mb-4 text-sm leading-relaxed text-foreground">{sentence}</p>

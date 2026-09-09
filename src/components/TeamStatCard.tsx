@@ -12,7 +12,6 @@ export type TeamStatRow = { team: Team; value: number; rank: number };
 export default function TeamStatCard({
   title,
   term,
-  eyebrow,
   rows,
   format,
   tab,
@@ -22,7 +21,6 @@ export default function TeamStatCard({
   title: string;
   /** Explains the word in the heading, where the heading uses one. */
   term?: GlossaryKey;
-  eyebrow?: string;
   rows: TeamStatRow[];
   format: (v: number) => string;
   tab: string;
@@ -35,7 +33,6 @@ export default function TeamStatCard({
     return (
       <div>
         <SectionHeading
-          eyebrow={eyebrow}
           title={title}
           titleSuffix={term ? <Term name={term} label={null} className="ml-2 align-middle text-[11px] font-normal" /> : undefined}
           action={

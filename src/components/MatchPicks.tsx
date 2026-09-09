@@ -139,7 +139,6 @@ export default function MatchPicks() {
   return (
     <section className="mt-14">
       <SectionHeading
-        eyebrow="Picks"
         // Eleven characters wrap and strand a lone 合 next to the action link at
         // 375px. Seven fit, and which round they belong to is the part a reader
         // actually needs from the title.

@@ -127,7 +127,7 @@ export default function TeamStyleSection({ teamId }: { teamId: number }) {
 
   return (
     <section className="mt-12">
-      <SectionHeading eyebrow="Style" title="このクラブの戦い方" />
+      <SectionHeading title="このクラブの戦い方" />
 
       <div className="glass rounded-xl p-5">
         {/* A clause to a line. Japanese breaks at any character, so joining these

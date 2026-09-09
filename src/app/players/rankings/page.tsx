@@ -25,7 +25,7 @@ export default async function PlayerRankingsPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow="Player Stats" title="選手スタッツランキング" />
+      <SectionHeading title="選手スタッツランキング" />
       <PlayerRankingsExplorer
         initialTab={tab}
         teamById={teamById}

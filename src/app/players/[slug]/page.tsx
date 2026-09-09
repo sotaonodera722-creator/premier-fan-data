@@ -96,7 +96,7 @@ export default async function PlayerDetailPage({
 
         <section className="mt-12 grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <SectionHeading eyebrow="Profile" title="プロフィール" />
+            <SectionHeading title="プロフィール" />
             <div className="glass space-y-3 rounded-xl p-5 text-sm">
               <Row label="国籍" value={getNationalityJa(player.nationality)} />
               <Row label="ポジション" value={getPositionJa(player.position)} />
@@ -117,7 +117,7 @@ export default async function PlayerDetailPage({
 
         {team && teammates.length > 0 && (
           <section className="mt-12">
-            <SectionHeading eyebrow="Squad" title={`${teamNameShort(team)}の他の選手`} />
+            <SectionHeading title={`${teamNameShort(team)}の他の選手`} />
             <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-6">
               {teammates.map((p) => (
                 <Link

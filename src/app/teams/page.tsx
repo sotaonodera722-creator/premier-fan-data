@@ -64,7 +64,7 @@ export default async function TeamsPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow="Clubs" title="クラブ名鑑" />
+      <SectionHeading title="クラブ名鑑" />
       <p className="mb-6 max-w-2xl text-sm leading-relaxed text-muted">
         プレミアリーグの20クラブが、それぞれ何者なのか。街、スタジアム、創設年、これまでに獲ってきたタイトル、そして今季の順位まで。
         順位表の数字が意味を持つのは、そのクラブが何者か分かってからです。
@@ -103,7 +103,7 @@ export default async function TeamsPage({
       </ul>
 
       <div className="mt-14">
-        <SectionHeading eyebrow="Key Stats" title="重要な統計" />
+        <SectionHeading title="重要な統計" />
         <KeyTeamStats />
       </div>
     </div>

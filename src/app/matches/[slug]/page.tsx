@@ -165,7 +165,7 @@ export default async function MatchDetailPage({
           until they know how the ninety minutes went. */}
       {lineup?.events && lineup.events.length > 0 && (
         <section className="mt-10">
-          <SectionHeading eyebrow="Timeline" title="タイムライン" />
+          <SectionHeading title="タイムライン" />
           <MatchTimeline
             events={lineup.events}
             homeTeamId={homeTeam.id}
@@ -179,7 +179,6 @@ export default async function MatchDetailPage({
       {lineup?.statistics && (
         <section className="mt-10">
           <SectionHeading
-            eyebrow={hasExpectedGoals ? "Expected Goals" : "Stats"}
             title={hasExpectedGoals ? "xGとスコアの乖離" : "トップ統計"}
           />
           {hasExpectedGoals && (
@@ -203,7 +202,7 @@ export default async function MatchDetailPage({
       {lineup && (
         <>
           <section className="mt-10">
-            <SectionHeading eyebrow="Lineups" title="スタメン・フォーメーション" />
+            <SectionHeading title="スタメン・フォーメーション" />
             <MatchFormation lineup={lineup} homeTeam={homeTeam} awayTeam={awayTeam} />
           </section>
 
@@ -217,7 +216,7 @@ export default async function MatchDetailPage({
       {!lineup && predictedLineup && predictedHome && predictedAway && (
         <>
           <section className="mt-10">
-            <SectionHeading eyebrow="Predicted Lineups" title="予想フォーメーション" />
+            <SectionHeading title="予想フォーメーション" />
             <p className="mb-3 -mt-2 text-xs text-muted">
               前節のスタメンより予想 ·{" "}
               <Link href={`/matches/${predictedHome.match.id}`} className="hover:text-accent-2 hover:underline">
@@ -252,7 +251,7 @@ export default async function MatchDetailPage({
           "no history" is part of judging whether to watch it, and a section that
           silently disappears reads as a bug. */}
       <section className="mt-10">
-        <SectionHeading eyebrow="History" title="対戦成績" />
+        <SectionHeading title="対戦成績" />
         <MatchHeadToHead homeTeam={homeTeam} awayTeam={awayTeam} excludeUtcDate={match.utcDate} />
       </section>
 

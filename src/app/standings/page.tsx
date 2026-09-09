@@ -19,7 +19,9 @@ export default function StandingsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow={`Matchday ${matchday}`} title="順位表" />
+      {/* The one Latin label that carried information rather than repeating
+          the heading: the matchday. It moves into the Japanese title. */}
+      <SectionHeading title="順位表" titleSuffix={<span className="ml-2 align-middle text-note font-body text-muted">第{matchday}節</span>} />
 
       {clubsWithGamesInHand.length > 0 && (
         // Positions are read as a ranking of strength, which they are not while
