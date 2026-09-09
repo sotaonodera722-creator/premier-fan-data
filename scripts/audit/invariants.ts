@@ -28,6 +28,8 @@ import {
   getPlayerUsage,
   getMatchIdsWithLineups,
   getMatchLineup,
+  resolveRosterPlayer,
+  getMatchesForTeam,
   getPlayerMinutesMap,
   getHeadToHead,
   getActiveRoundMatches,
@@ -244,6 +246,30 @@ group("D. 選手名簿（players.json）", () => {
     players,
     (p) => !/[ぁ-んァ-ヶ一-龯]/.test(p.name),
     (p) => `${p.name}: name に日本語が混入している（nameJa に入れること）`
+  );
+
+  // S11 の完了条件5。対象集合は「ラインナップに名前が出る選手」で、新しい選手が
+  // 初出場した節に自動で増える。増えたぶんが未入力のままだと、同じ並びの中に
+  // ラテン文字が1人だけ混じることになるので、そこで落として気づけるようにする。
+  const namedInLineups = new Set<number>();
+  for (const team of teams) {
+    for (const m of getMatchesForTeam(team.id).filter((x) => x.played)) {
+      const lineup = getMatchLineup(m.id);
+      if (!lineup) continue;
+      const side = lineup.homeTeam.teamId === team.id ? lineup.homeTeam : lineup.awayTeam;
+      for (const entry of [...side.startXI.flat(), ...side.substitutes]) {
+        const resolved = resolveRosterPlayer(entry.name, team.id);
+        if (resolved) namedInLineups.add(resolved.id);
+      }
+    }
+  }
+  const targets = players.filter((p) => namedInLineups.has(p.id));
+  note("日本語表記の対象", `${targets.length} 人（ラインナップに名前が出る選手）`);
+  every(
+    "ラインナップに出る選手全員に日本語表記がある",
+    targets,
+    (p) => Boolean(p.nameJa),
+    (p) => `${p.id} ${p.name}: 日本語表記が未入力 — src/lib/playerNamesKatakana.ts に追加すること`
   );
 
   every(
