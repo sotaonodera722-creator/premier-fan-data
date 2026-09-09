@@ -1,10 +1,12 @@
 export default function SectionHeading({
   eyebrow,
   title,
+  titleSuffix,
   action,
 }: {
   eyebrow?: string;
   title: string;
+  titleSuffix?: React.ReactNode;
   action?: React.ReactNode;
 }) {
   return (
@@ -17,6 +19,7 @@ export default function SectionHeading({
         )}
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           {title}
+          {titleSuffix}
         </h2>
       </div>
       {action}

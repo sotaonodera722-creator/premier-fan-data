@@ -15,7 +15,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: "goals", label: "平均得点数" },
   { key: "conceded", label: "平均被得点数" },
   { key: "cleanSheets", label: "無失点試合数" },
-  { key: "possession", label: "平均支配率" },
+  { key: "possession", label: "平均ボール保持率" },
   { key: "xg", label: "平均xG" },
   { key: "shots", label: "平均枠内シュート数" },
 ];

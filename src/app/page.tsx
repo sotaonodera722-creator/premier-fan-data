@@ -67,7 +67,7 @@ export default async function Home({
         <div className="mt-7">
           <WeekendTiles />
         </div>
-        <SampleSizeNote />
+        <SampleSizeNote derived />
       </section>
 
       <section className="mt-12">
@@ -131,6 +131,7 @@ export default async function Home({
         <TeamStatCard
           eyebrow="Expected Goals"
           title="平均期待得点 (xG) TOP3"
+          term="xg"
           rows={topXg}
           format={(v) => v.toFixed(2)}
           tab="xg"

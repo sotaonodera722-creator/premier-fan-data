@@ -2,6 +2,7 @@ import { getPlayers, getTeams, getPlayerRanking } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import PlayersExplorer from "@/components/PlayersExplorer";
 import PlayerRankingList from "@/components/PlayerRankingList";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export const metadata = {
   title: "選手名鑑 | Premier Fan Data",
@@ -64,6 +65,8 @@ export default async function PlayersPage({
           moreHref="/players/rankings?tab=minutes"
         />
       </div>
+
+      <SampleSizeNote derived />
 
       <SectionHeading eyebrow="Directory" title="選手を検索" />
       <PlayersExplorer
