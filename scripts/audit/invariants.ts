@@ -28,16 +28,20 @@ import {
   getPlayerUsage,
   getMatchIdsWithLineups,
   getMatchLineup,
+  resolveRosterPlayer,
+  getMatchesForTeam,
   getPlayerMinutesMap,
   getHeadToHead,
   getActiveRoundMatches,
   getRoundProgress,
   getCompetitionMeta,
+  getPlayerRanking,
 } from "@/lib/data";
 import { CHAMPIONS_LEAGUE_SPOTS, EUROPA_LEAGUE_SPOTS, RELEGATION_SPOTS } from "@/lib/leagueRules";
 import pastSeasonsJson from "@/data/past-seasons.json";
 import playersJson from "@/data/players.json";
 import type { PastSeasonsFile, Player } from "@/lib/types";
+import { playerAliasEntries } from "@/lib/playerAliases";
 import { group, check, soft, every, equal, note, report } from "./harness";
 
 const TEAM_COUNT = 20;
@@ -226,6 +230,49 @@ group("C. 日程表の構造（matches.json）", () => {
 group("D. 選手名簿（players.json）", () => {
   check("選手が1人以上いる", players.length > 0, () => "players.json が空");
   equal("選手IDが重複していない", new Set(players.map((p) => p.id)).size, players.length);
+
+  // S11 の完了条件1。src/lib/playerNamesJa.ts の冒頭が警告しているとおり、`name` を
+  // 日本語に置き換えると、ラインナップとイベントの名前照合が全滅し、日本人選手の
+  // 出場記録が静かにゼロになる。表示は `nameJa` を読み、照合は `name` を読む —
+  // その分離が守られているかを、目視ではなく文字単位で確かめる。
+  const rawNames = new Map((playersJson as Player[]).map((p) => [p.id, p.name]));
+  every(
+    "getPlayers() の name が players.json の name と完全一致する",
+    players,
+    (p) => rawNames.get(p.id) === p.name,
+    (p) => `${p.id}: "${rawNames.get(p.id)}" が "${p.name}" に書き換えられている`
+  );
+
+  every(
+    "日本語表記が name ではなく nameJa に入っている",
+    players,
+    (p) => !/[ぁ-んァ-ヶ一-龯]/.test(p.name),
+    (p) => `${p.name}: name に日本語が混入している（nameJa に入れること）`
+  );
+
+  // S11 の完了条件5。対象集合は「ラインナップに名前が出る選手」で、新しい選手が
+  // 初出場した節に自動で増える。増えたぶんが未入力のままだと、同じ並びの中に
+  // ラテン文字が1人だけ混じることになるので、そこで落として気づけるようにする。
+  const namedInLineups = new Set<number>();
+  for (const team of teams) {
+    for (const m of getMatchesForTeam(team.id).filter((x) => x.played)) {
+      const lineup = getMatchLineup(m.id);
+      if (!lineup) continue;
+      const side = lineup.homeTeam.teamId === team.id ? lineup.homeTeam : lineup.awayTeam;
+      for (const entry of [...side.startXI.flat(), ...side.substitutes]) {
+        const resolved = resolveRosterPlayer(entry.name, team.id);
+        if (resolved) namedInLineups.add(resolved.id);
+      }
+    }
+  }
+  const targets = players.filter((p) => namedInLineups.has(p.id));
+  note("日本語表記の対象", `${targets.length} 人（ラインナップに名前が出る選手）`);
+  every(
+    "ラインナップに出る選手全員に日本語表記がある",
+    targets,
+    (p) => Boolean(p.nameJa),
+    (p) => `${p.id} ${p.name}: 日本語表記が未入力 — src/lib/playerNamesKatakana.ts に追加すること`
+  );
 
   every(
     "所属クラブが実在する",
@@ -650,10 +697,27 @@ group("G. 出場時間の導出", () => {
   );
   const coverage = totalSquadMinutes > 0 ? rosterMinutes / totalSquadMinutes : 1;
   note("名簿と照合できた出場時間の割合", `${(coverage * 100).toFixed(1)}%`);
+  note(
+    "出場時間の総和",
+    `理論値 ${totalSquadMinutes.toLocaleString("ja-JP")}分 / うち名簿の選手に紐づく ` +
+      `${rosterMinutes.toLocaleString("ja-JP")}分`
+  );
+
+  // S11（選手名の日本語化）着手時点の実測値。名前照合が壊れれば真っ先にここが落ちる。
+  // 提供元が名簿に無い選手を出してくる分の揺れ（現在43人ぶん）は避けられないので、
+  // 明らかな破綻を止める硬い床と、悪化に気づくための柔らかい床を分けて置く。
+  const COVERAGE_BASELINE = 0.988;
+  check(
+    "出場時間の9割以上が名簿の選手に紐づく",
+    coverage >= 0.9,
+    () =>
+      `${(coverage * 100).toFixed(1)}% しか紐づいていない — 名前照合が壊れている疑いが強い` +
+      `（S11着手時点は ${(COVERAGE_BASELINE * 100).toFixed(1)}%）`
+  );
   soft(
-    "出場時間の8割以上が名簿の選手に紐づく",
-    coverage >= 0.8,
-    () => `${(coverage * 100).toFixed(1)}% しか紐づいていない — 選手ページに出ない出場が多すぎる`
+    "照合率が着手時点から悪化していない",
+    coverage >= COVERAGE_BASELINE - 0.005,
+    () => `${(coverage * 100).toFixed(1)}% — 着手時点の ${(COVERAGE_BASELINE * 100).toFixed(1)}% から下がっている`
   );
 });
 
@@ -978,6 +1042,94 @@ group("K. 空データへの耐性", () => {
   check("順位表が空でない", getStandingsTable().length > 0, () => "getStandingsTable() が空");
   check("日本人選手セクションが空でない", getJapanesePlayerSummaries().length > 0, () => "サマリーが0件");
   equal("順位表が20クラブのまま", getStandingsTable().length, TEAM_COUNT);
+});
+
+// S11 の完了条件6・7。順位表（position）は同着を共有し、次の順位を人数分飛ばす
+// 規約で運用されている。ランキングの4タブがこの規約からずれると、同じサイトの
+// 中に2つの「順位」の意味が生まれ、読者が学んだ規約がタブを跨ぐと通用しなくなる。
+group("L. 選手ランキングの共有順位", () => {
+  const kinds = ["minutes", "goals", "assists", "ga"] as const;
+
+  for (const kind of kinds) {
+    const ranking = getPlayerRanking(kind, 30);
+
+    // 同値は同じ順位、値が変われば「これまでに並んだ人数+1」に飛ぶ（順位表と同じ規約）。
+    let ok = true;
+    let reason = "";
+    let previousValue: number | null = null;
+    let previousRank = 0;
+    ranking.entries.forEach((row, index) => {
+      if (row.value === previousValue) {
+        if (row.rank !== previousRank) {
+          ok = false;
+          reason = `${row.player.name}: 値${row.value}は前の行と同値なのに順位が${row.rank}(前は${previousRank})`;
+        }
+      } else {
+        if (row.rank !== index + 1) {
+          ok = false;
+          reason = `${row.player.name}: 値${row.value}の初出行なのに順位が${row.rank}(期待${index + 1})`;
+        }
+        previousValue = row.value;
+        previousRank = row.rank;
+      }
+    });
+    check(`${kind}: 同値は同じ順位、次は人数分飛ぶ`, ok, () => reason);
+
+    // 順位は「自分より真に大きい値を持つ人数+1」と一致する（順位表の position と同じ定義）。
+    every(
+      `${kind}: 順位が「自分より上位の人数+1」と一致する`,
+      ranking.entries,
+      (row) => row.rank === ranking.entries.filter((r) => r.value > row.value).length + 1,
+      (row) => `${row.player.name}: rank=${row.rank}`
+    );
+  }
+
+  // 出場時間タブは今節時点で270分ちょうどが最多タイ集団。表示される全30行が
+  // 同率1位になるのが正しい状態（設計者の想定「30人」ではなく実測「81人」）。
+  const minutesTop = getPlayerRanking("minutes", 30);
+  note("出場時間タブの最多タイ集団", `${minutesTop.tiedAtTop} 人`);
+  check(
+    "出場時間タブは表示30行すべてが同率1位（270分ちょうどの選手が上位30件を占める）",
+    minutesTop.allShownTied,
+    () => "上位30件に異なる出場時間が混在している — 270分の選手が30人未満に減った可能性"
+  );
+});
+
+group("M. 愛称の対応表（playerAliases.ts）", () => {
+  const entries = playerAliasEntries();
+  note("対応表の行数", `${entries.length} 行`);
+
+  every(
+    "対応先の選手が、そのクラブの名簿に実在する",
+    entries,
+    (e) => getPlayersByTeam(e.teamId).some((p) => p.id === e.playerId),
+    (e) => `${teamName(e.teamId)} "${e.alias}" → 選手 ${e.playerId} がクラブの名簿にいない`
+  );
+
+  // 対応表は規則を緩める代わりに置いている。1行が2人に当たるなら、それは
+  // 規則を緩めたのと同じ事故（qa-log R6）なので、ちょうど1人であることを要求する。
+  every(
+    "対応表の各行がクラブ内のちょうど1人に解決する",
+    entries,
+    (e) => getPlayersByTeam(e.teamId).filter((p) => p.id === e.playerId).length === 1,
+    (e) => `${teamName(e.teamId)} "${e.alias}": 解決先が1人でない`
+  );
+
+  every(
+    "対応表を通した照合が、その選手を返す",
+    entries,
+    (e) => resolveRosterPlayer(e.alias, e.teamId)?.id === e.playerId,
+    (e) =>
+      `${teamName(e.teamId)} "${e.alias}" → ${resolveRosterPlayer(e.alias, e.teamId)?.name ?? "未照合"}` +
+      `（期待: 選手 ${e.playerId}）`
+  );
+
+  every(
+    "同じ別名を2クラブが登録していない",
+    entries,
+    (e) => entries.filter((o) => o.alias === e.alias).length === 1,
+    (e) => `"${e.alias}" が複数クラブに登録されている`
+  );
 });
 
 process.exit(report("プレミアリーグ・データ監査（不変条件）"));

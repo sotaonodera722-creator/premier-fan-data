@@ -4,7 +4,9 @@ import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
 import pastSeasonsJson from "@/data/past-seasons.json";
-import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { getPlayerNameKana } from "@/lib/playerNamesJa";
+import { playerNameJa } from "@/lib/playerDisplayName";
+import { getAliasedPlayerId } from "@/lib/playerAliases";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import { getClubProfile } from "@/lib/clubProfiles";
@@ -96,9 +98,11 @@ export const getPlayers: () => Player[] = memo(() => {
   const minutesMap = getPlayerMinutesMap();
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
-    const nameJa = getPlayerNameJa(p.id);
+    // Kanji for the Japanese players, katakana for everyone else we have.
+    const nameJa = playerNameJa(p.id);
+    const nameKana = getPlayerNameKana(p.id);
     const base = { ...p, age: plausibleAge(p.age) };
-    const withName = nameJa ? { ...base, nameJa } : base;
+    const withName = { ...base, ...(nameJa ? { nameJa } : {}), ...(nameKana ? { nameKana } : {}) };
     if (!minutesMap.has(p.id)) return withName;
     const c = contributions.get(p.id);
     return { ...withName, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
@@ -530,10 +534,33 @@ function mononymMatch(a: string, b: string): boolean {
 // each call is a linear scan with a normalising comparison at each step.
 const resolvedRosterPlayers = new Map<string, Player | undefined>();
 
+/**
+ * Puts the Japanese name back onto a roster row that came from the raw file.
+ *
+ * `resolveRosterPlayer` reads the unenriched roster on purpose — it is called
+ * from inside the derivation that `getPlayers()` itself depends on — so what it
+ * returns has no `nameJa`. Handing that straight to a component printed a squad
+ * ranking entirely in Latin on a page whose own heading said 鎌田大地, with the
+ * player's own row among the ones in Latin. This overlay is a lookup in two
+ * hand-written tables and adds no dependency of its own.
+ */
+function withJapaneseName(player: Player | undefined): Player | null {
+  if (!player) return null;
+  const nameJa = playerNameJa(player.id);
+  const nameKana = getPlayerNameKana(player.id);
+  return { ...player, ...(nameJa ? { nameJa } : {}), ...(nameKana ? { nameKana } : {}) };
+}
+
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   const key = `${teamId}|${name}`;
   if (resolvedRosterPlayers.has(key)) return resolvedRosterPlayers.get(key);
-  const found = bestNameMatch(rawPlayersByTeam(teamId), (p) => p.name, name);
+  // A hand-written alias wins over any rule: it exists precisely because the
+  // rules cannot get there, and loosening them until they can breaks other
+  // players (qa-log R6).
+  const aliasId = getAliasedPlayerId(name, teamId);
+  const found = aliasId
+    ? rawPlayersByTeam(teamId).find((p) => p.id === aliasId)
+    : bestNameMatch(rawPlayersByTeam(teamId), (p) => p.name, name);
   resolvedRosterPlayers.set(key, found);
   return found;
 }
@@ -682,8 +709,8 @@ export const getPlayerGoalContributionsMap: () => Map<number, { goals: number; a
  */
 export type UsageRole = "everyPresent" | "rotation" | "waiting" | "unused";
 
-const EVERY_PRESENT_SHARE = 0.7;
-const ROTATION_SHARE = 0.3;
+export const EVERY_PRESENT_SHARE = 0.7;
+export const ROTATION_SHARE = 0.3;
 
 function roleForShare(share: number): UsageRole {
   if (share <= 0) return "unused";
@@ -743,6 +770,22 @@ export interface SquadUsage {
 
 // Minutes for everyone who actually took the pitch in one match, keyed by the
 // provider's player id so unrostered players are counted too.
+/**
+ * Finds the squad member an event is talking about.
+ *
+ * Usually the two spellings are close enough for the matcher. When they are not,
+ * both sides are put through the roster instead: the provider calls Newcastle's
+ * Livramento "Valentino" in an event and "T." on the bench, and those two forms
+ * only meet through the player they both name.
+ */
+function matchSquadEntry(squad: LineupPlayer[], name: string, teamId: number): LineupPlayer | undefined {
+  const direct = bestNameMatch(squad, (p) => p.name, name);
+  if (direct) return direct;
+  const player = resolveRosterPlayer(name, teamId);
+  if (!player) return undefined;
+  return squad.find((entry) => resolveRosterPlayer(entry.name, teamId)?.id === player.id);
+}
+
 interface SquadMatchMinutes {
   players: Map<number, { entry: LineupPlayer; minutes: number; started: boolean }>;
   /**
@@ -792,8 +835,8 @@ function computeSquadMinutesByLineupId(lineup: MatchLineup, teamId: number): Squ
   // cannot invent an appearance.
   for (const e of substitutionsInOrder(lineup, teamId)) {
     const at = parseMinute(e.minute);
-    const off = e.player ? bestNameMatch(squad, (p) => p.name, e.player) : undefined;
-    const on = e.substitutedFor ? bestNameMatch(squad, (p) => p.name, e.substitutedFor) : undefined;
+    const off = e.player ? matchSquadEntry(squad, e.player, teamId) : undefined;
+    const on = e.substitutedFor ? matchSquadEntry(squad, e.substitutedFor, teamId) : undefined;
 
     const left = Boolean(off && enteredAt.has(off.id));
     const arrived = Boolean(on && !enteredAt.has(on.id));
@@ -850,7 +893,7 @@ export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: 
       // 160-minute rotation player and a 77-minute reserve, neither of which was
       // him. Where the roster can name him, his roster id is the identity; the
       // provider's id only stands in for players players.json has never heard of.
-      const player = resolveRosterPlayer(entry.name, teamId) ?? null;
+      const player = withJapaneseName(resolveRosterPlayer(entry.name, teamId));
       const key = player ? `roster:${player.id}` : `lineup:${id}`;
       const cur = totals.get(key) ?? {
         lineupPlayerId: id,
@@ -1055,6 +1098,72 @@ export function getTopMinutes(limit = 10): { player: Player; minutes: number }[]
 
 // Derived from the lineups we've fetched so far (only finished matches with a
 // published lineup), matched to our player records by normalized name.
+export type RankingKind = "goals" | "assists" | "ga" | "minutes";
+
+export interface RankedPlayer {
+  player: Player;
+  value: number;
+  /**
+   * Competition ranking: one more than the number of players strictly above,
+   * so players level on a figure share a place and the next one skips. The
+   * standings table already counts this way (see StandingRow.position); a site
+   * with two ranking conventions asks the reader to hold both.
+   */
+  rank: number;
+}
+
+export interface PlayerRanking {
+  entries: RankedPlayer[];
+  /** Players in the whole league sharing first place, not only those shown. */
+  tiedAtTop: number;
+  /** True when every row shown carries the same place. */
+  allShownTied: boolean;
+}
+
+/**
+ * A ranking, ranked. Early in a season these are mostly ties — 81 players have
+ * played all 270 minutes of it — and numbering them 1, 2, 3 invents an order
+ * the figures do not have.
+ */
+export function getPlayerRanking(kind: RankingKind, limit = 10): PlayerRanking {
+  const minutesMap = getPlayerMinutesMap();
+  const valueOf = (p: Player) => {
+    switch (kind) {
+      case "goals":
+        return p.goals ?? 0;
+      case "assists":
+        return p.assists ?? 0;
+      case "ga":
+        return (p.goals ?? 0) + (p.assists ?? 0);
+      case "minutes":
+        return minutesMap.get(p.id) ?? 0;
+    }
+  };
+
+  const sorted = getPlayers()
+    .map((player) => ({ player, value: valueOf(player) }))
+    .filter((row) => row.value > 0)
+    .sort((a, b) => b.value - a.value || a.player.name.localeCompare(b.player.name));
+
+  let rank = 0;
+  let previousValue: number | null = null;
+  const ranked = sorted.map((row, index) => {
+    if (row.value !== previousValue) {
+      rank = index + 1;
+      previousValue = row.value;
+    }
+    return { ...row, rank };
+  });
+
+  const entries = ranked.slice(0, limit);
+  const topValue = ranked[0]?.value;
+  return {
+    entries,
+    tiedAtTop: topValue === undefined ? 0 : ranked.filter((r) => r.value === topValue).length,
+    allShownTied: entries.length > 1 && entries.every((e) => e.rank === entries[0].rank),
+  };
+}
+
 export function getPlayerAppearances(playerId: number): PlayerAppearance[] {
   const player = getPlayerById(playerId);
   if (!player) return [];

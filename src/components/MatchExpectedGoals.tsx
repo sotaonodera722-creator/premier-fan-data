@@ -50,10 +50,23 @@ function Side({
   const side = align === "right" ? "items-end text-right" : "items-start text-left";
 
   return (
-    <div className={`flex flex-col gap-2 ${side}`}>
-      <span className="flex items-center gap-2">
+    // `min-w-0` is load-bearing: a nowrap name's min-content width is the whole
+    // name, and that width becomes the minimum of a `1fr` grid track, which is
+    // how コヴェントリー・シティ pushed the page to 394px at 375. Wrapping the
+    // name — rather than truncating it — is the same answer the player cards
+    // and the pitch labels reached: 104px of track against 131px of name, and a
+    // club is not identifiable from コヴェントリー・シ…. The badge is
+    // `shrink-0`, so the name is the only thing that gives way.
+    <div className={`flex min-w-0 flex-col gap-2 ${side}`}>
+      {/* Two lines of 15px, reserved whether or not the name needs them: without
+          it チェルシー sits on one line, ブライトン＆ホーヴ・アルビオン on two,
+          and the two xG numbers — the largest thing in the widget, meant to be
+          read against each other — stop sharing a baseline. */}
+      <span className="flex min-h-[30px] min-w-0 max-w-full items-center gap-2">
         {align === "left" && <TeamBadge team={team} size={22} />}
-        <span className="truncate text-xs font-medium text-foreground">{clubName(team)}</span>
+        <span className="line-clamp-2 text-xs font-medium leading-tight text-foreground">
+          {clubName(team)}
+        </span>
         {align === "right" && <TeamBadge team={team} size={22} />}
       </span>
       <span className="flex items-baseline gap-2">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Term from "@/components/Term";
 import { getPlayerUsage, getPlayerRoundUsage, getTeamById, getUpcomingFixtures, rankByMinutes } from "@/lib/data";
 import type { PlayerRoundStatus, UsageRole } from "@/lib/data";
 import type { Player, Team } from "@/lib/types";
@@ -238,6 +239,7 @@ export default function PlayerUsageSection({ player }: { player: Player }) {
               <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-foreground">
                 {ROLE_LABELS[usage.role]}
               </span>
+              <Term name="usageRole" label={null} className="text-[11px] font-normal text-muted" />
               {/* Three rounds is not a season. The label is the loudest thing on
                   the card, so the caveat rides next to it rather than only in
                   the small print underneath. */}

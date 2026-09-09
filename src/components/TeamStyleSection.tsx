@@ -1,9 +1,18 @@
 import { getTeamStyle } from "@/lib/data";
+import Term from "@/components/Term";
+import type { GlossaryKey } from "@/lib/glossary";
 import { getStyleVerdict, getGroupLine, positionIn } from "@/lib/teamStyle";
 import { getTeamColor } from "@/lib/teamColors";
 import type { AxisReading, StyleGroup } from "@/lib/teamStyle";
 import SectionHeading from "@/components/SectionHeading";
 import DataNote from "@/components/DataNote";
+
+// Axes whose name is a word rather than a description. The rest ("シュート数")
+// explain themselves.
+const AXIS_TERMS: Record<string, GlossaryKey | undefined> = {
+  "ファイナルサードへのパス": "finalThird",
+  "ボール保持率": "possession",
+};
 
 /**
  * How a club plays, against how the other nineteen play.
@@ -37,7 +46,12 @@ function Spectrum({
   return (
     <div className="mt-5">
       <div className="flex items-baseline justify-between gap-3">
-        <span className="min-w-0 text-xs text-muted">{axis.label}</span>
+        <span className="min-w-0 text-xs text-muted">
+          {axis.label}
+          {AXIS_TERMS[axis.label] && (
+            <Term name={AXIS_TERMS[axis.label]!} label={null} className="ml-1" />
+          )}
+        </span>
         <span className="shrink-0 whitespace-nowrap text-sm font-bold tabular-nums text-foreground">
           {axis.format(value)}
           <span className="ml-1.5 text-[11px] font-medium text-muted">

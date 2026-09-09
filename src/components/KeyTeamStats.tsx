@@ -42,13 +42,15 @@ export default function KeyTeamStats({ teamId }: { teamId?: number } = {}) {
       format: (v: number) => `${v}試合`,
     },
     {
-      title: "平均支配率",
+      title: "平均ボール保持率",
+      term: "possession" as const,
       tab: "possession",
       rows: buildRows(getTeamStatAverage("Possession", limit), teamId),
       format: (v: number) => `${Math.round(v * 100)}%`,
     },
     {
       title: "平均期待得点 (xG)",
+      term: "xg" as const,
       tab: "xg",
       rows: buildRows(getTeamStatAverage("Expected Goals", limit), teamId),
       format: (v: number) => v.toFixed(2),
@@ -64,7 +66,7 @@ export default function KeyTeamStats({ teamId }: { teamId?: number } = {}) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((c) => (
-        <TeamStatCard key={c.title} title={c.title} rows={c.rows} format={c.format} tab={c.tab} teamId={teamId} />
+        <TeamStatCard key={c.title} title={c.title} term={c.term} rows={c.rows} format={c.format} tab={c.tab} teamId={teamId} />
       ))}
     </div>
   );

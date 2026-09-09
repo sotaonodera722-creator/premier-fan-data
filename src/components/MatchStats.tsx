@@ -1,4 +1,6 @@
 import type { MatchStatistics, Team } from "@/lib/types";
+import Term from "@/components/Term";
+import type { GlossaryKey } from "@/lib/glossary";
 import { getTeamColor, colorsClash } from "@/lib/teamColors";
 import TeamBadge from "@/components/TeamBadge";
 import { teamNameShort } from "@/lib/teamNamesJa";
@@ -7,10 +9,10 @@ import { teamNameShort } from "@/lib/teamNamesJa";
 // where the comparison that matters is against the scoreline rather than against
 // the other side. Goalkeeper saves take its place — the other half of the story
 // a side that failed to convert its chances was part of.
-const DISPLAY_STATS: { key: string; label: string; isPercent?: boolean; decimals?: number }[] = [
-  { key: "Possession", label: "ポゼッション", isPercent: true },
+const DISPLAY_STATS: { key: string; label: string; isPercent?: boolean; decimals?: number; term?: GlossaryKey }[] = [
+  { key: "Possession", label: "ボール保持率", isPercent: true, term: "possession" as const },
   { key: "Shots on target", label: "枠内シュート" },
-  { key: "Big Chances Created", label: "ビッグチャンス創出" },
+  { key: "Big Chances Created", label: "ビッグチャンス創出", term: "bigChance" as const },
   { key: "Goalkeeper saves", label: "GKセーブ" },
   { key: "Corners", label: "コーナーキック" },
 ];
@@ -67,7 +69,7 @@ export default function MatchStats({
               <span className="font-[family-name:var(--font-display)] font-bold" style={{ color: homeColor }}>
                 {formatValue(r.home, r.isPercent, r.decimals)}
               </span>
-              <span className="text-muted">{r.label}</span>
+              <span className="text-muted">{r.term ? <Term name={r.term} label={r.label} /> : r.label}</span>
               <span className="font-[family-name:var(--font-display)] font-bold" style={{ color: awayColor }}>
                 {formatValue(r.away, r.isPercent, r.decimals)}
               </span>

@@ -1,7 +1,8 @@
-import { getPlayers, getTeams, getTopScorers, getTopAssists, getTopGoalContributions, getTopMinutes } from "@/lib/data";
+import { getPlayers, getTeams, getPlayerRanking } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import PlayersExplorer from "@/components/PlayersExplorer";
 import PlayerRankingList from "@/components/PlayerRankingList";
+import SampleSizeNote from "@/components/SampleSizeNote";
 
 export const metadata = {
   title: "選手名鑑 | Premier Fan Data",
@@ -17,10 +18,10 @@ export default async function PlayersPage({
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
 
-  const topScorers = getTopScorers(5).map((p) => ({ player: p, value: p.goals ?? 0 }));
-  const topAssists = getTopAssists(5).map((p) => ({ player: p, value: p.assists ?? 0 }));
-  const topGA = getTopGoalContributions(5).map((p) => ({ player: p, value: (p.goals ?? 0) + (p.assists ?? 0) }));
-  const topMinutes = getTopMinutes(5).map(({ player, minutes }) => ({ player, value: minutes }));
+  const topScorers = getPlayerRanking("goals", 5).entries;
+  const topAssists = getPlayerRanking("assists", 5).entries;
+  const topGA = getPlayerRanking("ga", 5).entries;
+  const topMinutes = getPlayerRanking("minutes", 5).entries;
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6">
@@ -64,6 +65,8 @@ export default async function PlayersPage({
           moreHref="/players/rankings?tab=minutes"
         />
       </div>
+
+      <SampleSizeNote derived />
 
       <SectionHeading eyebrow="Directory" title="選手を検索" />
       <PlayersExplorer

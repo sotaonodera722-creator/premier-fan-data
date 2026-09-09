@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Term from "@/components/Term";
+import type { GlossaryKey } from "@/lib/glossary";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import SectionHeading from "@/components/SectionHeading";
@@ -9,6 +11,7 @@ export type TeamStatRow = { team: Team; value: number; rank: number };
 
 export default function TeamStatCard({
   title,
+  term,
   eyebrow,
   rows,
   format,
@@ -17,6 +20,8 @@ export default function TeamStatCard({
   size = "sm",
 }: {
   title: string;
+  /** Explains the word in the heading, where the heading uses one. */
+  term?: GlossaryKey;
   eyebrow?: string;
   rows: TeamStatRow[];
   format: (v: number) => string;
@@ -32,6 +37,7 @@ export default function TeamStatCard({
         <SectionHeading
           eyebrow={eyebrow}
           title={title}
+          titleSuffix={term ? <Term name={term} label={null} className="ml-2 align-middle text-[11px] font-normal" /> : undefined}
           action={
             <SectionLink href={`/teams/rankings?tab=${tab}`}>もっと見る →</SectionLink>
           }
@@ -63,7 +69,10 @@ export default function TeamStatCard({
   return (
     <div className="glass rounded-xl p-4">
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-sm font-semibold text-foreground">{title}</p>
+        <p className="text-sm font-semibold text-foreground">
+          {title}
+          {term && <Term name={term} label={null} className="ml-2 align-middle text-[11px] font-normal" />}
+        </p>
         <SectionLink href={`/teams/rankings?tab=${tab}`} className="text-xs">もっと見る →</SectionLink>
       </div>
       {/* -my-1.5 keeps the visual rhythm of the list while each row still

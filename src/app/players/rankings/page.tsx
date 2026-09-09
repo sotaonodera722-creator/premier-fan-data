@@ -1,4 +1,4 @@
-import { getTeams, getTopScorers, getTopAssists, getTopGoalContributions, getTopMinutes } from "@/lib/data";
+import { getTeams, getPlayerRanking } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import PlayerRankingsExplorer from "@/components/PlayerRankingsExplorer";
 import SampleSizeNote from "@/components/SampleSizeNote";
@@ -18,13 +18,10 @@ export default async function PlayerRankingsPage({
   const teams = getTeams();
   const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
 
-  const goals = getTopScorers(RANKING_LIMIT).map((p) => ({ player: p, value: p.goals ?? 0 }));
-  const assists = getTopAssists(RANKING_LIMIT).map((p) => ({ player: p, value: p.assists ?? 0 }));
-  const ga = getTopGoalContributions(RANKING_LIMIT).map((p) => ({
-    player: p,
-    value: (p.goals ?? 0) + (p.assists ?? 0),
-  }));
-  const minutes = getTopMinutes(RANKING_LIMIT).map(({ player, minutes: mins }) => ({ player, value: mins }));
+  const goals = getPlayerRanking("goals", RANKING_LIMIT);
+  const assists = getPlayerRanking("assists", RANKING_LIMIT);
+  const ga = getPlayerRanking("ga", RANKING_LIMIT);
+  const minutes = getPlayerRanking("minutes", RANKING_LIMIT);
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-20 pt-10 sm:px-6">

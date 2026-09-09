@@ -24,6 +24,25 @@ const PLAYER_NAMES_JA: Record<number, string> = {
   113632: "坂元達裕",
 };
 
+// Readings for the kanji names above, so a reader who types the sound rather
+// than the characters still finds them. Only needed here: every other player's
+// Japanese rendering is katakana already, which is its own reading.
+const PLAYER_NAMES_KANA: Record<number, string> = {
+  118920: "スズキザイオン",
+  3269: "エンドウワタル",
+  49092: "モリタヒデマサ",
+  49105: "タナカアオ",
+  44017: "マエダダイゼン",
+  9034: "トミヤスタケヒロ",
+  6716: "カマダダイチ",
+  132707: "ミトマカオル",
+  113632: "サカモトタツヒロ",
+};
+
 export function getPlayerNameJa(playerId: number): string | undefined {
   return PLAYER_NAMES_JA[playerId];
+}
+
+export function getPlayerNameKana(playerId: number): string | undefined {
+  return PLAYER_NAMES_KANA[playerId];
 }

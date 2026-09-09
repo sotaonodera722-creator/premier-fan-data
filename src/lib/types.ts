@@ -34,8 +34,16 @@ export interface Player {
   // Always the Latin-script name from the feed. Lineup and event matching keys off
   // this, so it must not be replaced with a translation — see playerNamesJa.ts.
   name: string;
-  // Kanji name where we have one. Display code prefers it; matching must not.
+  // The Japanese rendering where we have one — kanji for the Japanese players,
+  // katakana for everyone else. Display code prefers it; matching must not.
   nameJa?: string;
+  /**
+   * Katakana reading, for search only. Needed where `nameJa` is kanji and a
+   * reader would type the sound rather than the characters (みとま / ミトマ).
+   * Redundant where `nameJa` is already katakana, so it is only set for the
+   * Japanese players.
+   */
+  nameKana?: string;
   teamId: number;
   position: Position;
   dateOfBirth: string;
