@@ -7,6 +7,7 @@ import {
   type StandingZone,
 } from "@/lib/leagueRules";
 import ZoneChip from "@/components/ZoneChip";
+import Term from "@/components/Term";
 
 // A position number is meaningless to a reader who has never followed the
 // league — "3rd" carries no consequence until someone says what 3rd wins you.
@@ -58,7 +59,7 @@ export default function ZoneLegend({
       </ul>
       <p className="mt-4 border-t border-border pt-3 text-[11px] leading-relaxed text-muted">
         全{totalTeams}クラブが、他の全クラブとホームで1回・アウェイで1回ずつ、8月から翌年5月まで38試合を戦います。勝利で勝点3、引き分けで1。勝点が並んだときは得失点差、次に総得点の多いほうが上位です。
-        カップ戦の優勝クラブの順位によっては、6位以下にも欧州大会の出場権が回ることがあります。「得失点差」は総得点から総失点を引いた数、「未消化」は他クラブより試合数が少ない状態で、勝点だけを比べると不利に見えても勝てば順位が動く余地が残っていることを表します。
+        カップ戦の優勝クラブの順位によっては、6位以下にも欧州大会の出場権が回ることがあります。{" "}<Term name="goalDiff" />{" "}と{" "}<Term name="gamesInHand" />{" "}は、表の中で意味を取り違えやすい2つです。
         {hasProvisionalBoundary && (
           <>
             {" "}

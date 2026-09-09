@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Term from "@/components/Term";
 import type { LineupPlayer, MatchLineup, Team } from "@/lib/types";
 import { getTeamColor, getContrastText, colorsClash } from "@/lib/teamColors";
 import { resolveRosterPlayer } from "@/lib/data";
@@ -93,6 +94,7 @@ export default function MatchFormation({
         <span className="flex items-center gap-1.5 font-medium" style={{ color: awayColor }}>
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: awayColor }} /> {teamNameShort(awayTeam)} ·{" "}
           {lineup.awayTeam.formation}
+          <Term name="formation" label={null} className="font-normal text-muted" />
           <span className="rounded bg-background px-1.5 py-0.5 text-[9px] font-semibold text-muted">AWAY</span>
         </span>
         <span className="flex items-center gap-1.5 font-medium" style={{ color: homeColor }}>

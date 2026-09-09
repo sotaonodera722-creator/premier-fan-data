@@ -82,8 +82,8 @@ export default function PlayerRankingsExplorer({
               <span className="w-6 text-sm font-bold tabular-nums text-muted">{rank}</span>
               {team && <TeamBadge team={team} size={28} />}
               <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">
-                  {p.isJapanese && "🇯🇵"} {p.nameJa ?? p.name}
+                <p className="flex items-center gap-1.5 text-sm font-medium leading-snug text-foreground">
+                  {p.isJapanese && "🇯🇵"} <span className="line-clamp-2">{p.nameJa ?? p.name}</span>
                 </p>
                 <p className="truncate text-xs text-muted">{team && teamNameShort(team)}</p>
               </div>

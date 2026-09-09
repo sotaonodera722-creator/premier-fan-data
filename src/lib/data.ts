@@ -534,6 +534,23 @@ function mononymMatch(a: string, b: string): boolean {
 // each call is a linear scan with a normalising comparison at each step.
 const resolvedRosterPlayers = new Map<string, Player | undefined>();
 
+/**
+ * Puts the Japanese name back onto a roster row that came from the raw file.
+ *
+ * `resolveRosterPlayer` reads the unenriched roster on purpose — it is called
+ * from inside the derivation that `getPlayers()` itself depends on — so what it
+ * returns has no `nameJa`. Handing that straight to a component printed a squad
+ * ranking entirely in Latin on a page whose own heading said 鎌田大地, with the
+ * player's own row among the ones in Latin. This overlay is a lookup in two
+ * hand-written tables and adds no dependency of its own.
+ */
+function withJapaneseName(player: Player | undefined): Player | null {
+  if (!player) return null;
+  const nameJa = playerNameJa(player.id);
+  const nameKana = getPlayerNameKana(player.id);
+  return { ...player, ...(nameJa ? { nameJa } : {}), ...(nameKana ? { nameKana } : {}) };
+}
+
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   const key = `${teamId}|${name}`;
   if (resolvedRosterPlayers.has(key)) return resolvedRosterPlayers.get(key);
@@ -876,7 +893,7 @@ export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: 
       // 160-minute rotation player and a 77-minute reserve, neither of which was
       // him. Where the roster can name him, his roster id is the identity; the
       // provider's id only stands in for players players.json has never heard of.
-      const player = resolveRosterPlayer(entry.name, teamId) ?? null;
+      const player = withJapaneseName(resolveRosterPlayer(entry.name, teamId));
       const key = player ? `roster:${player.id}` : `lineup:${id}`;
       const cur = totals.get(key) ?? {
         lineupPlayerId: id,
