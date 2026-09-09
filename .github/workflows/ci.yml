@@ -1,0 +1,35 @@
+name: CI
+
+# The cheap gate. It exists so that an expensive review agent is never spent on
+# something that does not compile, and so that a change which quietly breaks a
+# derived number is caught by arithmetic rather than by a reader.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      # Runs last because it is the check most likely to fail for reasons that
+      # are about the data rather than the diff — seeing lint and build results
+      # alongside it is what tells the two apart.
+      - name: Data invariants
+        run: npm run audit
