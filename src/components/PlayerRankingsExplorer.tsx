@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Team } from "@/lib/types";
 import TeamBadge from "@/components/TeamBadge";
 import { teamNameShort } from "@/lib/teamNamesJa";
-import type { RankingEntry } from "@/components/PlayerRankingList";
+import type { PlayerRanking } from "@/lib/data";
 import { useUrlParams } from "@/lib/useUrlParams";
 
 type Tab = "goals" | "assists" | "ga" | "minutes";
@@ -27,10 +27,10 @@ export default function PlayerRankingsExplorer({
 }: {
   initialTab?: string;
   teamById: Record<number, Team>;
-  goals: RankingEntry[];
-  assists: RankingEntry[];
-  ga: RankingEntry[];
-  minutes: RankingEntry[];
+  goals: PlayerRanking;
+  assists: PlayerRanking;
+  ga: PlayerRanking;
+  minutes: PlayerRanking;
 }) {
   const isTab = (v: string | undefined): v is Tab => TABS.some((t) => t.key === v);
   const [tab, setTab] = useState<Tab>(isTab(initialTab) ? initialTab : "goals");
@@ -41,9 +41,16 @@ export default function PlayerRankingsExplorer({
     updateUrl({ tab: next });
   }
 
-  const dataByTab: Record<Tab, RankingEntry[]> = { goals, assists, ga, minutes };
-  const entries = dataByTab[tab];
+  const dataByTab: Record<Tab, PlayerRanking> = { goals, assists, ga, minutes };
+  const ranking = dataByTab[tab];
+  const entries = ranking.entries;
   const suffix = TABS.find((t) => t.key === tab)?.suffix;
+  // Every row reading "1" looks broken until the list says why. Three matches in,
+  // eighty-one players have been on the pitch for all of them, and that — not an
+  // order among them — is what the minutes column has to report.
+  const tieNote = ranking.allShownTied
+    ? `表示中の${entries.length}人はすべて同じ数字で並んでいます（リーグ全体では${ranking.tiedAtTop}人が同率1位）。`
+    : null;
 
   return (
     <div>
@@ -61,8 +68,10 @@ export default function PlayerRankingsExplorer({
         ))}
       </div>
 
+      {tieNote && <p className="mb-2.5 text-xs leading-relaxed text-muted">{tieNote}</p>}
+
       <div className="glass divide-y divide-border rounded-xl">
-        {entries.map(({ player: p, value }, i) => {
+        {entries.map(({ player: p, value, rank }) => {
           const team = teamById[p.teamId];
           return (
             <Link
@@ -70,7 +79,7 @@ export default function PlayerRankingsExplorer({
               href={`/players/${p.id}`}
               className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface-2"
             >
-              <span className="w-6 text-sm font-bold text-muted">{i + 1}</span>
+              <span className="w-6 text-sm font-bold tabular-nums text-muted">{rank}</span>
               {team && <TeamBadge team={team} size={28} />}
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">

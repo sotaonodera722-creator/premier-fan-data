@@ -7,6 +7,7 @@ import { getNationalityJa } from "@/lib/nationalitiesJa";
 import TeamBadge from "@/components/TeamBadge";
 import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 import { useUrlParams } from "@/lib/useUrlParams";
+import { nameMatchesQuery } from "@/lib/nameSearch";
 
 type SortKey = "goals" | "assists" | "age";
 
@@ -73,12 +74,14 @@ export default function PlayersExplorer({
   const teamById = useMemo(() => Object.fromEntries(teams.map((t) => [t.id, t])), [teams]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = query.trim();
     const list = players.filter((p) => {
       if (japaneseOnly && !p.isJapanese) return false;
       if (teamId !== "all" && String(p.teamId) !== teamId) return false;
       if (position !== "all" && p.position !== position) return false;
-      if (q && !p.name.toLowerCase().includes(q)) return false;
+      // The name on the card is nameJa where we have one, so searching only
+      // `name` meant the spelling a reader can actually see returned nothing.
+      if (!nameMatchesQuery([p.name, p.nameJa, p.nameKana], q)) return false;
       return true;
     });
     return [...list].sort((a, b) => {

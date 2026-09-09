@@ -1,7 +1,6 @@
 import {
   getStandingsTable,
-  getTopScorers,
-  getTopAssists,
+  getPlayerRanking,
   getJapanesePlayerSummaries,
   getTeams,
   getAllMatches,
@@ -40,8 +39,8 @@ export default async function Home({
   const nextFixtureRound = getNextFixtureRound();
   const clickableMatchIds = new Set(getClickableMatchIds());
 
-  const topScorers = getTopScorers(3).map((p) => ({ player: p, value: p.goals ?? 0 }));
-  const topAssists = getTopAssists(3).map((p) => ({ player: p, value: p.assists ?? 0 }));
+  const topScorers = getPlayerRanking("goals", 3).entries;
+  const topAssists = getPlayerRanking("assists", 3).entries;
   const topXg = getTeamStatAverage("Expected Goals", 3).map((r, i) => ({ ...r, rank: i + 1 }));
 
   return (

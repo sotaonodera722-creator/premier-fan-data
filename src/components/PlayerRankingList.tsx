@@ -5,7 +5,7 @@ import { teamNameShort } from "@/lib/teamNamesJa";
 import SectionHeading from "@/components/SectionHeading";
 import SectionLink from "@/components/SectionLink";
 
-export type RankingEntry = { player: Player; value: number };
+export type RankingEntry = { player: Player; value: number; rank: number };
 
 export default function PlayerRankingList({
   eyebrow,
@@ -36,7 +36,7 @@ export default function PlayerRankingList({
         }
       />
       <div className="glass divide-y divide-border rounded-xl">
-        {entries.map(({ player: p, value }, i) => {
+        {entries.map(({ player: p, value, rank }) => {
           const team = teamById[p.teamId];
           return (
             <Link
@@ -44,7 +44,7 @@ export default function PlayerRankingList({
               href={`/players/${p.id}`}
               className="flex items-center gap-3 px-4 py-3 transition hover:bg-surface-2"
             >
-              <span className="w-5 text-sm font-bold text-muted">{i + 1}</span>
+              <span className="w-5 text-sm font-bold tabular-nums text-muted">{rank}</span>
               {team && <TeamBadge team={team} size={28} />}
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-foreground">

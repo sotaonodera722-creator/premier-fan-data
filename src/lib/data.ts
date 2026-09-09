@@ -4,7 +4,7 @@ import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
 import pastSeasonsJson from "@/data/past-seasons.json";
-import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { getPlayerNameJa, getPlayerNameKana } from "@/lib/playerNamesJa";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import { getClubProfile } from "@/lib/clubProfiles";
@@ -97,8 +97,9 @@ export const getPlayers: () => Player[] = memo(() => {
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
     const nameJa = getPlayerNameJa(p.id);
+    const nameKana = getPlayerNameKana(p.id);
     const base = { ...p, age: plausibleAge(p.age) };
-    const withName = nameJa ? { ...base, nameJa } : base;
+    const withName = { ...base, ...(nameJa ? { nameJa } : {}), ...(nameKana ? { nameKana } : {}) };
     if (!minutesMap.has(p.id)) return withName;
     const c = contributions.get(p.id);
     return { ...withName, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
@@ -1055,6 +1056,72 @@ export function getTopMinutes(limit = 10): { player: Player; minutes: number }[]
 
 // Derived from the lineups we've fetched so far (only finished matches with a
 // published lineup), matched to our player records by normalized name.
+export type RankingKind = "goals" | "assists" | "ga" | "minutes";
+
+export interface RankedPlayer {
+  player: Player;
+  value: number;
+  /**
+   * Competition ranking: one more than the number of players strictly above,
+   * so players level on a figure share a place and the next one skips. The
+   * standings table already counts this way (see StandingRow.position); a site
+   * with two ranking conventions asks the reader to hold both.
+   */
+  rank: number;
+}
+
+export interface PlayerRanking {
+  entries: RankedPlayer[];
+  /** Players in the whole league sharing first place, not only those shown. */
+  tiedAtTop: number;
+  /** True when every row shown carries the same place. */
+  allShownTied: boolean;
+}
+
+/**
+ * A ranking, ranked. Early in a season these are mostly ties — 81 players have
+ * played all 270 minutes of it — and numbering them 1, 2, 3 invents an order
+ * the figures do not have.
+ */
+export function getPlayerRanking(kind: RankingKind, limit = 10): PlayerRanking {
+  const minutesMap = getPlayerMinutesMap();
+  const valueOf = (p: Player) => {
+    switch (kind) {
+      case "goals":
+        return p.goals ?? 0;
+      case "assists":
+        return p.assists ?? 0;
+      case "ga":
+        return (p.goals ?? 0) + (p.assists ?? 0);
+      case "minutes":
+        return minutesMap.get(p.id) ?? 0;
+    }
+  };
+
+  const sorted = getPlayers()
+    .map((player) => ({ player, value: valueOf(player) }))
+    .filter((row) => row.value > 0)
+    .sort((a, b) => b.value - a.value || a.player.name.localeCompare(b.player.name));
+
+  let rank = 0;
+  let previousValue: number | null = null;
+  const ranked = sorted.map((row, index) => {
+    if (row.value !== previousValue) {
+      rank = index + 1;
+      previousValue = row.value;
+    }
+    return { ...row, rank };
+  });
+
+  const entries = ranked.slice(0, limit);
+  const topValue = ranked[0]?.value;
+  return {
+    entries,
+    tiedAtTop: topValue === undefined ? 0 : ranked.filter((r) => r.value === topValue).length,
+    allShownTied: entries.length > 1 && entries.every((e) => e.rank === entries[0].rank),
+  };
+}
+
 export function getPlayerAppearances(playerId: number): PlayerAppearance[] {
   const player = getPlayerById(playerId);
   if (!player) return [];
