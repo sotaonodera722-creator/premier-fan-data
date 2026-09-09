@@ -227,6 +227,25 @@ group("D. 選手名簿（players.json）", () => {
   check("選手が1人以上いる", players.length > 0, () => "players.json が空");
   equal("選手IDが重複していない", new Set(players.map((p) => p.id)).size, players.length);
 
+  // S11 の完了条件1。src/lib/playerNamesJa.ts の冒頭が警告しているとおり、`name` を
+  // 日本語に置き換えると、ラインナップとイベントの名前照合が全滅し、日本人選手の
+  // 出場記録が静かにゼロになる。表示は `nameJa` を読み、照合は `name` を読む —
+  // その分離が守られているかを、目視ではなく文字単位で確かめる。
+  const rawNames = new Map((playersJson as Player[]).map((p) => [p.id, p.name]));
+  every(
+    "getPlayers() の name が players.json の name と完全一致する",
+    players,
+    (p) => rawNames.get(p.id) === p.name,
+    (p) => `${p.id}: "${rawNames.get(p.id)}" が "${p.name}" に書き換えられている`
+  );
+
+  every(
+    "日本語表記が name ではなく nameJa に入っている",
+    players,
+    (p) => !/[ぁ-んァ-ヶ一-龯]/.test(p.name),
+    (p) => `${p.name}: name に日本語が混入している（nameJa に入れること）`
+  );
+
   every(
     "所属クラブが実在する",
     players,
@@ -650,10 +669,27 @@ group("G. 出場時間の導出", () => {
   );
   const coverage = totalSquadMinutes > 0 ? rosterMinutes / totalSquadMinutes : 1;
   note("名簿と照合できた出場時間の割合", `${(coverage * 100).toFixed(1)}%`);
+  note(
+    "出場時間の総和",
+    `理論値 ${totalSquadMinutes.toLocaleString("ja-JP")}分 / うち名簿の選手に紐づく ` +
+      `${rosterMinutes.toLocaleString("ja-JP")}分`
+  );
+
+  // S11（選手名の日本語化）着手時点の実測値。名前照合が壊れれば真っ先にここが落ちる。
+  // 提供元が名簿に無い選手を出してくる分の揺れ（現在43人ぶん）は避けられないので、
+  // 明らかな破綻を止める硬い床と、悪化に気づくための柔らかい床を分けて置く。
+  const COVERAGE_BASELINE = 0.988;
+  check(
+    "出場時間の9割以上が名簿の選手に紐づく",
+    coverage >= 0.9,
+    () =>
+      `${(coverage * 100).toFixed(1)}% しか紐づいていない — 名前照合が壊れている疑いが強い` +
+      `（S11着手時点は ${(COVERAGE_BASELINE * 100).toFixed(1)}%）`
+  );
   soft(
-    "出場時間の8割以上が名簿の選手に紐づく",
-    coverage >= 0.8,
-    () => `${(coverage * 100).toFixed(1)}% しか紐づいていない — 選手ページに出ない出場が多すぎる`
+    "照合率が着手時点から悪化していない",
+    coverage >= COVERAGE_BASELINE - 0.005,
+    () => `${(coverage * 100).toFixed(1)}% — 着手時点の ${(COVERAGE_BASELINE * 100).toFixed(1)}% から下がっている`
   );
 });
 
