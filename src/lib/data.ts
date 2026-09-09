@@ -1105,6 +1105,7 @@ export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(()
   return getJapanesePlayers()
     .map((player) => {
       const appearances = getPlayerAppearances(player.id);
+      const benchedMatches = countBenchedMatches(player);
       const roundStat = round.get(player.id) ?? null;
       const roundMatch = latest.matches.find(
         (m) => m.homeTeamId === player.teamId || m.awayTeamId === player.teamId
@@ -1116,9 +1117,10 @@ export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(()
         // the four-state classification below. Falling back to null for both
         // reported a player who has been an unused substitute all season as
         // having no involvement at all.
-        minutes: minutesMap.get(player.id) ?? (wasNamedInAnyLineup(player) ? 0 : null),
+        minutes: minutesMap.get(player.id) ?? (benchedMatches > 0 ? 0 : null),
         appearances: appearances.length,
         starts: appearances.filter((a) => a.status === "start").length,
+        benchedMatches,
         round: roundStat,
         roundStatus: resolveRoundStatus(player, roundMatch, roundStat),
         roundMatch: roundMatch ?? null,
@@ -1130,17 +1132,19 @@ export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(()
     .sort(compareJapaneseSummaries);
 });
 
-// Whether this player has been in a matchday squad at all — starting XI or bench,
-// used or not — across every match we hold a lineup for.
-function wasNamedInAnyLineup(player: Player): boolean {
-  return getMatchesForTeam(player.teamId)
-    .filter((m) => m.played)
-    .some((m) => {
-      const lineup = getMatchLineup(m.id);
-      if (!lineup) return false;
-      const side = m.homeTeamId === player.teamId ? lineup.homeTeam : lineup.awayTeam;
-      return [...side.startXI.flat(), ...side.substitutes].some((p) => namesMatch(p.name, player.name));
-    });
+// Matches this player was in the squad for — starting XI or bench — and never
+// took the pitch in. Being on the bench all season is a different season from
+// not being picked, and only this tells them apart.
+function countBenchedMatches(player: Player): number {
+  let count = 0;
+  for (const m of getMatchesForTeam(player.teamId).filter((x) => x.played)) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    const side = m.homeTeamId === player.teamId ? lineup.homeTeam : lineup.awayTeam;
+    const named = [...side.startXI.flat(), ...side.substitutes].some((p) => namesMatch(p.name, player.name));
+    if (named && (computeMatchMinutes(lineup).get(player.id) ?? 0) === 0) count += 1;
+  }
+  return count;
 }
 
 // The same player one round back, so the section can report a direction rather
@@ -1308,8 +1312,11 @@ export function getSampleSize(): {
 // shown as a tie. And clubs do not always have the same number of matches
 // played, which makes a bare position misleading; games in hand are counted so
 // the table can say so.
-export const getStandingsTable: () => StandingRow[] = memo(() => {
-  const sorted = [...teams].sort((a, b) => {
+// The order the table is printed in. The feed's own position leads, so the
+// official tiebreaks it has applied are respected; the rest only settles clubs
+// the feed itself has left level.
+function teamsInTableOrder(): Team[] {
+  return [...teams].sort((a, b) => {
     const ra = a.record;
     const rb = b.record;
     if (!ra || !rb) return (ra ? 0 : 1) - (rb ? 0 : 1);
@@ -1321,7 +1328,10 @@ export const getStandingsTable: () => StandingRow[] = memo(() => {
       a.name.localeCompare(b.name)
     );
   });
+}
 
+export const getStandingsTable: () => StandingRow[] = memo(() => {
+  const sorted = teamsInTableOrder();
   const total = sorted.length;
   const maxPlayed = sorted.reduce((max, t) => Math.max(max, t.record?.played ?? 0), 0);
   const movements = getRoundMovements();
@@ -1534,11 +1544,20 @@ export function getTableAtMatchday(matchday: number): Map<number, number> {
 
   // Competition ranking: a club's position is one more than the number of clubs
   // strictly above it, so level clubs share a number.
+  //
+  // Shared, not dense, because this is subtracted from `Team.record.position` —
+  // which is what the table prints, and which the feed also shares between clubs
+  // it cannot separate. Counting densely here would put a "▼2" beside a club
+  // whose printed position moved by one.
   return new Map(rows.map((row) => [row.id, 1 + rows.filter((other) => outranks(row, other)).length]));
 }
 
 export interface RoundMovement {
-  /** Position at the end of the previous round; null in the opening round. */
+  /**
+   * Place at the end of the previous round, counted 1..20 the same way the
+   * table counts the current one, so the difference between them is the number
+   * of places a reader can see the club has moved.
+   */
   previousPosition: number | null;
   /** Places gained this round. Positive is upward. Null when there is no previous round. */
   change: number | null;
@@ -1560,6 +1579,8 @@ export const getRoundMovements: () => Map<number, RoundMovement> = memo(() => {
   const previous = getTableAtMatchday(matchday - 1);
   for (const team of teams) {
     const previousPosition = previous.get(team.id) ?? null;
+    // The position the table prints, so the arrow beside it is that number's
+    // own movement. See getTableAtMatchday for why both sides share numbers.
     const currentPosition = team.record?.position ?? null;
     movements.set(team.id, {
       previousPosition,
@@ -1893,6 +1914,8 @@ function describeBiggestClimb(): string | null {
 
   const best = climbs[0];
   if (!best) return rows.length > 0 ? "順位の入れ替わりはなかった。" : null;
+  // Quotes the printed position at both ends, so the sentence and the table row
+  // are the same two numbers.
   return `${clubNameJa(best.team)}が${best.previousPosition}位から${best.position}位へ最も順位を上げている。`;
 }
 

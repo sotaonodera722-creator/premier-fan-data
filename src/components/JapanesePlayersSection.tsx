@@ -118,6 +118,22 @@ function LastRoundNote({
   );
 }
 
+/**
+ * The season so far, for a player who did not take the pitch this round.
+ *
+ * "今季の出場記録なし" was covering two different seasons. A player who has been
+ * in every matchday squad without being used is in his manager's plans and one
+ * substitution away from playing; a player who has not been picked at all is
+ * not. To someone following one name, that is the whole question.
+ */
+function seasonSoFar(minutes: number | null, appearances: number, benchedMatches: number): string {
+  if (minutes) return `今季 ${appearances}試合・${minutes}分`;
+  // No "・出場なし": every group this line appears under already says he did not
+  // play, and the longer wording crowded the club name off a 375px row.
+  if (benchedMatches > 0) return `今季 ベンチ入り${benchedMatches}試合`;
+  return "今季の出場記録なし";
+}
+
 function clubLabel(team: Team): string {
   return getTeamNameJa(team.id)?.short ?? team.shortName;
 }
@@ -223,7 +239,7 @@ function StatusGroup({
       <p className="mt-0.5 text-[11px] leading-relaxed text-muted">{note}</p>
       <ul className="glass mt-2.5 divide-y divide-border overflow-hidden rounded-xl">
         {players.map((summary) => {
-          const { player, minutes, appearances, roundMatch } = summary;
+          const { player, minutes, appearances, benchedMatches, roundMatch } = summary;
           const team = teamById[player.teamId];
           return (
             <li key={player.id}>
@@ -252,7 +268,7 @@ function StatusGroup({
                   </span>
                 ) : (
                   <span className="shrink-0 whitespace-nowrap text-[11px] tabular-nums text-muted">
-                    {minutes ? `今季 ${appearances}試合・${minutes}分` : "今季の出場記録なし"}
+                    {seasonSoFar(minutes, appearances, benchedMatches)}
                   </span>
                 )}
               </Link>

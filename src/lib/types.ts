@@ -65,7 +65,9 @@ export interface StandingRow {
   gamesInHand: number;
   /**
    * Where this club stood when the previous round finished, counted the same
-   * way as `position`. null in the opening round, when there is no before.
+   * way as `position` — shared between clubs that were level — because
+   * `position` is the number the table prints, and the movement beside it has
+   * to be that number's own. null in the opening round, when there is no before.
    */
   previousPosition: number | null;
   /** Places gained since then. Positive is upward; null when there is no before. */
@@ -206,6 +208,15 @@ export interface JapanesePlayerSummary {
   minutes: number | null;
   appearances: number;
   starts: number;
+  /**
+   * Matches he was named in the squad for and never came on.
+   *
+   * Not derivable from `appearances`, which counts only the matches he played
+   * in: a player who has been in every squad without being used has none of
+   * them, and reporting him the same way as one his manager has not picked at
+   * all loses the distinction the section is built on.
+   */
+  benchedMatches: number;
   // The most recent completed round only, so a section headed "this weekend" can
   // lead with weekend numbers instead of season totals. null when they did not
   // play in it.

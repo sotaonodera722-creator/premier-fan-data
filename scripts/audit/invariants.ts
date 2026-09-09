@@ -367,27 +367,31 @@ group("E. 順位表（導出）", () => {
     (r) => `${r.rank}位 ${r.team.shortName} に降格圏バッジが付いている`
   );
 
-  // 変動は「フィードの順位（同着は同じ番号を共有する）」同士の引き算で、表示される
-  // rank（1〜20の連番）とは別の数え方。両者を混ぜると符号まで変わるので、契約どおり
-  // position と突き合わせる。
+  // 順位表が画面に出しているのは `position`（フィードの順位。同着は番号を共有）であり、
+  // `rank` は内部の連番。矢印は表示されている数字の移動でなければ検算できないので、
+  // 前節順位・変動・表示のすべてが `position` 基準で揃っていることを確認する。
+  // 2026-09-09 にこれを `rank` 基準に変えて破綻させた（qa-log R8）。
   every(
-    "順位変動が前節順位と整合する",
+    "順位変動が表示されている順位と整合する",
     table.filter((r) => r.previousPosition !== null && r.positionChange !== null && r.position !== null),
     (r) => r.positionChange === r.previousPosition! - r.position!,
-    (r) => `${r.team.shortName}: ${r.previousPosition} → ${r.position} なのに変動 ${r.positionChange}`
+    (r) => `${r.team.shortName}: ${r.previousPosition}位 → ${r.position}位 なのに変動 ${r.positionChange}`
   );
 
-  // 同着があると、表示される順位（rank）と変動の基準（position）が食い違う。
-  // 「14位」の隣に「▼1」が出るのに 12位 からの移動、という読み方のずれが起きうる箇所。
-  const divergent = table.filter((r) => r.position !== null && r.position !== r.rank);
-  soft(
-    "表示順位と変動の基準が一致している",
-    divergent.length === 0,
-    () =>
-      `${divergent.length} クラブで表示順位と変動の基準がずれている（同着のため）:\n    ` +
-      divergent
-        .map((r) => `${r.team.shortName}: 表示 ${r.rank}位 / 変動の基準 ${r.position}位`)
-        .join("\n    ")
+  every(
+    "前節順位が 1〜20 の範囲に収まる",
+    table.filter((r) => r.previousPosition !== null),
+    (r) => r.previousPosition! >= 1 && r.previousPosition! <= TEAM_COUNT,
+    (r) => `${r.team.shortName}: 前節 ${r.previousPosition}位`
+  );
+
+  const tied = table.filter((r) => r.position !== null && r.position !== r.rank);
+  note(
+    "同着で表示順位と内部連番が異なるクラブ",
+    tied.length === 0
+      ? "なし"
+      : `${tied.length} クラブ: ` +
+        tied.map((r) => `${r.team.shortName} 表示${r.position}位/連番${r.rank}`).join(", ")
   );
 
   every(
@@ -735,6 +739,36 @@ group("H. 日本人選手の4状態", () => {
     summaries.filter((s) => s.roundStatus === "benched" || s.roundStatus === "played"),
     (s) => s.minutes !== null,
     (s) => `${s.player.name}: 今節 ${s.roundStatus} なのに minutes=null`
+  );
+
+  every(
+    "ベンチ入り試合数が負でない",
+    summaries,
+    (s) => s.benchedMatches >= 0,
+    (s) => `${s.player.name}: benchedMatches ${s.benchedMatches}`
+  );
+
+  every(
+    "ベンチ入り試合数がクラブの被覆試合数を超えない",
+    summaries,
+    (s) => s.benchedMatches <= getSquadUsage(s.player.teamId).coveredMatches,
+    (s) =>
+      `${s.player.name}: ベンチ入り${s.benchedMatches}試合 > 被覆${getSquadUsage(s.player.teamId).coveredMatches}試合`
+  );
+
+  // 「今季の出場記録なし」と「ベンチ入り◯試合・出場なし」の出し分けはこの2つに乗っている。
+  every(
+    "ベンチ入りがあるなら通算時間が null でない",
+    summaries.filter((s) => s.benchedMatches > 0),
+    (s) => s.minutes !== null,
+    (s) => `${s.player.name}: ベンチ入り${s.benchedMatches}試合あるのに minutes=null`
+  );
+
+  every(
+    "通算時間が null なら一度もメンバーに入っていない",
+    summaries.filter((s) => s.minutes === null),
+    (s) => s.benchedMatches === 0 && s.appearances === 0,
+    (s) => `${s.player.name}: minutes=null なのにベンチ入り${s.benchedMatches}・出場${s.appearances}`
   );
 
   every(
