@@ -59,11 +59,11 @@ export default function StatTile({
   const body = (
     <TileBody label={label} value={value} unit={unit} hint={hint} leading={leading} footer={footer} />
   );
-  if (!href) return <div className="glass rounded-xl px-4 py-3.5">{body}</div>;
+  if (!href) return <div className="glass rounded-xl px-panel py-panel">{body}</div>;
   return (
     <Link
       href={href}
-      className="glass block rounded-xl px-4 py-3.5 transition hover:border-accent-2/50 hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="glass block rounded-xl px-panel py-panel transition hover:border-accent-2/50 hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {body}
     </Link>
