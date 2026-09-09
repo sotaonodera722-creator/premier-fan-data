@@ -19,6 +19,7 @@ import type {
   MatchResultLetter,
   LineupsFile,
   MatchLineup,
+  MatchEvent,
   TeamLineup,
   HeadToHead,
   HeadToHeadFile,
@@ -96,12 +97,26 @@ export const getPlayers: () => Player[] = memo(() => {
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
     const nameJa = getPlayerNameJa(p.id);
-    const withName = nameJa ? { ...p, nameJa } : p;
+    const base = { ...p, age: plausibleAge(p.age) };
+    const withName = nameJa ? { ...base, nameJa } : base;
     if (!minutesMap.has(p.id)) return withName;
     const c = contributions.get(p.id);
     return { ...withName, goals: c?.goals ?? 0, assists: c?.assists ?? 0 };
   });
 });
+
+// The feed carries a handful of plainly wrong birth dates — one Premier League
+// defender is listed as born in 2025 — and the age computed from them reaches
+// the page as "1歳". There is no way to recover the real date from here, so the
+// age is dropped instead: every display already falls back to "-" for a missing
+// one, and no age at all is honest where a wrong one is not.
+const YOUNGEST_PLAUSIBLE_AGE = 15;
+const OLDEST_PLAUSIBLE_AGE = 45;
+
+function plausibleAge(age: number | null): number | null {
+  if (age === null) return null;
+  return age >= YOUNGEST_PLAUSIBLE_AGE && age <= OLDEST_PLAUSIBLE_AGE ? age : null;
+}
 
 const playersById = memo(() => new Map(getPlayers().map((p) => [p.id, p])));
 
@@ -358,13 +373,105 @@ function nameParts(name: string): string[] {
 // once normalized, they're an exact match, one is a first-initial + surname
 // abbreviation of the other (surname compared as a suffix, so "J. Larsen" matches
 // "Jørgen Strand Larsen"), or one is a single word that appears in the other.
-function namesMatch(a: string, b: string): boolean {
+/**
+ * How strongly two names claim to be the same player, 0 for not at all.
+ *
+ * The rules are ranked because looseness has to be a last resort. "B. Thomas"
+ * and "Brandon Thomas-Asante" satisfy the loosest rule below, and a squad
+ * holding both Bobby Thomas and Brandon Thomas-Asante will hand the first of
+ * them to anyone who asks for a match rather than the best of them — which is
+ * how Thomas-Asante's substitutions came to be credited to a defender who was
+ * already on the pitch. Callers resolve through `bestNameMatch`, which compares
+ * these scores instead of stopping at the first hit.
+ */
+function nameMatchScore(a: string, b: string): number {
   const na = normalizeName(a);
   const nb = normalizeName(b);
-  if (na === nb) return true;
-  if (abbreviatesTo(na, nb) || abbreviatesTo(nb, na)) return true;
-  if (mononymMatch(na, nb)) return true;
-  return transliterationMatch(na, nb);
+  if (na === nb) return 5;
+  if (abbreviatesTo(na, nb) || abbreviatesTo(nb, na) || partwiseMatch(na, nb) || prefixMatch(na, nb)) return 4;
+  if (transliterationMatch(na, nb)) return 3;
+  if (mononymMatch(na, nb)) return 2;
+  if (initialAndSurnameMatch(na, nb) || initialAndSurnameMatch(nb, na)) return 1;
+  return 0;
+}
+
+function namesMatch(a: string, b: string): boolean {
+  return nameMatchScore(a, b) > 0;
+}
+
+// The candidate matching `name` most strongly. Ties keep the earlier candidate,
+// which puts the starting XI ahead of the bench where a squad list is scanned.
+function bestNameMatch<T>(candidates: readonly T[], nameOf: (candidate: T) => string, name: string): T | undefined {
+  let best: T | undefined;
+  let bestScore = 0;
+  for (const candidate of candidates) {
+    const score = nameMatchScore(nameOf(candidate), name);
+    if (score > bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+// Two name tokens that stand for the same word: identical, an initial standing in
+// for it, or the same word spelled by two transliterators. The length floor keeps
+// the fuzzy arm away from short tokens, where a two-character edit is most of the
+// word and "Diop" and "Diouf" would collapse into one player.
+function tokensMatch(x: string, y: string): boolean {
+  if (x.length === 1) return y.startsWith(x);
+  if (y.length === 1) return x.startsWith(y);
+  return spelledAlike(x, y);
+}
+
+// The same name written with the same number of words, where any of them may be
+// abbreviated or transliterated differently. `abbreviatesTo` cannot see these
+// because it joins everything after the first word into one surname string:
+// "S. W. Egeli" vs "Sindre Walle Egeli" (a middle initial), and "Y. Yarmolyuk"
+// vs "Yehor Yarmoliuk" (abbreviation and transliteration at once, which neither
+// of the single-purpose rules can take on alone).
+function partwiseMatch(a: string, b: string): boolean {
+  const ap = nameParts(a);
+  const bp = nameParts(b);
+  if (ap.length < 2 || ap.length !== bp.length) return false;
+  return ap.every((part, i) => tokensMatch(part, bp[i]));
+}
+
+// One name is the other with its trailing words dropped — the provider lists
+// "Alysson Edward" on the bench and calls him "Alysson Edward Franco da Rocha"
+// in the event. Two matching words are required so a shared first name alone
+// cannot join two players.
+//
+// Initials are deliberately not accepted here, unlike in `partwiseMatch`. Allowing
+// them makes "Bobby Thomas" a prefix of "B. Thomas-Asante", which is how a club
+// carrying both of them had one man's substitutions credited to the other.
+function prefixMatch(a: string, b: string): boolean {
+  const ap = nameParts(a);
+  const bp = nameParts(b);
+  const [short, long] = ap.length <= bp.length ? [ap, bp] : [bp, ap];
+  if (short.length < 2 || short.length === long.length) return false;
+  return short.every((part, i) => spelledAlike(part, long[i]));
+}
+
+// The same word, allowing for two transliterators disagreeing about it.
+function spelledAlike(x: string, y: string): boolean {
+  if (x === y) return true;
+  return x.length >= 5 && y.length >= 5 && Math.abs(x.length - y.length) <= 2 && levenshteinDistance(x, y) <= 2;
+}
+
+// "Initial + surname" where the initial belongs to a word the short form drops.
+// The provider alternates between "A. Fatawu" and "I. Fatawu" for Abdul Fatawu
+// Issahaku, taking the initial from either end of the full name, so neither form
+// lines up word for word with it. Requires a distinctive surname to match on.
+function initialAndSurnameMatch(shortName: string, fullName: string): boolean {
+  const shortParts = nameParts(shortName);
+  const fullParts = nameParts(fullName);
+  if (shortParts.length !== 2 || fullParts.length < 3) return false;
+  const [initial, surname] = shortParts;
+  if (initial.length !== 1 || surname.length < 4) return false;
+  const surnameIndex = fullParts.findIndex((part) => tokensMatch(part, surname));
+  if (surnameIndex === -1) return false;
+  return fullParts.some((part, i) => i !== surnameIndex && part.startsWith(initial));
 }
 
 // Last-resort fallback for the same player spelled differently by two data
@@ -426,7 +533,7 @@ const resolvedRosterPlayers = new Map<string, Player | undefined>();
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   const key = `${teamId}|${name}`;
   if (resolvedRosterPlayers.has(key)) return resolvedRosterPlayers.get(key);
-  const found = rawPlayersByTeam(teamId).find((p) => namesMatch(p.name, name));
+  const found = bestNameMatch(rawPlayersByTeam(teamId), (p) => p.name, name);
   resolvedRosterPlayers.set(key, found);
   return found;
 }
@@ -450,34 +557,60 @@ function parseMinute(raw: string): number {
 
 const FULL_MATCH_MINUTES = 90;
 
-// Rough per-match minutes for everyone who appeared: starters get full time unless
-// subbed off, substitutes get the time from their sub-on minute to full time. No
-// allowance for red cards or stoppage time. Keyed by player id (resolved against
-// each side's actual roster) rather than by name, since lineup names aren't always
-// full ("C. Rushworth" some matches, "Carl Rushworth" others).
+/**
+ * Per-match minutes for everyone who appeared, keyed by roster player id
+ * (resolved by name, since lineup names aren't always full — "C. Rushworth" some
+ * matches, "Carl Rushworth" others).
+ *
+ * Time is measured from when a player took the pitch to when he left it, rather
+ * than read off the substitution minute directly. Two things go wrong otherwise,
+ * and both were live:
+ *
+ *   - A substitution naming someone who is *not* on the pitch — the provider
+ *     records an unused substitute as going off — credited him that many minutes
+ *     for a match he never entered.
+ *   - A substitute who later comes off himself was credited the clock reading
+ *     rather than his time on it: on at 60, off at 80, recorded as 80 minutes.
+ *
+ * No allowance for red cards or stoppage time, so a full match is always 90.
+ */
 function computeMatchMinutes(lineup: MatchLineup): Map<number, number> {
   const minutes = new Map<number, number>();
-  const events = lineup.events ?? [];
-  const fullTime = FULL_MATCH_MINUTES;
 
   for (const side of [lineup.homeTeam, lineup.awayTeam]) {
+    const enteredAt = new Map<number, number>();
     for (const p of side.startXI.flat()) {
       const player = resolveRosterPlayer(p.name, side.teamId);
-      if (player) minutes.set(player.id, fullTime);
+      if (player) enteredAt.set(player.id, 0);
+    }
+
+    for (const e of substitutionsInOrder(lineup, side.teamId)) {
+      const at = parseMinute(e.minute);
+      // event.player left the pitch; event.substitutedFor came on.
+      const out = e.player ? resolveRosterPlayer(e.player, side.teamId) : undefined;
+      const on = e.substitutedFor ? resolveRosterPlayer(e.substitutedFor, side.teamId) : undefined;
+      if (out && enteredAt.has(out.id)) {
+        minutes.set(out.id, (minutes.get(out.id) ?? 0) + at - enteredAt.get(out.id)!);
+        enteredAt.delete(out.id);
+      }
+      if (on && !enteredAt.has(on.id)) enteredAt.set(on.id, at);
+    }
+
+    for (const [playerId, from] of enteredAt) {
+      minutes.set(playerId, (minutes.get(playerId) ?? 0) + FULL_MATCH_MINUTES - from);
     }
   }
 
-  for (const e of events) {
-    if (e.type !== "Substitution") continue;
-    const subMinute = parseMinute(e.minute);
-    // event.player left the pitch; event.substitutedFor came on.
-    const outPlayer = e.player ? resolveRosterPlayer(e.player, e.teamId) : undefined;
-    const inPlayer = e.substitutedFor ? resolveRosterPlayer(e.substitutedFor, e.teamId) : undefined;
-    if (outPlayer) minutes.set(outPlayer.id, subMinute);
-    if (inPlayer) minutes.set(inPlayer.id, fullTime - subMinute);
-  }
-
   return minutes;
+}
+
+// One side's substitutions, earliest first. Order matters once minutes are
+// measured as time on the pitch: a player who comes on and later goes off is only
+// counted correctly if his arrival is processed before his departure.
+function substitutionsInOrder(lineup: MatchLineup, teamId: number): MatchEvent[] {
+  return (lineup.events ?? [])
+    .filter((e) => e.type === "Substitution" && e.teamId === teamId)
+    .sort((a, b) => parseMinute(a.minute) - parseMinute(b.minute));
 }
 
 // Total season minutes per player, summed across every match we have a lineup for.
@@ -598,59 +731,130 @@ export interface SquadUsage {
   coveredMatches: number;
   /** Most minutes first. */
   rows: SquadUsageRow[];
+  /**
+   * Minutes by which these rows miss `coveredMatches × 11 × 90`, and how many
+   * substitutions account for it. Both are zero when the feed named every swap
+   * in full — see SquadMatchMinutes for why they are not always zero, and
+   * scripts/audit/invariants.ts for the identity they are checked against.
+   */
+  imbalance: number;
+  unpairedSubstitutions: number;
 }
 
 // Minutes for everyone who actually took the pitch in one match, keyed by the
 // provider's player id so unrostered players are counted too.
-function computeSquadMinutesByLineupId(
-  lineup: MatchLineup,
-  teamId: number
-): Map<number, { entry: LineupPlayer; minutes: number; started: boolean }> {
+interface SquadMatchMinutes {
+  players: Map<number, { entry: LineupPlayer; minutes: number; started: boolean }>;
+  /**
+   * Minutes by which this match's total misses eleven men for ninety, and the
+   * number of substitutions responsible.
+   *
+   * The feed does not always name both halves of a swap: it records a player
+   * coming on with nobody leaving, or names someone who was on the bench the
+   * whole time as the one who left. Whoever really came on did play, so he is
+   * credited and the club's total runs over — inventing a victim to keep the
+   * books level would be a worse answer than reporting the discrepancy.
+   */
+  imbalance: number;
+  unpaired: number;
+}
+
+function computeSquadMinutesByLineupId(lineup: MatchLineup, teamId: number): SquadMatchMinutes {
   const side =
     lineup.homeTeam.teamId === teamId
       ? lineup.homeTeam
       : lineup.awayTeam.teamId === teamId
         ? lineup.awayTeam
         : null;
-  if (!side) return new Map();
+  if (!side) return { players: new Map(), imbalance: 0, unpaired: 0 };
 
   const squad = [...side.startXI.flat(), ...side.substitutes];
+  const starters = new Set(side.startXI.flat().map((p) => p.id));
   const found = new Map<number, { entry: LineupPlayer; minutes: number; started: boolean }>();
+  const enteredAt = new Map<number, number>();
 
-  for (const entry of side.startXI.flat()) {
-    found.set(entry.id, { entry, minutes: FULL_MATCH_MINUTES, started: true });
+  const credit = (entry: LineupPlayer, played: number) => {
+    const cur = found.get(entry.id);
+    found.set(entry.id, {
+      entry,
+      minutes: (cur?.minutes ?? 0) + played,
+      started: starters.has(entry.id),
+    });
+  };
+
+  for (const entry of side.startXI.flat()) enteredAt.set(entry.id, 0);
+
+  let imbalance = 0;
+  let unpaired = 0;
+
+  // Same reasoning as computeMatchMinutes: minutes are the time between taking
+  // the pitch and leaving it, so a substitution naming someone who is not on it
+  // cannot invent an appearance.
+  for (const e of substitutionsInOrder(lineup, teamId)) {
+    const at = parseMinute(e.minute);
+    const off = e.player ? bestNameMatch(squad, (p) => p.name, e.player) : undefined;
+    const on = e.substitutedFor ? bestNameMatch(squad, (p) => p.name, e.substitutedFor) : undefined;
+
+    const left = Boolean(off && enteredAt.has(off.id));
+    const arrived = Boolean(on && !enteredAt.has(on.id));
+    if (left) {
+      credit(off!, at - enteredAt.get(off!.id)!);
+      enteredAt.delete(off!.id);
+    }
+    if (arrived) enteredAt.set(on!.id, at);
+    if (left !== arrived) {
+      imbalance += (arrived ? 1 : -1) * (FULL_MATCH_MINUTES - at);
+      unpaired += 1;
+    }
   }
 
-  for (const e of lineup.events ?? []) {
-    if (e.type !== "Substitution" || e.teamId !== teamId) continue;
-    const minute = parseMinute(e.minute);
-    const offName = e.player;
-    const onName = e.substitutedFor;
-    const off = offName ? squad.find((p) => namesMatch(p.name, offName)) : undefined;
-    const on = onName ? squad.find((p) => namesMatch(p.name, onName)) : undefined;
-    if (off) found.set(off.id, { entry: off, minutes: minute, started: true });
-    if (on) found.set(on.id, { entry: on, minutes: FULL_MATCH_MINUTES - minute, started: false });
+  for (const [id, from] of enteredAt) {
+    const entry = squad.find((p) => p.id === id);
+    if (entry) credit(entry, FULL_MATCH_MINUTES - from);
   }
 
-  return found;
+  return { players: found, imbalance, unpaired };
 }
 
 // How a club has actually used its squad, over every match we hold a lineup for.
 export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: number) => {
   const matches = getMatchesForTeam(teamId).filter((m) => m.played);
   const totals = new Map<
-    number,
-    { name: string; position: Position; minutes: number; starts: number; subs: number }
+    string,
+    {
+      lineupPlayerId: number;
+      player: Player | null;
+      name: string;
+      position: Position;
+      minutes: number;
+      starts: number;
+      subs: number;
+    }
   >();
   let coveredMatches = 0;
+  let imbalance = 0;
+  let unpairedSubstitutions = 0;
 
   for (const match of matches) {
     const lineup = getMatchLineup(match.id);
     if (!lineup) continue;
     coveredMatches += 1;
 
-    for (const [id, { entry, minutes, started }] of computeSquadMinutesByLineupId(lineup, teamId)) {
-      const cur = totals.get(id) ?? {
+    const matchMinutes = computeSquadMinutesByLineupId(lineup, teamId);
+    imbalance += matchMinutes.imbalance;
+    unpairedSubstitutions += matchMinutes.unpaired;
+
+    for (const [id, { entry, minutes, started }] of matchMinutes.players) {
+      // The provider sometimes issues two ids for one player — "Jérémy Jacquet"
+      // and "J. Jacquet" arrived as separate people and split his season into a
+      // 160-minute rotation player and a 77-minute reserve, neither of which was
+      // him. Where the roster can name him, his roster id is the identity; the
+      // provider's id only stands in for players players.json has never heard of.
+      const player = resolveRosterPlayer(entry.name, teamId) ?? null;
+      const key = player ? `roster:${player.id}` : `lineup:${id}`;
+      const cur = totals.get(key) ?? {
+        lineupPlayerId: id,
+        player,
         name: entry.name,
         position: LINEUP_POSITION_TO_CODE[entry.position] ?? "MF",
         minutes: 0,
@@ -663,18 +867,18 @@ export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: 
       cur.minutes += minutes;
       if (started) cur.starts += 1;
       else cur.subs += 1;
-      totals.set(id, cur);
+      totals.set(key, cur);
     }
   }
 
   const clubMinutes = coveredMatches * FULL_MATCH_MINUTES;
   const roster = getPlayersByTeam(teamId);
-  const appeared: SquadUsageRow[] = [...totals.entries()]
-    .map(([lineupPlayerId, t]) => {
-      const player = roster.find((p) => namesMatch(p.name, t.name)) ?? null;
+  const appeared: SquadUsageRow[] = [...totals.values()]
+    .map((t) => {
+      const player = t.player;
       const share = clubMinutes > 0 ? t.minutes / clubMinutes : 0;
       return {
-        lineupPlayerId,
+        lineupPlayerId: t.lineupPlayerId,
         name: t.name,
         player,
         position: player?.position ?? t.position,
@@ -711,7 +915,7 @@ export const getSquadUsage: (teamId: number) => SquadUsage = memoByKey((teamId: 
     (a, b) => b.minutes - a.minutes || a.name.localeCompare(b.name)
   );
 
-  return { teamId, coveredMatches, rows };
+  return { teamId, coveredMatches, rows, imbalance, unpairedSubstitutions };
 });
 
 /**
@@ -819,7 +1023,7 @@ export function getPlayerRoundUsage(playerId: number): PlayerRoundUsage[] {
       );
       if (!entry) return { ...base, minutes: 0, status: "out" };
 
-      const played = computeSquadMinutesByLineupId(lineup, player.teamId).get(entry.id);
+      const played = computeSquadMinutesByLineupId(lineup, player.teamId).players.get(entry.id);
       const moments: { minute: string; kind: "goal" | "assist" }[] = [];
       for (const e of lineup.events ?? []) {
         if (e.type !== "Goal" && e.type !== "Penalty") continue;
@@ -901,15 +1105,22 @@ export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(()
   return getJapanesePlayers()
     .map((player) => {
       const appearances = getPlayerAppearances(player.id);
+      const benchedMatches = countBenchedMatches(player);
       const roundStat = round.get(player.id) ?? null;
       const roundMatch = latest.matches.find(
         (m) => m.homeTeamId === player.teamId || m.awayTeamId === player.teamId
       );
       return {
         player,
-        minutes: minutesMap.get(player.id) ?? null,
+        // null and 0 are different claims — "never in a matchday squad" against
+        // "named, but never sent on" — and the difference is the whole point of
+        // the four-state classification below. Falling back to null for both
+        // reported a player who has been an unused substitute all season as
+        // having no involvement at all.
+        minutes: minutesMap.get(player.id) ?? (benchedMatches > 0 ? 0 : null),
         appearances: appearances.length,
         starts: appearances.filter((a) => a.status === "start").length,
+        benchedMatches,
         round: roundStat,
         roundStatus: resolveRoundStatus(player, roundMatch, roundStat),
         roundMatch: roundMatch ?? null,
@@ -920,6 +1131,21 @@ export const getJapanesePlayerSummaries: () => JapanesePlayerSummary[] = memo(()
     })
     .sort(compareJapaneseSummaries);
 });
+
+// Matches this player was in the squad for — starting XI or bench — and never
+// took the pitch in. Being on the bench all season is a different season from
+// not being picked, and only this tells them apart.
+function countBenchedMatches(player: Player): number {
+  let count = 0;
+  for (const m of getMatchesForTeam(player.teamId).filter((x) => x.played)) {
+    const lineup = getMatchLineup(m.id);
+    if (!lineup) continue;
+    const side = m.homeTeamId === player.teamId ? lineup.homeTeam : lineup.awayTeam;
+    const named = [...side.startXI.flat(), ...side.substitutes].some((p) => namesMatch(p.name, player.name));
+    if (named && (computeMatchMinutes(lineup).get(player.id) ?? 0) === 0) count += 1;
+  }
+  return count;
+}
 
 // The same player one round back, so the section can report a direction rather
 // than a single week's number. The status is resolved by the same rules as the
@@ -1086,8 +1312,11 @@ export function getSampleSize(): {
 // shown as a tie. And clubs do not always have the same number of matches
 // played, which makes a bare position misleading; games in hand are counted so
 // the table can say so.
-export const getStandingsTable: () => StandingRow[] = memo(() => {
-  const sorted = [...teams].sort((a, b) => {
+// The order the table is printed in. The feed's own position leads, so the
+// official tiebreaks it has applied are respected; the rest only settles clubs
+// the feed itself has left level.
+function teamsInTableOrder(): Team[] {
+  return [...teams].sort((a, b) => {
     const ra = a.record;
     const rb = b.record;
     if (!ra || !rb) return (ra ? 0 : 1) - (rb ? 0 : 1);
@@ -1099,7 +1328,10 @@ export const getStandingsTable: () => StandingRow[] = memo(() => {
       a.name.localeCompare(b.name)
     );
   });
+}
 
+export const getStandingsTable: () => StandingRow[] = memo(() => {
+  const sorted = teamsInTableOrder();
   const total = sorted.length;
   const maxPlayed = sorted.reduce((max, t) => Math.max(max, t.record?.played ?? 0), 0);
   const movements = getRoundMovements();
@@ -1312,11 +1544,20 @@ export function getTableAtMatchday(matchday: number): Map<number, number> {
 
   // Competition ranking: a club's position is one more than the number of clubs
   // strictly above it, so level clubs share a number.
+  //
+  // Shared, not dense, because this is subtracted from `Team.record.position` —
+  // which is what the table prints, and which the feed also shares between clubs
+  // it cannot separate. Counting densely here would put a "▼2" beside a club
+  // whose printed position moved by one.
   return new Map(rows.map((row) => [row.id, 1 + rows.filter((other) => outranks(row, other)).length]));
 }
 
 export interface RoundMovement {
-  /** Position at the end of the previous round; null in the opening round. */
+  /**
+   * Place at the end of the previous round, counted 1..20 the same way the
+   * table counts the current one, so the difference between them is the number
+   * of places a reader can see the club has moved.
+   */
   previousPosition: number | null;
   /** Places gained this round. Positive is upward. Null when there is no previous round. */
   change: number | null;
@@ -1338,6 +1579,8 @@ export const getRoundMovements: () => Map<number, RoundMovement> = memo(() => {
   const previous = getTableAtMatchday(matchday - 1);
   for (const team of teams) {
     const previousPosition = previous.get(team.id) ?? null;
+    // The position the table prints, so the arrow beside it is that number's
+    // own movement. See getTableAtMatchday for why both sides share numbers.
     const currentPosition = team.record?.position ?? null;
     movements.set(team.id, {
       previousPosition,
@@ -1671,6 +1914,8 @@ function describeBiggestClimb(): string | null {
 
   const best = climbs[0];
   if (!best) return rows.length > 0 ? "順位の入れ替わりはなかった。" : null;
+  // Quotes the printed position at both ends, so the sentence and the table row
+  // are the same two numbers.
   return `${clubNameJa(best.team)}が${best.previousPosition}位から${best.position}位へ最も順位を上げている。`;
 }
 
