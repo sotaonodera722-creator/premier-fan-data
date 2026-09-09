@@ -37,7 +37,15 @@ function PlayerDot({
       >
         {player.number}
       </span>
-      <span className="max-w-full truncate text-[10px] font-medium leading-tight text-white transition group-hover:underline sm:text-[11px]">
+      {/*
+        Wraps rather than truncates, for the same reason the player cards do.
+        A marker is 64px of usable width and a katakana surname can want 70:
+        マクアリスター came out as マクアリス… on a pitch where the point of the
+        label is knowing who is standing there. Two lines cost 12px of a row
+        that has 20px of gap under it, and clamping at two keeps every marker
+        the same height.
+      */}
+      <span className="line-clamp-2 max-w-full text-[10px] font-medium leading-tight text-white transition group-hover:underline sm:text-[11px]">
         {(resolved && playerSurnameJa(resolved.id)) ?? player.name}
       </span>
     </div>
