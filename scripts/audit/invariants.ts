@@ -298,14 +298,24 @@ group("D. 選手名簿（players.json）", () => {
 
   // age は取得時点で計算されて凍結される。基準は「今」ではなく取得時刻でなければ、
   // 取得後に誕生日を迎えた選手が毎回1歳ずれて報告される。
+  //
+  // 年齢は暦で数える。経過ミリ秒を 365.2425 日で割ると、誕生日当日の選手が 28.0006 歳
+  // のように出て、保存値との差が 1 をわずかに超える。田中碧（1998-09-10）が誕生日当日に
+  // これで不合格になり、データではなく検査式のほうが誤っていた。
   const ingestedAt = new Date(getCompetitionMeta().lastUpdated).getTime();
+  function ageAt(dateOfBirth: string, at: number): number {
+    const born = new Date(dateOfBirth);
+    const on = new Date(at);
+    if (Number.isNaN(born.getTime())) return NaN;
+    let age = on.getUTCFullYear() - born.getUTCFullYear();
+    const months = on.getUTCMonth() - born.getUTCMonth();
+    if (months < 0 || (months === 0 && on.getUTCDate() < born.getUTCDate())) age -= 1;
+    return age;
+  }
   every(
     "年齢が生年月日と整合する（取得時点で±1歳）",
     players.filter((p) => p.age !== null && p.dateOfBirth),
-    (p) => {
-      const years = (ingestedAt - new Date(p.dateOfBirth).getTime()) / (365.2425 * 24 * 3600 * 1000);
-      return Math.abs(years - p.age!) <= 1;
-    },
+    (p) => Math.abs(ageAt(p.dateOfBirth, ingestedAt) - p.age!) <= 1,
     (p) => `${p.name}: age=${p.age} / 生年月日 ${p.dateOfBirth}`
   );
 
@@ -320,7 +330,7 @@ group("D. 選手名簿（players.json）", () => {
   // getPlayers() が年齢を落としている（表示は「-」になる）。件数が増えたら気づきたい。
   const rawPlayers = playersJson as Player[];
   const impossibleBirthdays = rawPlayers.filter((p) => {
-    const years = (ingestedAt - new Date(p.dateOfBirth).getTime()) / (365.2425 * 24 * 3600 * 1000);
+    const years = ageAt(p.dateOfBirth, ingestedAt);
     return !Number.isFinite(years) || years < 15 || years > 45;
   });
   soft(
