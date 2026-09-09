@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { MatchEvent, TeamLineup } from "@/lib/types";
 import { resolveRosterPlayer, isKnownMatchParticipant } from "@/lib/data";
-import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { playerNameJa } from "@/lib/playerDisplayName";
 
 // The reader came for one of nine names. Finding out whether that name did
 // anything should not mean reading twenty rows of Latin script looking for it,
@@ -75,9 +75,12 @@ function PlayerLink({
       href={`/players/${resolved.id}`}
       className={`transition hover:text-accent-2 hover:underline ${resolved.isJapanese ? "font-semibold" : ""}`}
     >
-      {/* resolveRosterPlayer reads the raw roster, which has no kanji on it —
-          the name map is the one place that does. */}
-      {resolved.isJapanese ? (getPlayerNameJa(resolved.id) ?? name) : name}
+      {/* resolveRosterPlayer reads the raw roster, which carries no Japanese —
+          the name tables are the one place that does. Everyone we hold a
+          rendering for gets it now, not only the Japanese players: a timeline
+          that reads 三笘薫 between two Latin names is still mostly unreadable
+          to the person who came here for that one name. */}
+      {playerNameJa(resolved.id) ?? name}
       {resolved.isJapanese && <JapaneseMark />}
     </Link>
   );

@@ -4,7 +4,8 @@ import matchesJson from "@/data/matches.json";
 import lineupsJson from "@/data/lineups.json";
 import h2hJson from "@/data/h2h.json";
 import pastSeasonsJson from "@/data/past-seasons.json";
-import { getPlayerNameJa, getPlayerNameKana } from "@/lib/playerNamesJa";
+import { getPlayerNameKana } from "@/lib/playerNamesJa";
+import { playerNameJa } from "@/lib/playerDisplayName";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import { getClubProfile } from "@/lib/clubProfiles";
@@ -96,7 +97,8 @@ export const getPlayers: () => Player[] = memo(() => {
   const minutesMap = getPlayerMinutesMap();
   const contributions = getPlayerGoalContributionsMap();
   return players.map((p) => {
-    const nameJa = getPlayerNameJa(p.id);
+    // Kanji for the Japanese players, katakana for everyone else we have.
+    const nameJa = playerNameJa(p.id);
     const nameKana = getPlayerNameKana(p.id);
     const base = { ...p, age: plausibleAge(p.age) };
     const withName = { ...base, ...(nameJa ? { nameJa } : {}), ...(nameKana ? { nameKana } : {}) };

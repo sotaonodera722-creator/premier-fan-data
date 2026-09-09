@@ -17,7 +17,7 @@ import MatchHeadToHead from "@/components/MatchHeadToHead";
 import SectionHeading from "@/components/SectionHeading";
 import { RelativeKickoff } from "@/components/RelativeTime";
 import { jstLongDate, jstTime, lateNightNote } from "@/lib/datetime";
-import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { playerNameJa } from "@/lib/playerDisplayName";
 import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 import { getRivalry, RIVALRY_KIND_LABELS } from "@/lib/rivalries";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
@@ -271,7 +271,7 @@ function SubstitutesList({ title, players, teamId }: { title: string; players: L
           const row = (
             <div className="flex items-center gap-3 px-4 py-2.5 text-sm transition hover:bg-surface-2">
               <span className="w-6 text-center text-xs font-bold text-muted">{p.number}</span>
-              <span className="flex-1 text-foreground">{(resolved && getPlayerNameJa(resolved.id)) ?? p.name}</span>
+              <span className="flex-1 text-foreground">{(resolved && playerNameJa(resolved.id)) ?? p.name}</span>
               <span className="text-xs text-muted">{p.position}</span>
             </div>
           );

@@ -2,8 +2,14 @@ import Link from "next/link";
 import type { LineupPlayer, MatchLineup, Team } from "@/lib/types";
 import { getTeamColor, getContrastText, colorsClash } from "@/lib/teamColors";
 import { resolveRosterPlayer } from "@/lib/data";
-import { getPlayerNameJa } from "@/lib/playerNamesJa";
+import { playerNameJa, playerSurnameJa } from "@/lib/playerDisplayName";
 import { teamNameShort } from "@/lib/teamNamesJa";
+
+// Five across is a real formation (5-4-1), and a fixed 68px marker overflows a
+// 375px pitch at that width. Each marker takes an equal share of the row and
+// stops growing at the width a katakana surname needs, so a back four gets the
+// full label and a back five gives up a few pixels rather than the whole row.
+const DOT_WIDTH = "min-w-0 flex-1 max-w-[68px]";
 
 function PlayerDot({
   player,
@@ -19,7 +25,7 @@ function PlayerDot({
   const textColor = outline ? color : getContrastText(color);
   const resolved = resolveRosterPlayer(player.name, teamId);
   const content = (
-    <div className="group flex w-14 flex-col items-center gap-1 rounded-lg p-1.5 text-center transition group-hover:bg-white/15 sm:w-[70px]">
+    <div className="group flex w-full flex-col items-center gap-1 rounded-lg px-0.5 py-1.5 text-center transition group-hover:bg-white/15">
       <span
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold shadow-lg transition group-hover:brightness-110 sm:h-8 sm:w-8"
         style={{
@@ -31,13 +37,13 @@ function PlayerDot({
         {player.number}
       </span>
       <span className="max-w-full truncate text-[10px] font-medium leading-tight text-white transition group-hover:underline sm:text-[11px]">
-        {(resolved && getPlayerNameJa(resolved.id)) ?? player.name}
+        {(resolved && playerSurnameJa(resolved.id)) ?? player.name}
       </span>
     </div>
   );
 
-  if (!resolved) return content;
-  const label = (resolved && getPlayerNameJa(resolved.id)) ?? player.name;
+  if (!resolved) return <div className={DOT_WIDTH}>{content}</div>;
+  const label = (resolved && playerNameJa(resolved.id)) ?? player.name;
   return (
     // Without `block` the anchor stays inline and its hit area collapses to a
     // text line, leaving the shirt number — the largest part of the marker —
@@ -47,7 +53,7 @@ function PlayerDot({
       href={`/players/${resolved.id}`}
       title={`${player.number} ${label}`}
       aria-label={`${label} の選手ページ`}
-      className="block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      className={`block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${DOT_WIDTH}`}
     >
       {content}
     </Link>
