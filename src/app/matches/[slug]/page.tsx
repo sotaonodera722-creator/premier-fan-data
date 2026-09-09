@@ -107,9 +107,7 @@ export default async function MatchDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
-      <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">
-        Matchday {match.matchday}
-      </p>
+      <p className="text-center text-note font-strong text-accent-2">第{match.matchday}節</p>
       <p className="mt-1.5 text-center text-sm text-muted">
         <time dateTime={match.utcDate} className="tabular-nums">
           {jstLongDate(match.utcDate)} {jstTime(match.utcDate)}

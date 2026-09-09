@@ -19,9 +19,7 @@ export default function RoundStatus() {
   return (
     <div>
       <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="text-xs font-bold uppercase tracking-[0.25em] text-accent-2">
-          Matchday {matchday}
-        </span>
+        <span className="text-note font-strong text-accent-2">第{matchday}節</span>
         <span className="text-sm text-foreground">
           <span className="font-[family-name:var(--font-display)] text-lg font-bold tabular-nums">
             {pending === 0 ? `全${total}試合` : `${total}試合中${played}試合`}

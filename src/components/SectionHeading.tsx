@@ -8,7 +8,7 @@ export default function SectionHeading({
   action?: React.ReactNode;
 }) {
   return (
-    // The Latin eyebrow that used to sit above the title is gone from all 42
+    // The Latin kicker that used to sit above the title is gone from all 42
     // places it appeared. Only one of them carried information — the matchday
     // number on the standings page, now written in Japanese in the title — and
     // the other 41 were the heading again in English. A label that repeats the
