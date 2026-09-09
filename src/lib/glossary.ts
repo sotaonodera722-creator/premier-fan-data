@@ -12,6 +12,8 @@
  * Explanations are two sentences at most. A reader who stopped at a word wants
  * to start reading again, not to read something longer.
  */
+import { EVERY_PRESENT_SHARE, ROTATION_SHARE } from "@/lib/data";
+
 export interface GlossaryEntry {
   /** The word as it is printed on the page. */
   term: string;
@@ -29,7 +31,7 @@ export const GLOSSARY = {
     term: "不動・ローテーション・出番待ち",
     body:
       "そのクラブが戦った時間のうち、その選手がピッチにいた割合で分けています。" +
-      "7割以上が「不動」、3割以上が「ローテーション」、それ未満が「出番待ち」です（このサイト独自の区分）。",
+      `${EVERY_PRESENT_SHARE * 10}割以上が「不動」、${ROTATION_SHARE * 10}割以上が「ローテーション」、それ未満が「出番待ち」です（このサイト独自の区分）。`,
   },
   bigChance: {
     term: "ビッグチャンス創出",

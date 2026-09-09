@@ -6,6 +6,7 @@ import h2hJson from "@/data/h2h.json";
 import pastSeasonsJson from "@/data/past-seasons.json";
 import { getPlayerNameKana } from "@/lib/playerNamesJa";
 import { playerNameJa } from "@/lib/playerDisplayName";
+import { getAliasedPlayerId } from "@/lib/playerAliases";
 import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { zoneForRank } from "@/lib/leagueRules";
 import { getClubProfile } from "@/lib/clubProfiles";
@@ -536,7 +537,13 @@ const resolvedRosterPlayers = new Map<string, Player | undefined>();
 export function resolveRosterPlayer(name: string, teamId: number): Player | undefined {
   const key = `${teamId}|${name}`;
   if (resolvedRosterPlayers.has(key)) return resolvedRosterPlayers.get(key);
-  const found = bestNameMatch(rawPlayersByTeam(teamId), (p) => p.name, name);
+  // A hand-written alias wins over any rule: it exists precisely because the
+  // rules cannot get there, and loosening them until they can breaks other
+  // players (qa-log R6).
+  const aliasId = getAliasedPlayerId(name, teamId);
+  const found = aliasId
+    ? rawPlayersByTeam(teamId).find((p) => p.id === aliasId)
+    : bestNameMatch(rawPlayersByTeam(teamId), (p) => p.name, name);
   resolvedRosterPlayers.set(key, found);
   return found;
 }
@@ -685,8 +692,8 @@ export const getPlayerGoalContributionsMap: () => Map<number, { goals: number; a
  */
 export type UsageRole = "everyPresent" | "rotation" | "waiting" | "unused";
 
-const EVERY_PRESENT_SHARE = 0.7;
-const ROTATION_SHARE = 0.3;
+export const EVERY_PRESENT_SHARE = 0.7;
+export const ROTATION_SHARE = 0.3;
 
 function roleForShare(share: number): UsageRole {
   if (share <= 0) return "unused";
@@ -746,6 +753,22 @@ export interface SquadUsage {
 
 // Minutes for everyone who actually took the pitch in one match, keyed by the
 // provider's player id so unrostered players are counted too.
+/**
+ * Finds the squad member an event is talking about.
+ *
+ * Usually the two spellings are close enough for the matcher. When they are not,
+ * both sides are put through the roster instead: the provider calls Newcastle's
+ * Livramento "Valentino" in an event and "T." on the bench, and those two forms
+ * only meet through the player they both name.
+ */
+function matchSquadEntry(squad: LineupPlayer[], name: string, teamId: number): LineupPlayer | undefined {
+  const direct = bestNameMatch(squad, (p) => p.name, name);
+  if (direct) return direct;
+  const player = resolveRosterPlayer(name, teamId);
+  if (!player) return undefined;
+  return squad.find((entry) => resolveRosterPlayer(entry.name, teamId)?.id === player.id);
+}
+
 interface SquadMatchMinutes {
   players: Map<number, { entry: LineupPlayer; minutes: number; started: boolean }>;
   /**
@@ -795,8 +818,8 @@ function computeSquadMinutesByLineupId(lineup: MatchLineup, teamId: number): Squ
   // cannot invent an appearance.
   for (const e of substitutionsInOrder(lineup, teamId)) {
     const at = parseMinute(e.minute);
-    const off = e.player ? bestNameMatch(squad, (p) => p.name, e.player) : undefined;
-    const on = e.substitutedFor ? bestNameMatch(squad, (p) => p.name, e.substitutedFor) : undefined;
+    const off = e.player ? matchSquadEntry(squad, e.player, teamId) : undefined;
+    const on = e.substitutedFor ? matchSquadEntry(squad, e.substitutedFor, teamId) : undefined;
 
     const left = Boolean(off && enteredAt.has(off.id));
     const arrived = Boolean(on && !enteredAt.has(on.id));

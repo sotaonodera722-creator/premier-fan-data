@@ -409,6 +409,8 @@ const PLAYER_NAMES_KATAKANA: Record<number, string> = {
   146753: "ルカーシュ・ホルニーチェク",
   142732: "マリック・ティアウ",
   213511: "マティアス・フェルナンデス＝パルド",
+  // Reached only through playerAliases.ts — the feed calls him "T. Livramento".
+  168712: "ヴァレンティノ・リヴラメント",
   3310: "ニック・ポープ",
   171986: "ニコ・ゴンサレス",
   251265: "シーン・ステュール",

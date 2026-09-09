@@ -35,11 +35,13 @@ import {
   getActiveRoundMatches,
   getRoundProgress,
   getCompetitionMeta,
+  getPlayerRanking,
 } from "@/lib/data";
 import { CHAMPIONS_LEAGUE_SPOTS, EUROPA_LEAGUE_SPOTS, RELEGATION_SPOTS } from "@/lib/leagueRules";
 import pastSeasonsJson from "@/data/past-seasons.json";
 import playersJson from "@/data/players.json";
 import type { PastSeasonsFile, Player } from "@/lib/types";
+import { playerAliasEntries } from "@/lib/playerAliases";
 import { group, check, soft, every, equal, note, report } from "./harness";
 
 const TEAM_COUNT = 20;
@@ -1040,6 +1042,94 @@ group("K. 空データへの耐性", () => {
   check("順位表が空でない", getStandingsTable().length > 0, () => "getStandingsTable() が空");
   check("日本人選手セクションが空でない", getJapanesePlayerSummaries().length > 0, () => "サマリーが0件");
   equal("順位表が20クラブのまま", getStandingsTable().length, TEAM_COUNT);
+});
+
+// S11 の完了条件6・7。順位表（position）は同着を共有し、次の順位を人数分飛ばす
+// 規約で運用されている。ランキングの4タブがこの規約からずれると、同じサイトの
+// 中に2つの「順位」の意味が生まれ、読者が学んだ規約がタブを跨ぐと通用しなくなる。
+group("L. 選手ランキングの共有順位", () => {
+  const kinds = ["minutes", "goals", "assists", "ga"] as const;
+
+  for (const kind of kinds) {
+    const ranking = getPlayerRanking(kind, 30);
+
+    // 同値は同じ順位、値が変われば「これまでに並んだ人数+1」に飛ぶ（順位表と同じ規約）。
+    let ok = true;
+    let reason = "";
+    let previousValue: number | null = null;
+    let previousRank = 0;
+    ranking.entries.forEach((row, index) => {
+      if (row.value === previousValue) {
+        if (row.rank !== previousRank) {
+          ok = false;
+          reason = `${row.player.name}: 値${row.value}は前の行と同値なのに順位が${row.rank}(前は${previousRank})`;
+        }
+      } else {
+        if (row.rank !== index + 1) {
+          ok = false;
+          reason = `${row.player.name}: 値${row.value}の初出行なのに順位が${row.rank}(期待${index + 1})`;
+        }
+        previousValue = row.value;
+        previousRank = row.rank;
+      }
+    });
+    check(`${kind}: 同値は同じ順位、次は人数分飛ぶ`, ok, () => reason);
+
+    // 順位は「自分より真に大きい値を持つ人数+1」と一致する（順位表の position と同じ定義）。
+    every(
+      `${kind}: 順位が「自分より上位の人数+1」と一致する`,
+      ranking.entries,
+      (row) => row.rank === ranking.entries.filter((r) => r.value > row.value).length + 1,
+      (row) => `${row.player.name}: rank=${row.rank}`
+    );
+  }
+
+  // 出場時間タブは今節時点で270分ちょうどが最多タイ集団。表示される全30行が
+  // 同率1位になるのが正しい状態（設計者の想定「30人」ではなく実測「81人」）。
+  const minutesTop = getPlayerRanking("minutes", 30);
+  note("出場時間タブの最多タイ集団", `${minutesTop.tiedAtTop} 人`);
+  check(
+    "出場時間タブは表示30行すべてが同率1位（270分ちょうどの選手が上位30件を占める）",
+    minutesTop.allShownTied,
+    () => "上位30件に異なる出場時間が混在している — 270分の選手が30人未満に減った可能性"
+  );
+});
+
+group("M. 愛称の対応表（playerAliases.ts）", () => {
+  const entries = playerAliasEntries();
+  note("対応表の行数", `${entries.length} 行`);
+
+  every(
+    "対応先の選手が、そのクラブの名簿に実在する",
+    entries,
+    (e) => getPlayersByTeam(e.teamId).some((p) => p.id === e.playerId),
+    (e) => `${teamName(e.teamId)} "${e.alias}" → 選手 ${e.playerId} がクラブの名簿にいない`
+  );
+
+  // 対応表は規則を緩める代わりに置いている。1行が2人に当たるなら、それは
+  // 規則を緩めたのと同じ事故（qa-log R6）なので、ちょうど1人であることを要求する。
+  every(
+    "対応表の各行がクラブ内のちょうど1人に解決する",
+    entries,
+    (e) => getPlayersByTeam(e.teamId).filter((p) => p.id === e.playerId).length === 1,
+    (e) => `${teamName(e.teamId)} "${e.alias}": 解決先が1人でない`
+  );
+
+  every(
+    "対応表を通した照合が、その選手を返す",
+    entries,
+    (e) => resolveRosterPlayer(e.alias, e.teamId)?.id === e.playerId,
+    (e) =>
+      `${teamName(e.teamId)} "${e.alias}" → ${resolveRosterPlayer(e.alias, e.teamId)?.name ?? "未照合"}` +
+      `（期待: 選手 ${e.playerId}）`
+  );
+
+  every(
+    "同じ別名を2クラブが登録していない",
+    entries,
+    (e) => entries.filter((o) => o.alias === e.alias).length === 1,
+    (e) => `"${e.alias}" が複数クラブに登録されている`
+  );
 });
 
 process.exit(report("プレミアリーグ・データ監査（不変条件）"));
