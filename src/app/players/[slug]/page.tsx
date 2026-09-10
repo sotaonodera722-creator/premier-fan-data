@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPlayerById, getPlayers, getTeamById, getPlayersByTeam, getPlayerAppearances } from "@/lib/data";
+import { getPlayerById, getPrerenderedPlayerIds, getTeamById, getPlayersByTeam, getPlayerAppearances } from "@/lib/data";
 import PlayerUsageSection from "@/components/PlayerUsageSection";
 import TeamBadge from "@/components/TeamBadge";
 import StatTile from "@/components/StatTile";
@@ -11,7 +11,7 @@ import { getPositionJa } from "@/lib/positionsJa";
 import { teamNameShort, teamNameFull } from "@/lib/teamNamesJa";
 
 export function generateStaticParams() {
-  return getPlayers().map((p) => ({ slug: String(p.id) }));
+  return getPrerenderedPlayerIds().map((id) => ({ slug: String(id) }));
 }
 
 export async function generateMetadata({
