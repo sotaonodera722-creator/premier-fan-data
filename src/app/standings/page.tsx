@@ -2,7 +2,7 @@ import { getStandingsTable, getCurrentMatchday } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import { teamNameShort } from "@/lib/teamNamesJa";
 import SampleSizeNote from "@/components/SampleSizeNote";
-import StandingsTable from "@/components/StandingsTable";
+import StandingsTable, { visibleFormLength } from "@/components/StandingsTable";
 import ZoneLegend from "@/components/ZoneLegend";
 import MovementLegend from "@/components/MovementLegend";
 import SeasonMovers from "@/components/SeasonMovers";
@@ -27,8 +27,8 @@ export default function StandingsPage() {
         // Positions are read as a ranking of strength, which they are not while
         // clubs have played a different number of matches. Say so above the
         // table rather than leaving it to be inferred from the 試合 column.
-        <p className="mb-4 rounded-lg border border-border bg-background-alt px-3.5 py-2.5 text-xs leading-relaxed text-muted">
-          <span className="font-medium text-foreground">消化試合数が揃っていません。</span>{" "}
+        <p className="mb-panel rounded-lg bg-background-alt px-panel py-inline text-note text-muted">
+          <span className="font-label text-foreground">消化試合数が揃っていません。</span>{" "}
           {clubsWithGamesInHand
             .map((r) => `${teamNameShort(r.team)}（${r.gamesInHand}試合少ない）`)
             .join("・")}
@@ -36,9 +36,13 @@ export default function StandingsPage() {
         </p>
       )}
 
-      <MovementLegend className="mb-2.5" />
+      <MovementLegend className="mb-inline" />
       <StandingsTable rows={rows} />
-      <ZoneLegend totalTeams={rows.length} hasProvisionalBoundary={hasProvisionalBoundary} />
+      <ZoneLegend
+        totalTeams={rows.length}
+        formLength={visibleFormLength(rows)}
+        hasProvisionalBoundary={hasProvisionalBoundary}
+      />
       <SampleSizeNote />
       <SeasonMovers />
     </div>

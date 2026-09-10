@@ -21,7 +21,7 @@ export default function ZoneChip({
   return (
     <span
       title={provisional ? `${ZONE_NAMES[zone]}（同着のため暫定）` : ZONE_NAMES[zone]}
-      className={`inline-flex items-center rounded-sm border px-1 text-[9px] font-bold leading-4 ${TONE[zone]} ${
+      className={`inline-flex items-center rounded-sm border px-1 text-micro font-strong leading-4 ${TONE[zone]} ${
         provisional ? "border-dashed" : ""
       }`}
     >

@@ -12,7 +12,7 @@ export default function MovementLegend({ className = "" }: { className?: string 
   if (matchday <= 1) return null;
 
   return (
-    <p className={`text-[11px] leading-relaxed text-muted ${className}`}>
+    <p className={`text-micro text-muted ${className}`}>
       <span className="font-bold text-success">▲</span>
       <span className="font-bold text-danger">▼</span>
       {/* "第2節終了時点" is exact but makes the reader do the arithmetic. Leading

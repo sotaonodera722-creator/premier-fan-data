@@ -57,10 +57,10 @@ function Row({
           and S04 removed from this site — or letting a row grow taller than the
           eleven around it. */}
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold leading-tight text-foreground">
+        <span className="block truncate text-body font-strong leading-tight text-foreground">
           {name}
         </span>
-        <span className="mt-0.5 block truncate text-[11px] leading-tight tabular-nums text-muted">
+        <span className="mt-hair block truncate text-micro leading-tight tabular-nums text-muted">
           {left}
         </span>
       </span>
@@ -70,7 +70,7 @@ function Row({
           below rather than competing with them. */}
       <span
         className={`w-[4.5rem] shrink-0 whitespace-nowrap text-right tabular-nums ${
-          tone === "muted" ? "text-xs font-semibold" : "text-sm font-bold"
+          tone === "muted" ? "text-note font-label" : "text-body font-strong"
         } ${toneClass}`}
       >
         {right}
@@ -79,12 +79,12 @@ function Row({
   );
 
   if (!teamId) {
-    return <div className="flex items-center gap-3 px-3.5 py-2.5">{body}</div>;
+    return <div className="flex items-center gap-inline px-panel py-inline">{body}</div>;
   }
   return (
     <Link
       href={`/teams/${teamId}`}
-      className="flex min-h-[44px] items-center gap-3 px-3.5 py-2.5 transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
+      className="flex min-h-[44px] items-center gap-inline px-panel py-inline transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
     >
       {body}
     </Link>
@@ -108,11 +108,11 @@ function Group({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`border-t border-border first:border-t-0 ${note ? "bg-background-alt" : ""}`}>
-      <p className="px-3.5 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
+    <div className={`mt-panel first:mt-0 ${note ? "bg-background-alt" : ""}`}>
+      <p className="px-panel pb-hair pt-inline text-micro font-label text-muted">
         {label}
       </p>
-      {note && <p className="px-3.5 pb-1.5 text-[11px] leading-snug text-muted">{note}</p>}
+      {note && <p className="px-panel pb-hair text-micro text-muted">{note}</p>}
       <div className="pb-1">{children}</div>
     </div>
   );
@@ -204,7 +204,7 @@ export default function SeasonMovers() {
       <SectionHeading title="昨季から何が変わったか" />
 
       {sentence && (
-        <p className="mb-4 text-sm leading-relaxed text-foreground">{sentence}</p>
+        <p className="mb-panel text-body text-foreground">{sentence}</p>
       )}
 
       <div className="glass overflow-hidden rounded-xl">

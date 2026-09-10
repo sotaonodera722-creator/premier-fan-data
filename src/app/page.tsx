@@ -90,7 +90,7 @@ export default async function Home({
             title="順位表"
             action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
           />
-          <MovementLegend className="mb-2.5" />
+          <MovementLegend className="mb-inline" />
           <HomeStandingsTable rows={standingsRows} />
         </div>
         <div className="min-w-0">
