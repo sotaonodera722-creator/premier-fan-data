@@ -41,18 +41,31 @@ function formHeading(rows: StandingRow[]): string {
  * gets that wrong (R2, R8). Reading the change point also survives a sliced
  * list, which is what the homepage shows.
  */
-type ZoneBand = { index: number; zone: StandingZone; provisional: number[] };
+type ZoneBand = { index: number; zone: StandingZone; provisional: number[]; label: boolean };
 
 function zoneBands(rows: StandingRow[]): ZoneBand[] {
   const bands: ZoneBand[] = [];
+  let open: ZoneBand | undefined;
   rows.forEach((row, index) => {
     const zone = row.provisionalZone;
-    if (!zone) return;
-    if (zone !== rows[index - 1]?.provisionalZone) bands.push({ index, zone, provisional: [] });
+    const before = rows[index - 1]?.provisionalZone;
+    if (zone && zone !== before) {
+      open = { index, zone, provisional: [], label: true };
+      bands.push(open);
+    } else if (!zone && before) {
+      // A zone has to end somewhere, and the row below it is entitled to
+      // nothing. Without this line the Europa place simply stops with no sign
+      // that it has: fifth and sixth looked identical, which is the one
+      // difference on that part of the table worth seeing. No label, because
+      // what begins here is the middle of the table, and having nothing
+      // riding on the season is what the absence of a label says.
+      bands.push({ index, zone: before, provisional: [], label: false });
+      open = undefined;
+    }
     // The dashed "?" badge used to carry this per row. Moving the zone to a band
     // would drop it, so the band says which position is still unsettled.
-    if (row.tieStraddlesZoneBoundary && row.position != null) {
-      bands[bands.length - 1].provisional.push(row.position);
+    if (open && row.tieStraddlesZoneBoundary && row.position != null) {
+      open.provisional.push(row.position);
     }
   });
   return bands;
@@ -79,7 +92,7 @@ function PromotedMark({ teamId }: { teamId: number }) {
   return (
     <span
       title={`今季昇格・${profile.promotedAfterYears}年ぶりの1部`}
-      className="inline-flex shrink-0 items-center rounded-sm bg-surface-2 px-1 text-micro leading-4 text-muted"
+      className="inline-flex shrink-0 items-center bg-surface-2 px-1 text-micro leading-4 text-muted"
     >
       昇格
     </span>
@@ -142,8 +155,12 @@ export function StandingsCardList({
         return (
           <Fragment key={row.team.id}>
           {band && (
-            <li className={`border-t-2 border-current px-panel pb-hair pt-inline text-micro font-label ${BAND_TONE[band.zone]}`}>
-              {bandLabel(band)}
+            <li
+              className={`border-t-2 border-current ${BAND_TONE[band.zone]} ${
+                band.label ? "px-panel pb-hair pt-inline text-micro font-label" : ""
+              }`}
+            >
+              {band.label && bandLabel(band)}
             </li>
           )}
           <li className="relative">
@@ -245,8 +262,11 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
               <Fragment key={row.team.id}>
               {band && (
                 <tr className={`border-t-2 border-current ${BAND_TONE[band.zone]}`}>
-                  <td colSpan={12} className="px-inline pb-hair pt-inline text-micro font-label">
-                    {bandLabel(band)}
+                  <td
+                    colSpan={12}
+                    className={band.label ? "px-inline pb-hair pt-inline text-micro font-label" : ""}
+                  >
+                    {band.label && bandLabel(band)}
                   </td>
                 </tr>
               )}
@@ -263,7 +283,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                 <td className="px-inline py-inline">
                   <Link
                     href={`/teams/${row.team.id}`}
-                    className="flex items-center gap-inline rounded-sm hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="flex items-center gap-inline hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     <TeamBadge team={row.team} size={28} />
                     <span className="flex min-w-0 items-center gap-hair">
@@ -302,7 +322,7 @@ function StandingsFullTable({ rows }: { rows: StandingRow[] }) {
                     <Link
                       href={`/matches/${nextFixture.id}`}
                       title={`${teamNameFull(nextOpponent)}戦 ${jstShortDate(nextFixture.utcDate)} ${jstTime(nextFixture.utcDate)}（日本時間）`}
-                      className="flex items-center gap-inline rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="flex items-center gap-inline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <TeamBadge team={nextOpponent} size={22} />
                       <span className="text-micro leading-tight tabular-nums text-muted">
