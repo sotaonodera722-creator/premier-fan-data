@@ -28,6 +28,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      # The build prerenders 88 pages, not the 959 it used to, because every
+      # deployment keeps a copy of what it prerendered and six of those a day
+      # put the project over Vercel's storage. Building every page was also a
+      # test — it failed if any player or fixture broke its own page — and this
+      # is what is left of that: serve the build and ask for a rotating sample
+      # of the pages nobody prerendered.
+      - name: Pages nobody prerendered
+        run: npm run smoke
+
       # Runs last because it is the check most likely to fail for reasons that
       # are about the data rather than the diff — seeing lint and build results
       # alongside it is what tells the two apart.

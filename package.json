@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "audit": "tsx scripts/audit/invariants.ts"
+    "audit": "tsx scripts/audit/invariants.ts",
+    "smoke": "tsx scripts/smoke-pages.mjs"
   },
   "dependencies": {
     "next": "16.3.4",
