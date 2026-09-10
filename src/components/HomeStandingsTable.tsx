@@ -13,25 +13,38 @@ const BOTTOM_COUNT = 3;
 export default function HomeStandingsTable({ rows }: { rows: StandingRow[] }) {
   const showAll = rows.length <= TOP_COUNT + BOTTOM_COUNT + 1;
 
-  // Clubs level on points share a position number. Cutting through the middle of
-  // such a group would print one "17th" and silently drop the other, so the
-  // bottom slice grows upwards until it starts on a whole group.
+  // Clubs level on points share a position number, and a cut through the middle
+  // of such a group prints one "6th" and silently drops the other. The bottom
+  // slice already grew upwards to start on a whole group; the top slice did not
+  // grow downwards, so Newcastle — level with Liverpool on six — was missing
+  // from a list that claimed to be omitting seventh place onwards.
+  let topEnd = Math.min(TOP_COUNT, rows.length);
+  while (
+    topEnd < rows.length &&
+    rows[topEnd]?.position != null &&
+    rows[topEnd].position === rows[topEnd - 1]?.position
+  ) {
+    topEnd += 1;
+  }
+
   let bottomStart = rows.length - BOTTOM_COUNT;
   while (
-    bottomStart > TOP_COUNT &&
+    bottomStart > topEnd &&
     rows[bottomStart - 1]?.position != null &&
     rows[bottomStart - 1].position === rows[bottomStart].position
   ) {
     bottomStart -= 1;
   }
 
-  const shown = showAll ? rows : [...rows.slice(0, TOP_COUNT), ...rows.slice(bottomStart)];
+  // Both slices growing can leave nothing between them to omit.
+  const cut = bottomStart > topEnd;
+  const shown = showAll || !cut ? rows : [...rows.slice(0, topEnd), ...rows.slice(bottomStart)];
 
   return (
     <StandingsCardList
       rows={shown}
       className=""
-      omittedAfterIndex={showAll ? undefined : TOP_COUNT - 1}
+      omittedAfterIndex={showAll || !cut ? undefined : topEnd - 1}
     />
   );
 }

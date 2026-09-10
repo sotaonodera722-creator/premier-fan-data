@@ -39,7 +39,7 @@ export default function MovementIndicator({
       role="img"
       aria-label={`前節から${movement}`}
       title={`${from}（${points}）${caveat}`}
-      className={`font-[family-name:var(--font-display)] text-[10px] font-bold leading-none tabular-nums ${tone} ${className}`}
+      className={`font-numeral text-micro font-strong leading-none ${tone} ${className}`}
     >
       <span aria-hidden="true">{glyph}</span>
     </span>
