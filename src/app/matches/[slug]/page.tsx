@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import {
   getMatchById,
   getMatchLineup,
-  getClickableMatchIds,
+  getPrerenderedMatchIds,
   getTeamById,
   getPredictedLineup,
   resolveRosterPlayer,
@@ -23,7 +23,7 @@ import { getRivalry, RIVALRY_KIND_LABELS } from "@/lib/rivalries";
 import type { LineupPlayer, MatchLineup } from "@/lib/types";
 
 export function generateStaticParams() {
-  return getClickableMatchIds().map((id) => ({ slug: String(id) }));
+  return getPrerenderedMatchIds().map((id) => ({ slug: String(id) }));
 }
 
 export async function generateMetadata({

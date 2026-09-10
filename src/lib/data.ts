@@ -254,6 +254,35 @@ export function getPredictedLineup(
 // played) whose predecessor is fully finished; while it's in progress this mixes
 // finished matches (shown as scores) with ones still to come (shown as fixtures),
 // rather than only trickling in results one at a time as the round plays out.
+// Which pages are worth building ahead of time.
+//
+// Every deployment keeps its own copy of everything it prerendered, and at
+// 380 fixtures plus 548 players that copy was 214MB — six of them a day put
+// the project over Vercel's 10GB before anyone noticed. Building every page
+// also stops bounding the problem: by May there are 380 played matches, not
+// thirty, so "only the finished ones" would put it back where it started.
+//
+// These two sets stay about the same size all season. Everything outside them
+// still works — `dynamicParams` defaults to true, so an unlisted page is
+// rendered on the first request and cached from then on.
+export function getPrerenderedMatchIds(): number[] {
+  const round = getActiveRoundMatches().map((m) => m.id);
+  const next = matchesFile.matches
+    .filter((m) => m.matchday === getCurrentMatchday())
+    .map((m) => m.id);
+  return [...new Set([...round, ...next])];
+}
+
+// The Japanese players are the door this site exists to open, and the ranking
+// lists on the home page are the only other player links a reader meets before
+// they have opened anything.
+export function getPrerenderedPlayerIds(): number[] {
+  const ranked = (["goals", "assists", "ga", "minutes"] as RankingKind[]).flatMap((kind) =>
+    getPlayerRanking(kind, 10).entries.map((e) => e.player.id)
+  );
+  return [...new Set([...getJapanesePlayers().map((p) => p.id), ...ranked])];
+}
+
 export function getActiveRoundMatches(): Match[] {
   const all = matchesFile.matches;
   const matchdays = [...new Set(all.map((m) => m.matchday))].sort((a, b) => a - b);
