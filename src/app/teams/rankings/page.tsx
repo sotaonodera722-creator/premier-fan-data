@@ -45,7 +45,7 @@ export default async function TeamStatsRankingsPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-20 pt-10 sm:px-6">
-      <SectionHeading eyebrow="Team Stats" title="チームスタッツランキング" />
+      <SectionHeading title="チームスタッツランキング" />
       <TeamStatsExplorer
         initialTab={tab}
         goals={goals}

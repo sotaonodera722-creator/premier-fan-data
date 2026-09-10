@@ -150,7 +150,7 @@ export default async function TeamDetailPage({
               // Before any number on this page means anything, a reader has to
               // know who they are looking at. That goes first.
               <section className="mt-8">
-                <SectionHeading eyebrow="Identity" title="このクラブは何者か" />
+                <SectionHeading title="このクラブは何者か" />
                 <div className="glass rounded-xl p-5">
                   <p className="text-sm leading-relaxed text-foreground">{profile.identity}</p>
                   <dl className="mt-4 grid gap-x-6 gap-y-3 border-t border-border pt-4 text-sm sm:grid-cols-3">
@@ -213,7 +213,7 @@ export default async function TeamDetailPage({
 
             <section className="mt-12 grid gap-8 pb-12 lg:grid-cols-2">
               <div>
-                <SectionHeading eyebrow="Club Info" title="クラブ情報" />
+                <SectionHeading title="クラブ情報" />
                 <div className="glass space-y-3 rounded-xl p-5 text-sm">
                   {profile ? (
                     <>
@@ -246,7 +246,7 @@ export default async function TeamDetailPage({
 
               {jpPlayers.length > 0 && (
                 <div>
-                  <SectionHeading eyebrow="Japanese Players" title="日本人選手" />
+                  <SectionHeading title="日本人選手" />
                   <div className="glass divide-y divide-border rounded-xl">
                     {jpPlayers.map((p) => (
                       <Link
@@ -277,7 +277,7 @@ export default async function TeamDetailPage({
         matches={
           <section className="mt-8 grid gap-8 pb-12 lg:grid-cols-2">
             <div>
-              <SectionHeading eyebrow="Results" title="直近の試合結果" />
+              <SectionHeading title="直近の試合結果" />
               <div className="glass divide-y divide-border rounded-xl">
                 {recent.length === 0 && <p className="p-4 text-sm text-muted">試合結果はまだありません。</p>}
                 {recent.map((m) => {
@@ -321,7 +321,7 @@ export default async function TeamDetailPage({
             </div>
 
             <div>
-              <SectionHeading eyebrow="Fixtures" title="今後の試合予定" />
+              <SectionHeading title="今後の試合予定" />
               <div className="glass divide-y divide-border rounded-xl">
                 {upcoming.length === 0 && <p className="p-4 text-sm text-muted">予定されている試合はありません。</p>}
                 {upcoming.map((m) => {
@@ -355,13 +355,13 @@ export default async function TeamDetailPage({
         }
         stats={
           <section className="mt-8 pb-12">
-            <SectionHeading eyebrow="Key Stats" title="重要な統計" />
+            <SectionHeading title="重要な統計" />
             <KeyTeamStats teamId={team.id} />
           </section>
         }
         squad={
           <section className="mt-8 pb-12">
-            <SectionHeading eyebrow="Squad" title="スカッド一覧" />
+            <SectionHeading title="スカッド一覧" />
             <div className="space-y-8">
               {POSITION_ORDER.map((pos) => {
                 const group = roster.filter((p) => p.position === pos);

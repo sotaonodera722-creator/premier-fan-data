@@ -107,9 +107,7 @@ export default async function MatchDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 pb-20 pt-10 sm:px-6">
-      <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">
-        Matchday {match.matchday}
-      </p>
+      <p className="text-center text-note font-strong text-accent-2">第{match.matchday}節</p>
       <p className="mt-1.5 text-center text-sm text-muted">
         <time dateTime={match.utcDate} className="tabular-nums">
           {jstLongDate(match.utcDate)} {jstTime(match.utcDate)}
@@ -165,7 +163,7 @@ export default async function MatchDetailPage({
           until they know how the ninety minutes went. */}
       {lineup?.events && lineup.events.length > 0 && (
         <section className="mt-10">
-          <SectionHeading eyebrow="Timeline" title="タイムライン" />
+          <SectionHeading title="タイムライン" />
           <MatchTimeline
             events={lineup.events}
             homeTeamId={homeTeam.id}
@@ -179,7 +177,6 @@ export default async function MatchDetailPage({
       {lineup?.statistics && (
         <section className="mt-10">
           <SectionHeading
-            eyebrow={hasExpectedGoals ? "Expected Goals" : "Stats"}
             title={hasExpectedGoals ? "xGとスコアの乖離" : "トップ統計"}
           />
           {hasExpectedGoals && (
@@ -203,7 +200,7 @@ export default async function MatchDetailPage({
       {lineup && (
         <>
           <section className="mt-10">
-            <SectionHeading eyebrow="Lineups" title="スタメン・フォーメーション" />
+            <SectionHeading title="スタメン・フォーメーション" />
             <MatchFormation lineup={lineup} homeTeam={homeTeam} awayTeam={awayTeam} />
           </section>
 
@@ -217,7 +214,7 @@ export default async function MatchDetailPage({
       {!lineup && predictedLineup && predictedHome && predictedAway && (
         <>
           <section className="mt-10">
-            <SectionHeading eyebrow="Predicted Lineups" title="予想フォーメーション" />
+            <SectionHeading title="予想フォーメーション" />
             <p className="mb-3 -mt-2 text-xs text-muted">
               前節のスタメンより予想 ·{" "}
               <Link href={`/matches/${predictedHome.match.id}`} className="hover:text-accent-2 hover:underline">
@@ -252,7 +249,7 @@ export default async function MatchDetailPage({
           "no history" is part of judging whether to watch it, and a section that
           silently disappears reads as a bug. */}
       <section className="mt-10">
-        <SectionHeading eyebrow="History" title="対戦成績" />
+        <SectionHeading title="対戦成績" />
         <MatchHeadToHead homeTeam={homeTeam} awayTeam={awayTeam} excludeUtcDate={match.utcDate} />
       </section>
 

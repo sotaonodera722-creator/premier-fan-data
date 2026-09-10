@@ -72,7 +72,6 @@ export default async function Home({
 
       <section className="mt-12">
         <SectionHeading
-          eyebrow="Japanese Players"
           title="日本人選手の週末"
           action={<SectionLink href="/players">選手名鑑へ →</SectionLink>}
         />
@@ -88,7 +87,6 @@ export default async function Home({
       <section className="mt-14 grid items-start gap-8 lg:grid-cols-2">
         <div className="min-w-0">
           <SectionHeading
-            eyebrow="Standings"
             title="順位表"
             action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
           />
@@ -97,7 +95,6 @@ export default async function Home({
         </div>
         <div className="min-w-0">
           <SectionHeading
-            eyebrow="Fixtures"
             title="試合日程"
             action={<SectionLink href="/matches">試合一覧へ →</SectionLink>}
           />
@@ -113,7 +110,6 @@ export default async function Home({
 
       <section className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <PlayerRankingList
-          eyebrow="Scorers"
           title="得点ランキング TOP3"
           entries={topScorers}
           teamById={teamById}
@@ -121,7 +117,6 @@ export default async function Home({
           moreHref="/players/rankings?tab=goals"
         />
         <PlayerRankingList
-          eyebrow="Assists"
           title="アシストランキング TOP3"
           entries={topAssists}
           teamById={teamById}
@@ -129,7 +124,6 @@ export default async function Home({
           moreHref="/players/rankings?tab=assists"
         />
         <TeamStatCard
-          eyebrow="Expected Goals"
           title="平均期待得点 (xG) TOP3"
           term="xg"
           rows={topXg}

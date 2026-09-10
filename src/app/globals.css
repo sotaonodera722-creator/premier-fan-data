@@ -34,10 +34,85 @@
   --color-success: var(--success);
   --color-info: var(--info);
   --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Latin stays on Geist so that the 110 players still written in Latin, the
+     club abbreviations and the TLAs keep the widths they have; Japanese always
+     lands on Noto. Whether one face should carry both is a question for S17,
+     once the pages look settled. */
+  --font-sans: var(--font-geist-sans), var(--font-ja), system-ui, sans-serif;
+  --font-numeral: var(--font-display);
 }
 
+
+/* The vocabulary S14 exists to define. Kept out of `@theme inline` because
+   these are literal values, not indirections through :root, and out of
+   Tailwind own numeric scales because `--spacing-3` would silently retune
+   every `gap-3` and `p-3` already on the site. */
+@theme {
+  /* Seven steps, not the twelve that had accumulated. The bottom five sit on
+     sizes already in use, so moving a page onto them costs no layout; only the
+     top two move, because the answer to "the numbers aren't the subject" is to
+     make the big number genuinely big, not to shrink the prose around it.
+     Line heights are set for Japanese, which needs more room than Latin. */
+  --text-micro: 11px;              /* units, legends, badges — never a Japanese sentence */
+  --text-micro--line-height: 1.45;
+  --text-note: 12px;               /* notes, labels, table headers */
+  --text-note--line-height: 1.6;
+  --text-body: 14px;               /* body copy, table cells */
+  --text-body--line-height: 1.75;
+  --text-lead: 16px;               /* standfirsts, card headings */
+  --text-lead--line-height: 1.6;
+  --text-title: 22px;              /* section headings */
+  --text-title--line-height: 1.35;
+  --text-stat: 34px;               /* the figure a section is about */
+  --text-stat--line-height: 1;
+  --text-stat-xl: 52px;            /* the figure a screen is about — one or two per screen */
+  --text-stat-xl--line-height: 0.92;
+
+  /* Four weights. 600 and 700 both existed, but Japanese gothic faces collapse
+     that difference to nothing on screen. The pair became one 700, and the
+     freed step went to 800 — reserved for figures, where ink is the hierarchy. */
+  --font-weight-body: 400;
+  --font-weight-label: 500;
+  --font-weight-strong: 700;
+  --font-weight-stat: 800;
+
+  /* Six spacing steps on a 4px grid, named rather than numbered so they sit
+     beside Tailwind scale instead of overwriting it. The half steps
+     (2/6/10/14px) are deliberately absent: nobody sees the 2px between
+     `gap-1.5` and `gap-2`, and keeping them meant spacing followed no rule a
+     reader could feel. */
+  --spacing-hair: 4px;      /* a figure and its unit */
+  --spacing-inline: 8px;    /* within a line — icon to text, cell to cell */
+  --spacing-panel: 16px;    /* inside a panel */
+  --spacing-heading: 24px;  /* a heading and what it introduces */
+  --spacing-group: 40px;    /* groups within a section */
+  --spacing-section: 64px;  /* between sections */
+}
+
+/* The face figures are set in, with its digits pinned to one width. Rajdhani
+   could not do this: it ships no OpenType features at all, so every
+   `tabular-nums` written against it was inert. Roboto Condensed already sets
+   all ten digits to the same advance, and `tabular-nums` holds that if the
+   face is ever swapped again. Existing code reaches the same face through
+   `font-[family-name:var(--font-display)]`; new code should use this. */
+.font-numeral {
+  font-family: var(--font-display), var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* When a rule is allowed. Anything outside these three is decoration, and the
+   separation should come from space and alignment instead.
+     1. Row divisions in a table — four or more like rows, two or more numeric
+        columns (standings, rankings). One `divide-y`; never a border per row.
+     2. The edge of a panel — only where its surface differs from the ground and
+        space alone cannot separate it.
+     3. A single rule that carries meaning — a zone boundary, say, where the
+        line itself is the information.
+   No decorative frames, no panel inside a panel, no rule and space doing the
+   same job twice. S14 removes none of the existing rules: with surface and
+   ground both #ffffff, dropping one means deciding per block whether to change
+   the surface or lean on space, and that is a page-level judgement (S15-S18).
+   The baseline not to exceed: 318 `border`, 17 `divide-y`, 139 `rounded*`. */
 * {
   border-color: var(--border);
 }
