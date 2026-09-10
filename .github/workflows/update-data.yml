@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   update-data:
@@ -65,4 +66,43 @@ jobs:
       # a worse failure than the one being reported. Failing here still turns
       # the run red, which is what sends the owner an email.
       - name: Data invariants
-        run: npm run audit
+        id: audit
+        run: npm run audit | tee audit.log
+
+      # A red run does email the owner, but an email is read once and then gone,
+      # and this runs unattended six times a day. An issue stays until someone
+      # closes it, and the next refresh adds to it rather than opening a second.
+      - name: Report a broken invariant as an issue
+        if: always() && steps.audit.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            echo '自動更新後の `npm run audit` が不合格を出しました。'
+            echo
+            echo "- 実行: $RUN_URL"
+            echo "- データのコミット: $GITHUB_SHA"
+            echo
+            echo '```'
+            # -F because [不合格] is a bracket expression to grep otherwise, and
+            # would match almost every line. Only the failures: the notices are
+            # measurements we do not control and are noise in an alert.
+            grep -F -B1 -A6 '[不合格]' audit.log || echo '(不合格の行を取り出せませんでした)'
+            echo '```'
+            echo
+            echo '検査は push の**後**に走ります。壊れた不変条件はたいてい提供元の事実で、'
+            echo '更新を止めると先週のスコアを見せることになるためです。'
+            echo '**つまりこのデータは既に公開されています。**'
+            echo
+            echo '最初に確かめること: 提供元の欠損か、こちらの導出ロジックの誤りか。'
+            echo '提供元の事実なら検査を注意（soft）に落とすかの判断、'
+            echo 'こちらの誤りなら `src/lib/data.ts` の修正です。'
+          } > "$RUNNER_TEMP/issue-body.md"
+          existing=$(gh issue list --label data-invariant --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file "$RUNNER_TEMP/issue-body.md"
+          else
+            gh label create data-invariant --description '自動更新後の不変条件の不合格' --color B60205 --force >/dev/null 2>&1 || true
+            gh issue create --title 'データの不変条件が壊れています' --label data-invariant --body-file "$RUNNER_TEMP/issue-body.md"
+          fi
