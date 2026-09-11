@@ -36,8 +36,10 @@
   --color-danger: var(--danger);
   /* Latin stays on Geist so that the 110 players still written in Latin, the
      club abbreviations and the TLAs keep the widths they have; Japanese always
-     lands on Noto. Whether one face should carry both is a question for S17,
-     once the pages look settled. */
+     lands on Noto. Whether one face should carry both waits until after S18:
+     changing it moves the width of every Latin name on every page, and doing
+     that during a page rebuild would leave no way to tell which of the two
+     broke a row. */
   --font-sans: var(--font-geist-sans), var(--font-ja), system-ui, sans-serif;
   --font-numeral: var(--font-display);
 }
@@ -112,7 +114,8 @@
    same job twice. S14 removes none of the existing rules: with surface and
    ground both #ffffff, dropping one means deciding per block whether to change
    the surface or lean on space, and that is a page-level judgement (S15-S18).
-   The baseline not to exceed: 318 `border`, 17 `divide-y`, 139 `rounded*`. */
+   The ceiling after S17 (homepage rebuilt, S15 and S17 done): 252 `border`,
+   16 `divide-y`, 115 `rounded*` across every .tsx under src. S16 and S18 only go down. */
 * {
   border-color: var(--border);
 }
@@ -120,13 +123,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-}
-
-.pitch-lines {
-  background-image:
-    linear-gradient(rgba(20, 18, 15, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 18, 15, 0.04) 1px, transparent 1px);
-  background-size: 42px 42px;
 }
 
 /* Literal grass-pitch texture for MatchFormation — flat pitch green, always the
