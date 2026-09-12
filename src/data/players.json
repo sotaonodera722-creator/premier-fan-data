@@ -192,7 +192,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 7935,
@@ -244,7 +244,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 8279,
@@ -270,7 +270,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 144434,
@@ -3260,7 +3260,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 165311,
@@ -3338,7 +3338,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 97535,
@@ -3390,7 +3390,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 3
+    "appearances": 4
   },
   {
     "id": 192313,
@@ -3528,7 +3528,7 @@
     "teamId": 73,
     "position": "DF",
     "dateOfBirth": "1999-09-13",
-    "age": 26,
+    "age": 27,
     "nationality": "Spain",
     "isJapanese": false,
     "goals": null,
