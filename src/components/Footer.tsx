@@ -62,6 +62,23 @@ export default function Footer() {
         <p className="mt-1 text-xs leading-relaxed text-muted">
           非公式のファン向けデータベースです。プレミアリーグ及び各クラブとは提携関係にありません。
         </p>
+        {/*
+          Football-Data.org's terms require this exact sentence, in English, in
+          the footer or another visible place. The 出典 block above names them as
+          a provider, which is not the same thing and did not satisfy this.
+        */}
+        <p className="mt-1 text-xs leading-relaxed text-muted">
+          Football data provided by the{" "}
+          <a
+            href="https://www.football-data.org/"
+            className="underline transition hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Football-Data.org API
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );

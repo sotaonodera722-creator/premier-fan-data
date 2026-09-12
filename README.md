@@ -13,6 +13,19 @@ npm run dev
 
 http://localhost:3000 を開きます。
 
+## 検索と計測
+
+`/sitemap.xml` が956件のURL(トップ8ページ + クラブ20 + 選手548 + 試合380)を、`/robots.txt` がその場所を検索エンジンに知らせます。試合は `getClickableMatchIds()` の集合だけを載せます — ラインナップを持たない消化済みの試合は404を返すので、サイトマップに入れてはいけません。
+
+絶対URLの組み立てとアクセス解析は環境変数で切り替えます(`.env.local.example` 参照)。
+
+| 変数 | 効果 |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | sitemap・robots・OGPタグのオリジン。未設定なら Vercel のURL |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 の測定ID。**未設定なら計測タグを一切出力しない** |
+
+どちらもビルド時に埋め込まれるため、変更は次のデプロイから効きます。
+
 ## データの取得・更新
 
 `.env.local` に football-data.org と Highlightly のAPIトークンを設定してください(`.env.local.example` 参照)。
@@ -52,6 +65,7 @@ football-data.org の無料プランは10リクエスト/分の制限がある�
 - `scripts/ingest-football-data.mjs` — football-data.org からチーム・選手・試合データを取得するスクリプト
 - `scripts/ingest-lineups.mjs` — Highlightly からスタメン・フォーメーションを取得するスクリプト
 - `scripts/ingest-h2h.mjs` — football-data.org からチーム同士の過去の対戦成績を取得するスクリプト
+- `scripts/generate-og-image.mjs` — 共有リンクに出る画像(`src/app/opengraph-image.png`)を書き出すスクリプト。季節のデータを含まないので手で実行する。文言やデザインを変えたときだけ再実行する
 - `.github/workflows/update-data.yml` — 上記3本のスクリプトを定期実行し、変更があれば自動コミットするGitHub Actionsワークフロー
 
 ## データ利用について
