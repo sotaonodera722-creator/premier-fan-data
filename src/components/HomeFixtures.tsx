@@ -1,33 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import type { Match, Team } from "@/lib/types";
-import TeamBadge from "@/components/TeamBadge";
+import MatchRow, { sideTones } from "@/components/MatchRow";
 import MatchdayPills from "@/components/MatchdayPills";
 import { RelativeKickoff } from "@/components/RelativeTime";
 import { useUrlParams } from "@/lib/useUrlParams";
-import { getTeamNameJa } from "@/lib/teamNamesJa";
 import { jstShortDate, jstTime, lateNightNote } from "@/lib/datetime";
 
-function clubLabel(team: Team): string {
-  return getTeamNameJa(team.id)?.short ?? team.shortName;
-}
+const FOCUS_RING =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
-/** One side of a fixture. Mirrored for the away club so the score sits centred. */
-function Side({ team, align }: { team: Team; align: "home" | "away" }) {
-  return (
-    <span
-      className={`flex min-w-0 items-center gap-1.5 ${
-        align === "home" ? "justify-end text-right" : "justify-start text-left"
-      }`}
-    >
-      {align === "away" && <TeamBadge team={team} size={20} />}
-      <span className="min-w-0 text-[13px] leading-tight text-foreground">{clubLabel(team)}</span>
-      {align === "home" && <TeamBadge team={team} size={20} />}
-    </span>
-  );
-}
+const ROUND_ARROW = `flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted transition hover:bg-border hover:text-foreground disabled:pointer-events-none disabled:opacity-30 ${FOCUS_RING}`;
 
 export default function HomeFixtures({
   matches,
@@ -85,33 +69,36 @@ export default function HomeFixtures({
 
   return (
     <div>
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-inline flex items-center gap-inline">
         <button
           type="button"
           onClick={() => setMatchday(Math.max(1, matchday - 1))}
           disabled={matchday <= 1}
           aria-label="前の節"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={ROUND_ARROW}
         >
           <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
             <path d="M12 5l-5 5 5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
         {/* min-width rather than a fixed one so the arrows don't shift between 第1節 and 第10節 */}
-        <span className="min-w-14 shrink-0 text-center text-sm font-semibold text-foreground">第{matchday}節</span>
+        <span className="min-w-14 shrink-0 text-center text-body font-strong text-foreground">第{matchday}節</span>
         <button
           type="button"
           onClick={() => setMatchday(Math.min(maxMatchday, matchday + 1))}
           disabled={matchday >= maxMatchday}
           aria-label="次の節"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:text-foreground disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={ROUND_ARROW}
         >
           <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
             <path d="M8 5l5 5-5 5" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
         {roundStatus && (
-          <span className="shrink-0 rounded-md border border-border px-1.5 py-0.5 text-[10px] font-semibold text-muted">
+          // A flat tag, the same one the table uses for a promoted club: it
+          // labels the rows below, and a bordered chip beside two round buttons
+          // read as a third button.
+          <span className="shrink-0 bg-surface-2 px-hair text-micro font-label leading-4 text-muted">
             {roundStatus}
           </span>
         )}
@@ -120,65 +107,59 @@ export default function HomeFixtures({
           <button
             type="button"
             onClick={() => setMatchday(currentMatchday)}
-            className="-my-2 ml-auto shrink-0 rounded-sm py-2 text-xs font-medium text-accent-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className={`ml-auto inline-flex min-h-[44px] shrink-0 items-center text-note font-label text-accent-2 hover:underline ${FOCUS_RING}`}
           >
             第{currentMatchday}節へ戻る
           </button>
         )}
       </div>
 
-      <div className="mb-3">
+      <div className="mb-panel">
         <MatchdayPills rounds={rounds} matchday={matchday} onChange={setMatchday} />
       </div>
 
-      {roundMatches.length === 0 && (
-        <p className="glass rounded-xl p-4 text-sm text-muted">この節の試合データがありません。</p>
-      )}
+      {roundMatches.length === 0 && <p className="text-body text-muted">この節の試合データがありません。</p>}
 
-      <div className="space-y-3">
+      {/* The same rows as the results at the top of the page. Ten matches still
+          to come are the other half of the weekend, not a footnote to it, so
+          they are set in exactly the same shape. */}
+      <div className="grid gap-y-panel lg:grid-cols-2 lg:gap-x-group">
         {dayGroups.map((group) => (
-          <div key={group.date} className="glass overflow-hidden rounded-xl">
-            <p className="flex items-baseline gap-2 border-b border-border bg-background-alt px-3 py-1.5 text-[11px] font-semibold text-foreground">
+          <div key={group.date}>
+            <p className="flex items-baseline gap-inline pb-hair text-note font-strong text-foreground">
               <span className="tabular-nums">{group.date}</span>
-              {group.note && <span className="font-normal text-muted">{group.note}</span>}
+              {group.note && <span className="font-body text-muted">{group.note}</span>}
             </p>
-            <div className="divide-y divide-border">
-              {group.matches.map((m) => {
-                const home = teamById.get(m.homeTeamId);
-                const away = teamById.get(m.awayTeamId);
-                if (!home || !away) return null;
-                const content = (
-                  <div className="grid min-h-[44px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2.5">
-                    <Side team={home} align="home" />
-                    <span className="flex w-14 flex-col items-center justify-self-center leading-tight">
-                      {m.played ? (
-                        <span className="font-[family-name:var(--font-display)] text-sm font-bold tabular-nums text-foreground">
-                          {m.homeGoals}-{m.awayGoals}
+            {group.matches.map((m) => {
+              const home = teamById.get(m.homeTeamId);
+              const away = teamById.get(m.awayTeamId);
+              if (!home || !away) return null;
+              const [homeTone, awayTone] = sideTones(m.played, m.homeGoals ?? 0, m.awayGoals ?? 0);
+              return (
+                <MatchRow
+                  key={m.id}
+                  home={home}
+                  away={away}
+                  homeTone={homeTone}
+                  awayTone={awayTone}
+                  center={
+                    m.played ? (
+                      <span className="font-numeral text-lead font-strong text-foreground">
+                        {m.homeGoals}-{m.awayGoals}
+                      </span>
+                    ) : (
+                      <>
+                        <span className="font-numeral text-lead font-strong text-foreground">
+                          {jstTime(m.utcDate)}
                         </span>
-                      ) : (
-                        <>
-                          <span className="text-xs font-medium tabular-nums text-foreground">
-                            {jstTime(m.utcDate)}
-                          </span>
-                          <RelativeKickoff iso={m.utcDate} className="text-[9px] text-accent-2" />
-                        </>
-                      )}
-                    </span>
-                    <Side team={away} align="away" />
-                  </div>
-                );
-                if (!clickableMatchIds.has(m.id)) return <div key={m.id}>{content}</div>;
-                return (
-                  <Link
-                    key={m.id}
-                    href={`/matches/${m.id}`}
-                    className="block transition hover:bg-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
-                  >
-                    {content}
-                  </Link>
-                );
-              })}
-            </div>
+                        <RelativeKickoff iso={m.utcDate} className="mt-hair text-micro text-accent-2" />
+                      </>
+                    )
+                  }
+                  href={clickableMatchIds.has(m.id) ? `/matches/${m.id}` : undefined}
+                />
+              );
+            })}
           </div>
         ))}
       </div>

@@ -20,8 +20,7 @@ import JapanesePlayersSection from "@/components/JapanesePlayersSection";
 import WeekendBoard from "@/components/WeekendBoard";
 import HomeStandingsTable from "@/components/HomeStandingsTable";
 import HomeFixtures from "@/components/HomeFixtures";
-import PlayerRankingList from "@/components/PlayerRankingList";
-import TeamStatCard from "@/components/TeamStatCard";
+import HomeRankings from "@/components/HomeRankings";
 import SampleSizeNote from "@/components/SampleSizeNote";
 
 export default async function Home({
@@ -44,19 +43,23 @@ export default async function Home({
   const topXg = getTeamStatAverage("Expected Goals", 3).map((r, i) => ({ ...r, rank: i + 1 }));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+    <div className="mx-auto max-w-7xl px-panel pb-section sm:px-heading">
       {/*
         The page opens on where the round stands rather than on a headline. A
         reader arriving on a Sunday morning in Japan is mid-round — some of it
         played overnight, some still to come tonight — and that fact is the
         whole reason this site exists, so it goes above everything else.
+
+        This block is the front page: the round, the sentence, the ten results
+        and the four points. It is the only block with a figure above 22px, so
+        everything below it reads as reference rather than as news.
       */}
-      <section className="border-b border-border pb-7 pt-2 sm:pt-10">
+      <section className="pt-panel sm:pt-group">
         <RoundStatus />
 
         <RoundSummaryLede />
 
-        <div className="mt-2 sm:mt-4">
+        <div className="mt-heading">
           <WeekendBoard
             matches={results.matches}
             teamById={teamById}
@@ -64,13 +67,13 @@ export default async function Home({
           />
         </div>
 
-        <div className="mt-7">
+        <div className="mt-group">
           <WeekendTiles />
         </div>
         <SampleSizeNote derived />
       </section>
 
-      <section className="mt-12">
+      <section className="mt-section">
         <SectionHeading
           title="日本人選手の週末"
           action={<SectionLink href="/players">選手名鑑へ →</SectionLink>}
@@ -84,53 +87,36 @@ export default async function Home({
           that explains it. */}
       <MatchPicks />
 
-      <section className="mt-14 grid items-start gap-8 lg:grid-cols-2">
-        <div className="min-w-0">
-          <SectionHeading
-            title="順位表"
-            action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
-          />
-          <MovementLegend className="mb-inline" />
-          <HomeStandingsTable rows={standingsRows} />
-        </div>
-        <div className="min-w-0">
-          <SectionHeading
-            title="試合日程"
-            action={<SectionLink href="/matches">試合一覧へ →</SectionLink>}
-          />
-          <HomeFixtures
-            matches={allMatches}
-            teams={teams}
-            currentMatchday={nextFixtureRound}
-            initialRound={round}
-            clickableMatchIds={clickableMatchIds}
-          />
-        </div>
+      {/* One column at every width. Side by side, the table and the fixtures
+          read as two unrelated panels; stacked, the page runs results → table →
+          what's next, and the fixtures sit in the same rows as the results at
+          the top. The measure is held so a row never stretches across a
+          desktop. */}
+      <section className="mt-section max-w-3xl">
+        <SectionHeading
+          title="順位表"
+          action={<SectionLink href="/standings">全順位を見る →</SectionLink>}
+        />
+        <MovementLegend className="mb-inline" />
+        <HomeStandingsTable rows={standingsRows} />
       </section>
 
-      <section className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <PlayerRankingList
-          title="得点ランキング TOP3"
-          entries={topScorers}
-          teamById={teamById}
-          emptyLabel="得点"
-          moreHref="/players/rankings?tab=goals"
+      <section className="mt-section max-w-3xl">
+        <SectionHeading
+          title="試合日程"
+          action={<SectionLink href="/matches">試合一覧へ →</SectionLink>}
         />
-        <PlayerRankingList
-          title="アシストランキング TOP3"
-          entries={topAssists}
-          teamById={teamById}
-          emptyLabel="アシスト"
-          moreHref="/players/rankings?tab=assists"
+        <HomeFixtures
+          matches={allMatches}
+          teams={teams}
+          currentMatchday={nextFixtureRound}
+          initialRound={round}
+          clickableMatchIds={clickableMatchIds}
         />
-        <TeamStatCard
-          title="平均期待得点 (xG) TOP3"
-          term="xg"
-          rows={topXg}
-          format={(v) => v.toFixed(2)}
-          tab="xg"
-          size="lg"
-        />
+      </section>
+
+      <section className="mt-section">
+        <HomeRankings scorers={topScorers} assists={topAssists} xg={topXg} teamById={teamById} />
       </section>
     </div>
   );
