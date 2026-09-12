@@ -57,15 +57,15 @@
     "coach": null,
     "record": {
       "position": 3,
-      "played": 3,
+      "played": 4,
       "wins": 2,
-      "draws": 1,
+      "draws": 2,
       "losses": 0,
-      "goalsFor": 3,
-      "goalsAgainst": 0,
+      "goalsFor": 5,
+      "goalsAgainst": 2,
       "goalDiff": 3,
-      "points": 7,
-      "winRate": 66.7
+      "points": 8,
+      "winRate": 50
     }
   },
   {
@@ -80,15 +80,15 @@
     "coach": null,
     "record": {
       "position": 4,
-      "played": 3,
+      "played": 4,
       "wins": 2,
-      "draws": 0,
+      "draws": 1,
       "losses": 1,
-      "goalsFor": 8,
-      "goalsAgainst": 7,
+      "goalsFor": 10,
+      "goalsAgainst": 9,
       "goalDiff": 1,
-      "points": 6,
-      "winRate": 66.7
+      "points": 7,
+      "winRate": 50
     }
   },
   {
@@ -103,15 +103,15 @@
     "coach": null,
     "record": {
       "position": 5,
-      "played": 3,
+      "played": 4,
       "wins": 1,
-      "draws": 2,
+      "draws": 3,
       "losses": 0,
-      "goalsFor": 5,
-      "goalsAgainst": 2,
+      "goalsFor": 7,
+      "goalsAgainst": 4,
       "goalDiff": 3,
-      "points": 5,
-      "winRate": 33.3
+      "points": 6,
+      "winRate": 25
     }
   },
   {
@@ -126,15 +126,38 @@
     "coach": null,
     "record": {
       "position": 6,
-      "played": 3,
+      "played": 4,
       "wins": 1,
-      "draws": 2,
+      "draws": 3,
       "losses": 0,
       "goalsFor": 6,
       "goalsAgainst": 4,
       "goalDiff": 2,
-      "points": 5,
-      "winRate": 33.3
+      "points": 6,
+      "winRate": 25
+    }
+  },
+  {
+    "id": 349,
+    "name": "Ipswich Town FC",
+    "shortName": "Ipswich Town",
+    "tla": "IPS",
+    "crest": "https://crests.football-data.org/349.png",
+    "clubColors": "Blue / White",
+    "venue": "Portman Road Stadium",
+    "founded": 1887,
+    "coach": null,
+    "record": {
+      "position": 7,
+      "played": 4,
+      "wins": 2,
+      "draws": 0,
+      "losses": 2,
+      "goalsFor": 7,
+      "goalsAgainst": 10,
+      "goalDiff": -3,
+      "points": 6,
+      "winRate": 50
     }
   },
   {
@@ -148,7 +171,7 @@
     "founded": 1881,
     "coach": null,
     "record": {
-      "position": 6,
+      "position": 8,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -171,7 +194,7 @@
     "founded": 1878,
     "coach": null,
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -194,7 +217,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -204,6 +227,29 @@
       "goalDiff": 1,
       "points": 5,
       "winRate": 33.3
+    }
+  },
+  {
+    "id": 351,
+    "name": "Nottingham Forest FC",
+    "shortName": "Nottingham",
+    "tla": "NOT",
+    "crest": "https://crests.football-data.org/351.png",
+    "clubColors": "Red / White",
+    "venue": "The City Ground",
+    "founded": 1865,
+    "coach": null,
+    "record": {
+      "position": 11,
+      "played": 4,
+      "wins": 1,
+      "draws": 2,
+      "losses": 1,
+      "goalsFor": 4,
+      "goalsAgainst": 4,
+      "goalDiff": 0,
+      "points": 5,
+      "winRate": 25
     }
   },
   {
@@ -217,7 +263,7 @@
     "founded": 1898,
     "coach": null,
     "record": {
-      "position": 10,
+      "position": 12,
       "played": 3,
       "wins": 1,
       "draws": 1,
@@ -240,7 +286,7 @@
     "founded": 1878,
     "coach": null,
     "record": {
-      "position": 11,
+      "position": 13,
       "played": 3,
       "wins": 1,
       "draws": 1,
@@ -263,7 +309,7 @@
     "founded": 1879,
     "coach": null,
     "record": {
-      "position": 12,
+      "position": 14,
       "played": 3,
       "wins": 1,
       "draws": 1,
@@ -272,52 +318,6 @@
       "goalsAgainst": 3,
       "goalDiff": 0,
       "points": 4,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 349,
-    "name": "Ipswich Town FC",
-    "shortName": "Ipswich Town",
-    "tla": "IPS",
-    "crest": "https://crests.football-data.org/349.png",
-    "clubColors": "Blue / White",
-    "venue": "Portman Road Stadium",
-    "founded": 1887,
-    "coach": null,
-    "record": {
-      "position": 13,
-      "played": 3,
-      "wins": 1,
-      "draws": 0,
-      "losses": 2,
-      "goalsFor": 4,
-      "goalsAgainst": 8,
-      "goalDiff": -4,
-      "points": 3,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 354,
-    "name": "Crystal Palace FC",
-    "shortName": "Crystal Palace",
-    "tla": "CRY",
-    "crest": "https://crests.football-data.org/354.png",
-    "clubColors": "Red / Blue",
-    "venue": "Selhurst Park",
-    "founded": 1905,
-    "coach": null,
-    "record": {
-      "position": 13,
-      "played": 3,
-      "wins": 1,
-      "draws": 0,
-      "losses": 2,
-      "goalsFor": 4,
-      "goalsAgainst": 8,
-      "goalDiff": -4,
-      "points": 3,
       "winRate": 33.3
     }
   },
@@ -333,59 +333,59 @@
     "coach": null,
     "record": {
       "position": 15,
-      "played": 3,
+      "played": 4,
       "wins": 0,
-      "draws": 2,
+      "draws": 3,
       "losses": 1,
-      "goalsFor": 4,
-      "goalsAgainst": 5,
+      "goalsFor": 6,
+      "goalsAgainst": 7,
       "goalDiff": -1,
-      "points": 2,
+      "points": 3,
       "winRate": 0
     }
   },
   {
-    "id": 351,
-    "name": "Nottingham Forest FC",
-    "shortName": "Nottingham",
-    "tla": "NOT",
-    "crest": "https://crests.football-data.org/351.png",
-    "clubColors": "Red / White",
-    "venue": "The City Ground",
-    "founded": 1865,
+    "id": 354,
+    "name": "Crystal Palace FC",
+    "shortName": "Crystal Palace",
+    "tla": "CRY",
+    "crest": "https://crests.football-data.org/354.png",
+    "clubColors": "Red / Blue",
+    "venue": "Selhurst Park",
+    "founded": 1905,
     "coach": null,
     "record": {
       "position": 16,
-      "played": 3,
-      "wins": 0,
-      "draws": 2,
-      "losses": 1,
-      "goalsFor": 2,
-      "goalsAgainst": 3,
-      "goalDiff": -1,
-      "points": 2,
-      "winRate": 0
+      "played": 4,
+      "wins": 1,
+      "draws": 0,
+      "losses": 3,
+      "goalsFor": 6,
+      "goalsAgainst": 11,
+      "goalDiff": -5,
+      "points": 3,
+      "winRate": 25
     }
   },
   {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
+    "id": 63,
+    "name": "Fulham FC",
+    "shortName": "Fulham",
+    "tla": "FUL",
+    "crest": "https://crests.football-data.org/63.png",
+    "clubColors": "White / Black",
+    "venue": "Craven Cottage",
+    "founded": 1879,
     "coach": null,
     "record": {
       "position": 17,
-      "played": 3,
+      "played": 4,
       "wins": 0,
       "draws": 1,
-      "losses": 2,
-      "goalsFor": 0,
-      "goalsAgainst": 5,
-      "goalDiff": -5,
+      "losses": 3,
+      "goalsFor": 4,
+      "goalsAgainst": 7,
+      "goalDiff": -3,
       "points": 1,
       "winRate": 0
     }
@@ -401,7 +401,7 @@
     "founded": 1882,
     "coach": null,
     "record": {
-      "position": 17,
+      "position": 18,
       "played": 3,
       "wins": 0,
       "draws": 1,
@@ -414,25 +414,25 @@
     }
   },
   {
-    "id": 63,
-    "name": "Fulham FC",
-    "shortName": "Fulham",
-    "tla": "FUL",
-    "crest": "https://crests.football-data.org/63.png",
-    "clubColors": "White / Black",
-    "venue": "Craven Cottage",
-    "founded": 1879,
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
     "coach": null,
     "record": {
       "position": 19,
-      "played": 3,
+      "played": 4,
       "wins": 0,
-      "draws": 0,
+      "draws": 1,
       "losses": 3,
-      "goalsFor": 4,
+      "goalsFor": 1,
       "goalsAgainst": 7,
-      "goalDiff": -3,
-      "points": 0,
+      "goalDiff": -6,
+      "points": 1,
       "winRate": 0
     }
   },
