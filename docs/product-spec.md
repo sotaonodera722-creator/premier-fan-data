@@ -6,6 +6,7 @@
 - データ基準日: 2026-09-07（第3節終了時点、30 / 380 試合）
 - 40機能 / 13スプリント（S13 は計画外の差し込み）
 - 閲覧用ページ: https://claude.ai/code/artifact/ae7b14dd-99f2-41c1-b0f4-5b179c2cbf7c
+- 収益化の状況と、外部サービスの利用条件: [monetization.md](monetization.md)
 
 ---
 
