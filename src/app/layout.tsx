@@ -60,6 +60,20 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  // Proves to Search Console that we own the site, which is what lets the
+  // sitemap be submitted at all.
+  //
+  // Verifying through Google Analytics instead would have needed no code, but
+  // it requires the gtag snippet to sit in <head>, and ours is at the end of
+  // <body> so the page paints before it loads. Moving it would mean
+  // `beforeInteractive` — trading the site's speed for a one-time check.
+  //
+  // The token is public by design (it ships in the HTML of every page), so it
+  // belongs in the source. Removing it un-verifies the property, so leave it
+  // even after Search Console reports success.
+  verification: {
+    google: "aP7EPCb2P_xf_8GbFQnQ33nuY4qRJome62UNhDxNp1E",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
