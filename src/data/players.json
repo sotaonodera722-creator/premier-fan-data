@@ -164,9 +164,9 @@
     "age": 28,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 3
   },
   {
     "id": 4032,
@@ -268,7 +268,7 @@
     "age": 25,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 3,
     "assists": 0,
     "appearances": 4
   },
