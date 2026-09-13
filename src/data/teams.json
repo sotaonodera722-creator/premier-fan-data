@@ -34,15 +34,15 @@
     "coach": null,
     "record": {
       "position": 2,
-      "played": 3,
+      "played": 4,
       "wins": 3,
-      "draws": 0,
+      "draws": 1,
       "losses": 0,
       "goalsFor": 7,
       "goalsAgainst": 2,
       "goalDiff": 5,
-      "points": 9,
-      "winRate": 100
+      "points": 10,
+      "winRate": 75
     }
   },
   {
@@ -69,6 +69,29 @@
     }
   },
   {
+    "id": 397,
+    "name": "Brighton & Hove Albion FC",
+    "shortName": "Brighton Hove",
+    "tla": "BHA",
+    "crest": "https://crests.football-data.org/397.png",
+    "clubColors": "Blue / White",
+    "venue": "The American Express Community Stadium",
+    "founded": 1898,
+    "coach": null,
+    "record": {
+      "position": 4,
+      "played": 4,
+      "wins": 2,
+      "draws": 1,
+      "losses": 1,
+      "goalsFor": 13,
+      "goalsAgainst": 5,
+      "goalDiff": 8,
+      "points": 7,
+      "winRate": 50
+    }
+  },
+  {
     "id": 61,
     "name": "Chelsea FC",
     "shortName": "Chelsea",
@@ -79,7 +102,7 @@
     "founded": 1905,
     "coach": null,
     "record": {
-      "position": 4,
+      "position": 5,
       "played": 4,
       "wins": 2,
       "draws": 1,
@@ -102,7 +125,7 @@
     "founded": 1889,
     "coach": null,
     "record": {
-      "position": 5,
+      "position": 6,
       "played": 4,
       "wins": 1,
       "draws": 3,
@@ -125,7 +148,7 @@
     "founded": 1892,
     "coach": null,
     "record": {
-      "position": 6,
+      "position": 7,
       "played": 4,
       "wins": 1,
       "draws": 3,
@@ -148,7 +171,7 @@
     "founded": 1878,
     "coach": null,
     "record": {
-      "position": 7,
+      "position": 8,
       "played": 4,
       "wins": 1,
       "draws": 3,
@@ -171,7 +194,7 @@
     "founded": 1887,
     "coach": null,
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 4,
       "wins": 2,
       "draws": 0,
@@ -194,7 +217,7 @@
     "founded": 1881,
     "coach": null,
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -204,6 +227,29 @@
       "goalDiff": 2,
       "points": 5,
       "winRate": 33.3
+    }
+  },
+  {
+    "id": 66,
+    "name": "Manchester United FC",
+    "shortName": "Man United",
+    "tla": "MUN",
+    "crest": "https://crests.football-data.org/66.png",
+    "clubColors": "Red / White",
+    "venue": "Old Trafford",
+    "founded": 1878,
+    "coach": null,
+    "record": {
+      "position": 11,
+      "played": 4,
+      "wins": 1,
+      "draws": 2,
+      "losses": 1,
+      "goalsFor": 7,
+      "goalsAgainst": 6,
+      "goalDiff": 1,
+      "points": 5,
+      "winRate": 25
     }
   },
   {
@@ -217,7 +263,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 10,
+      "position": 12,
       "played": 3,
       "wins": 1,
       "draws": 2,
@@ -240,7 +286,7 @@
     "founded": 1865,
     "coach": null,
     "record": {
-      "position": 11,
+      "position": 13,
       "played": 4,
       "wins": 1,
       "draws": 2,
@@ -250,52 +296,6 @@
       "goalDiff": 0,
       "points": 5,
       "winRate": 25
-    }
-  },
-  {
-    "id": 397,
-    "name": "Brighton & Hove Albion FC",
-    "shortName": "Brighton Hove",
-    "tla": "BHA",
-    "crest": "https://crests.football-data.org/397.png",
-    "clubColors": "Blue / White",
-    "venue": "The American Express Community Stadium",
-    "founded": 1898,
-    "coach": null,
-    "record": {
-      "position": 12,
-      "played": 3,
-      "wins": 1,
-      "draws": 1,
-      "losses": 1,
-      "goalsFor": 8,
-      "goalsAgainst": 5,
-      "goalDiff": 3,
-      "points": 4,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 66,
-    "name": "Manchester United FC",
-    "shortName": "Man United",
-    "tla": "MUN",
-    "crest": "https://crests.football-data.org/66.png",
-    "clubColors": "Red / White",
-    "venue": "Old Trafford",
-    "founded": 1878,
-    "coach": null,
-    "record": {
-      "position": 13,
-      "played": 3,
-      "wins": 1,
-      "draws": 1,
-      "losses": 1,
-      "goalsFor": 7,
-      "goalsAgainst": 6,
-      "goalDiff": 1,
-      "points": 4,
-      "winRate": 33.3
     }
   },
   {
@@ -448,13 +448,13 @@
     "coach": null,
     "record": {
       "position": 20,
-      "played": 3,
+      "played": 4,
       "wins": 0,
       "draws": 0,
-      "losses": 3,
+      "losses": 4,
       "goalsFor": 0,
-      "goalsAgainst": 5,
-      "goalDiff": -5,
+      "goalsAgainst": 10,
+      "goalDiff": -10,
       "points": 0,
       "winRate": 0
     }
