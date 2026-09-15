@@ -3050,9 +3050,9 @@
     "age": 20,
     "nationality": "Ivory Coast",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 4
   },
   {
     "id": 301059,
@@ -4532,9 +4532,9 @@
     "age": 26,
     "nationality": "Switzerland",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 4
   },
   {
     "id": 185178,
