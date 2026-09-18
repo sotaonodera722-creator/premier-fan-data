@@ -92,29 +92,6 @@
     }
   },
   {
-    "id": 397,
-    "name": "Brighton & Hove Albion FC",
-    "shortName": "Brighton Hove",
-    "tla": "BHA",
-    "crest": "https://crests.football-data.org/397.png",
-    "clubColors": "Blue / White",
-    "venue": "The American Express Community Stadium",
-    "founded": 1898,
-    "coach": null,
-    "record": {
-      "position": 5,
-      "played": 4,
-      "wins": 2,
-      "draws": 1,
-      "losses": 1,
-      "goalsFor": 13,
-      "goalsAgainst": 5,
-      "goalDiff": 8,
-      "points": 7,
-      "winRate": 50
-    }
-  },
-  {
     "id": 61,
     "name": "Chelsea FC",
     "shortName": "Chelsea",
@@ -125,14 +102,37 @@
     "founded": 1905,
     "coach": null,
     "record": {
+      "position": 5,
+      "played": 5,
+      "wins": 2,
+      "draws": 2,
+      "losses": 1,
+      "goalsFor": 10,
+      "goalsAgainst": 9,
+      "goalDiff": 1,
+      "points": 8,
+      "winRate": 40
+    }
+  },
+  {
+    "id": 397,
+    "name": "Brighton & Hove Albion FC",
+    "shortName": "Brighton Hove",
+    "tla": "BHA",
+    "crest": "https://crests.football-data.org/397.png",
+    "clubColors": "Blue / White",
+    "venue": "The American Express Community Stadium",
+    "founded": 1898,
+    "coach": null,
+    "record": {
       "position": 6,
       "played": 4,
       "wins": 2,
       "draws": 1,
       "losses": 1,
-      "goalsFor": 10,
-      "goalsAgainst": 9,
-      "goalDiff": 1,
+      "goalsFor": 13,
+      "goalsAgainst": 5,
+      "goalDiff": 8,
       "points": 7,
       "winRate": 50
     }
@@ -149,15 +149,15 @@
     "coach": null,
     "record": {
       "position": 7,
-      "played": 4,
+      "played": 5,
       "wins": 1,
-      "draws": 3,
+      "draws": 4,
       "losses": 0,
       "goalsFor": 7,
       "goalsAgainst": 4,
       "goalDiff": 3,
-      "points": 6,
-      "winRate": 25
+      "points": 7,
+      "winRate": 20
     }
   },
   {
