@@ -46,6 +46,29 @@
     }
   },
   {
+    "id": 402,
+    "name": "Brentford FC",
+    "shortName": "Brentford",
+    "tla": "BRE",
+    "crest": "https://crests.football-data.org/402.png",
+    "clubColors": "Red / White / Black",
+    "venue": "Griffin Park",
+    "founded": 1889,
+    "coach": null,
+    "record": {
+      "position": 3,
+      "played": 5,
+      "wins": 2,
+      "draws": 3,
+      "losses": 0,
+      "goalsFor": 10,
+      "goalsAgainst": 4,
+      "goalDiff": 6,
+      "points": 9,
+      "winRate": 40
+    }
+  },
+  {
     "id": 341,
     "name": "Leeds United FC",
     "shortName": "Leeds United",
@@ -56,7 +79,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 3,
+      "position": 4,
       "played": 4,
       "wins": 2,
       "draws": 2,
@@ -79,7 +102,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 4,
+      "position": 5,
       "played": 4,
       "wins": 2,
       "draws": 2,
@@ -89,29 +112,6 @@
       "goalDiff": 3,
       "points": 8,
       "winRate": 50
-    }
-  },
-  {
-    "id": 61,
-    "name": "Chelsea FC",
-    "shortName": "Chelsea",
-    "tla": "CHE",
-    "crest": "https://crests.football-data.org/61.png",
-    "clubColors": "Royal Blue / White",
-    "venue": "Stamford Bridge",
-    "founded": 1905,
-    "coach": null,
-    "record": {
-      "position": 5,
-      "played": 5,
-      "wins": 2,
-      "draws": 2,
-      "losses": 1,
-      "goalsFor": 10,
-      "goalsAgainst": 9,
-      "goalDiff": 1,
-      "points": 8,
-      "winRate": 40
     }
   },
   {
@@ -138,26 +138,26 @@
     }
   },
   {
-    "id": 402,
-    "name": "Brentford FC",
-    "shortName": "Brentford",
-    "tla": "BRE",
-    "crest": "https://crests.football-data.org/402.png",
-    "clubColors": "Red / White / Black",
-    "venue": "Griffin Park",
-    "founded": 1889,
+    "id": 61,
+    "name": "Chelsea FC",
+    "shortName": "Chelsea",
+    "tla": "CHE",
+    "crest": "https://crests.football-data.org/61.png",
+    "clubColors": "Royal Blue / White",
+    "venue": "Stamford Bridge",
+    "founded": 1905,
     "coach": null,
     "record": {
       "position": 7,
       "played": 5,
-      "wins": 1,
-      "draws": 4,
-      "losses": 0,
-      "goalsFor": 7,
-      "goalsAgainst": 4,
-      "goalDiff": 3,
+      "wins": 2,
+      "draws": 1,
+      "losses": 2,
+      "goalsFor": 10,
+      "goalsAgainst": 12,
+      "goalDiff": -2,
       "points": 7,
-      "winRate": 20
+      "winRate": 40
     }
   },
   {

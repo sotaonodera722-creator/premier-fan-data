@@ -3151,7 +3151,7 @@
     "teamId": 71,
     "position": "DF",
     "dateOfBirth": "1998-09-19",
-    "age": 27,
+    "age": 28,
     "nationality": "Austria",
     "isJapanese": false,
     "goals": null,
@@ -6300,9 +6300,9 @@
     "age": 24,
     "nationality": "Portugal",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 4
   },
   {
     "id": 171965,
@@ -6365,9 +6365,9 @@
     "age": 25,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 5
   },
   {
     "id": 150778,
@@ -6378,9 +6378,9 @@
     "age": 26,
     "nationality": "England",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 5
   },
   {
     "id": 177305,
