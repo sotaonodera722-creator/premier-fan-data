@@ -379,13 +379,36 @@
     "coach": null,
     "record": {
       "position": 17,
-      "played": 4,
+      "played": 5,
       "wins": 0,
-      "draws": 2,
+      "draws": 3,
       "losses": 2,
       "goalsFor": 0,
       "goalsAgainst": 5,
       "goalDiff": -5,
+      "points": 3,
+      "winRate": 0
+    }
+  },
+  {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": null,
+    "record": {
+      "position": 18,
+      "played": 5,
+      "wins": 0,
+      "draws": 2,
+      "losses": 3,
+      "goalsFor": 1,
+      "goalsAgainst": 7,
+      "goalDiff": -6,
       "points": 2,
       "winRate": 0
     }
@@ -401,7 +424,7 @@
     "founded": 1879,
     "coach": null,
     "record": {
-      "position": 18,
+      "position": 19,
       "played": 4,
       "wins": 0,
       "draws": 1,
@@ -409,29 +432,6 @@
       "goalsFor": 4,
       "goalsAgainst": 7,
       "goalDiff": -3,
-      "points": 1,
-      "winRate": 0
-    }
-  },
-  {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": null,
-    "record": {
-      "position": 19,
-      "played": 4,
-      "wins": 0,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 1,
-      "goalsAgainst": 7,
-      "goalDiff": -6,
       "points": 1,
       "winRate": 0
     }
