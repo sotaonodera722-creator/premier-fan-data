@@ -6911,9 +6911,9 @@
     "age": 28,
     "nationality": "Wales",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 1,
+    "assists": 0,
+    "appearances": 5
   },
   {
     "id": 55048,

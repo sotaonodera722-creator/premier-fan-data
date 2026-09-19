@@ -264,15 +264,15 @@
     "coach": null,
     "record": {
       "position": 12,
-      "played": 4,
+      "played": 5,
       "wins": 1,
       "draws": 2,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 4,
-      "goalsAgainst": 4,
-      "goalDiff": 0,
+      "goalsAgainst": 5,
+      "goalDiff": -1,
       "points": 5,
-      "winRate": 25
+      "winRate": 20
     }
   },
   {
@@ -391,6 +391,29 @@
     }
   },
   {
+    "id": 1076,
+    "name": "Coventry City FC",
+    "shortName": "Coventry City",
+    "tla": "COV",
+    "crest": "https://crests.football-data.org/1076.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "St Andrew's Trillion Trophy Stadium",
+    "founded": 1883,
+    "coach": null,
+    "record": {
+      "position": 18,
+      "played": 5,
+      "wins": 1,
+      "draws": 0,
+      "losses": 4,
+      "goalsFor": 1,
+      "goalsAgainst": 10,
+      "goalDiff": -9,
+      "points": 3,
+      "winRate": 20
+    }
+  },
+  {
     "id": 73,
     "name": "Tottenham Hotspur FC",
     "shortName": "Tottenham",
@@ -401,7 +424,7 @@
     "founded": 1882,
     "coach": null,
     "record": {
-      "position": 18,
+      "position": 19,
       "played": 5,
       "wins": 0,
       "draws": 2,
@@ -424,7 +447,7 @@
     "founded": 1879,
     "coach": null,
     "record": {
-      "position": 19,
+      "position": 20,
       "played": 4,
       "wins": 0,
       "draws": 1,
@@ -433,29 +456,6 @@
       "goalsAgainst": 7,
       "goalDiff": -3,
       "points": 1,
-      "winRate": 0
-    }
-  },
-  {
-    "id": 1076,
-    "name": "Coventry City FC",
-    "shortName": "Coventry City",
-    "tla": "COV",
-    "crest": "https://crests.football-data.org/1076.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "St Andrew's Trillion Trophy Stadium",
-    "founded": 1883,
-    "coach": null,
-    "record": {
-      "position": 20,
-      "played": 4,
-      "wins": 0,
-      "draws": 0,
-      "losses": 4,
-      "goalsFor": 0,
-      "goalsAgainst": 10,
-      "goalDiff": -10,
-      "points": 0,
       "winRate": 0
     }
   }
