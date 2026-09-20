@@ -3,7 +3,7 @@
     "competition": "Premier League",
     "season": "2026/27",
     "currentMatchday": 5,
-    "lastUpdated": "2026-09-20T12:15:07.291Z",
+    "lastUpdated": "2026-09-20T16:12:52.996Z",
     "source": "football-data.org"
   },
   "matches": [
@@ -517,45 +517,45 @@
       "id": 560582,
       "matchday": 5,
       "utcDate": "2026-09-20T13:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 1044,
       "awayTeamId": 64,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 1
     },
     {
       "id": 560585,
       "matchday": 5,
       "utcDate": "2026-09-20T13:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 341,
       "awayTeamId": 354,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 0
     },
     {
       "id": 560590,
       "matchday": 5,
       "utcDate": "2026-09-20T13:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 65,
       "awayTeamId": 71,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 5,
+      "awayGoals": 3
     },
     {
       "id": 560583,
       "matchday": 5,
       "utcDate": "2026-09-20T15:30:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "played": false,
       "homeTeamId": 63,
       "awayTeamId": 66,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 0
     },
     {
       "id": 560593,
