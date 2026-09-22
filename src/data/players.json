@@ -143,19 +143,6 @@
     "appearances": null
   },
   {
-    "id": 244120,
-    "name": "Myles Lewis-Skelly",
-    "teamId": 57,
-    "position": "DF",
-    "dateOfBirth": "2006-09-26",
-    "age": 19,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 1684,
     "name": "Bruno Guimarães",
     "teamId": 57,
@@ -228,6 +215,19 @@
     "dateOfBirth": "1999-02-02",
     "age": 27,
     "nationality": "Spain",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
+    "id": 244120,
+    "name": "Myles Lewis-Skelly",
+    "teamId": 57,
+    "position": "MF",
+    "dateOfBirth": "2006-09-26",
+    "age": 19,
+    "nationality": "England",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -5408,19 +5408,6 @@
     "appearances": null
   },
   {
-    "id": 213425,
-    "name": "Anan Khalaili",
-    "teamId": 354,
-    "position": "DF",
-    "dateOfBirth": "2004-09-03",
-    "age": 22,
-    "nationality": "Israel",
-    "isJapanese": false,
-    "goals": 1,
-    "assists": 0,
-    "appearances": 5
-  },
-  {
     "id": 260271,
     "name": "Jaydee Canvot",
     "teamId": 354,
@@ -5523,6 +5510,19 @@
     "goals": null,
     "assists": null,
     "appearances": null
+  },
+  {
+    "id": 213425,
+    "name": "Anan Khalaili",
+    "teamId": 354,
+    "position": "MF",
+    "dateOfBirth": "2004-09-03",
+    "age": 22,
+    "nationality": "Israel",
+    "isJapanese": false,
+    "goals": 1,
+    "assists": 0,
+    "appearances": 5
   },
   {
     "id": 641,
