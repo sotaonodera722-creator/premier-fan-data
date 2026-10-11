@@ -11,14 +11,14 @@
     "coach": null,
     "record": {
       "position": 1,
-      "played": 5,
-      "wins": 5,
+      "played": 6,
+      "wins": 6,
       "draws": 0,
       "losses": 0,
-      "goalsFor": 13,
+      "goalsFor": 16,
       "goalsAgainst": 5,
-      "goalDiff": 8,
-      "points": 15,
+      "goalDiff": 11,
+      "points": 18,
       "winRate": 100
     }
   },
@@ -161,29 +161,6 @@
     }
   },
   {
-    "id": 64,
-    "name": "Liverpool FC",
-    "shortName": "Liverpool",
-    "tla": "LIV",
-    "crest": "https://crests.football-data.org/64.png",
-    "clubColors": "Red / White",
-    "venue": "Anfield",
-    "founded": 1892,
-    "coach": null,
-    "record": {
-      "position": 8,
-      "played": 5,
-      "wins": 2,
-      "draws": 3,
-      "losses": 0,
-      "goalsFor": 7,
-      "goalsAgainst": 4,
-      "goalDiff": 3,
-      "points": 9,
-      "winRate": 40
-    }
-  },
-  {
     "id": 322,
     "name": "Hull City AFC",
     "shortName": "Hull City",
@@ -194,7 +171,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 9,
+      "position": 8,
       "played": 6,
       "wins": 2,
       "draws": 3,
@@ -202,6 +179,29 @@
       "goalsFor": 8,
       "goalsAgainst": 6,
       "goalDiff": 2,
+      "points": 9,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 64,
+    "name": "Liverpool FC",
+    "shortName": "Liverpool",
+    "tla": "LIV",
+    "crest": "https://crests.football-data.org/64.png",
+    "clubColors": "Red / White",
+    "venue": "Anfield",
+    "founded": 1892,
+    "coach": null,
+    "record": {
+      "position": 9,
+      "played": 6,
+      "wins": 2,
+      "draws": 3,
+      "losses": 1,
+      "goalsFor": 7,
+      "goalsAgainst": 7,
+      "goalDiff": 0,
       "points": 9,
       "winRate": 33.3
     }
