@@ -92,6 +92,29 @@
     }
   },
   {
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": null,
+    "record": {
+      "position": 5,
+      "played": 6,
+      "wins": 2,
+      "draws": 4,
+      "losses": 0,
+      "goalsFor": 8,
+      "goalsAgainst": 5,
+      "goalDiff": 3,
+      "points": 10,
+      "winRate": 33.3
+    }
+  },
+  {
     "id": 61,
     "name": "Chelsea FC",
     "shortName": "Chelsea",
@@ -102,7 +125,7 @@
     "founded": 1905,
     "coach": null,
     "record": {
-      "position": 5,
+      "position": 6,
       "played": 6,
       "wins": 3,
       "draws": 1,
@@ -125,7 +148,7 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 6,
+      "position": 7,
       "played": 6,
       "wins": 2,
       "draws": 3,
@@ -148,7 +171,7 @@
     "founded": 1892,
     "coach": null,
     "record": {
-      "position": 7,
+      "position": 8,
       "played": 5,
       "wins": 2,
       "draws": 3,
@@ -158,52 +181,6 @@
       "goalDiff": 3,
       "points": 9,
       "winRate": 40
-    }
-  },
-  {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": null,
-    "record": {
-      "position": 8,
-      "played": 5,
-      "wins": 2,
-      "draws": 3,
-      "losses": 0,
-      "goalsFor": 6,
-      "goalsAgainst": 3,
-      "goalDiff": 3,
-      "points": 9,
-      "winRate": 40
-    }
-  },
-  {
-    "id": 349,
-    "name": "Ipswich Town FC",
-    "shortName": "Ipswich Town",
-    "tla": "IPS",
-    "crest": "https://crests.football-data.org/349.png",
-    "clubColors": "Blue / White",
-    "venue": "Portman Road Stadium",
-    "founded": 1887,
-    "coach": null,
-    "record": {
-      "position": 9,
-      "played": 6,
-      "wins": 3,
-      "draws": 0,
-      "losses": 3,
-      "goalsFor": 9,
-      "goalsAgainst": 12,
-      "goalDiff": -3,
-      "points": 9,
-      "winRate": 50
     }
   },
   {
@@ -217,16 +194,39 @@
     "founded": 1904,
     "coach": null,
     "record": {
-      "position": 10,
-      "played": 5,
+      "position": 9,
+      "played": 6,
       "wins": 2,
-      "draws": 2,
+      "draws": 3,
       "losses": 1,
-      "goalsFor": 6,
-      "goalsAgainst": 4,
+      "goalsFor": 8,
+      "goalsAgainst": 6,
       "goalDiff": 2,
-      "points": 8,
-      "winRate": 40
+      "points": 9,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 349,
+    "name": "Ipswich Town FC",
+    "shortName": "Ipswich Town",
+    "tla": "IPS",
+    "crest": "https://crests.football-data.org/349.png",
+    "clubColors": "Blue / White",
+    "venue": "Portman Road Stadium",
+    "founded": 1887,
+    "coach": null,
+    "record": {
+      "position": 10,
+      "played": 6,
+      "wins": 3,
+      "draws": 0,
+      "losses": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 12,
+      "goalDiff": -3,
+      "points": 9,
+      "winRate": 50
     }
   },
   {
@@ -253,6 +253,29 @@
     }
   },
   {
+    "id": 354,
+    "name": "Crystal Palace FC",
+    "shortName": "Crystal Palace",
+    "tla": "CRY",
+    "crest": "https://crests.football-data.org/354.png",
+    "clubColors": "Red / Blue",
+    "venue": "Selhurst Park",
+    "founded": 1905,
+    "coach": null,
+    "record": {
+      "position": 12,
+      "played": 6,
+      "wins": 2,
+      "draws": 1,
+      "losses": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 12,
+      "goalDiff": -3,
+      "points": 7,
+      "winRate": 33.3
+    }
+  },
+  {
     "id": 66,
     "name": "Manchester United FC",
     "shortName": "Man United",
@@ -263,7 +286,7 @@
     "founded": 1878,
     "coach": null,
     "record": {
-      "position": 12,
+      "position": 13,
       "played": 6,
       "wins": 1,
       "draws": 3,
@@ -286,16 +309,16 @@
     "founded": 1865,
     "coach": null,
     "record": {
-      "position": 13,
-      "played": 5,
+      "position": 14,
+      "played": 6,
       "wins": 1,
       "draws": 2,
-      "losses": 2,
-      "goalsFor": 4,
-      "goalsAgainst": 5,
-      "goalDiff": -1,
+      "losses": 3,
+      "goalsFor": 5,
+      "goalsAgainst": 8,
+      "goalDiff": -3,
       "points": 5,
-      "winRate": 20
+      "winRate": 16.7
     }
   },
   {
@@ -309,7 +332,7 @@
     "founded": 1872,
     "coach": null,
     "record": {
-      "position": 14,
+      "position": 15,
       "played": 6,
       "wins": 1,
       "draws": 2,
@@ -319,29 +342,6 @@
       "goalDiff": -5,
       "points": 5,
       "winRate": 16.7
-    }
-  },
-  {
-    "id": 354,
-    "name": "Crystal Palace FC",
-    "shortName": "Crystal Palace",
-    "tla": "CRY",
-    "crest": "https://crests.football-data.org/354.png",
-    "clubColors": "Red / Blue",
-    "venue": "Selhurst Park",
-    "founded": 1905,
-    "coach": null,
-    "record": {
-      "position": 15,
-      "played": 5,
-      "wins": 1,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 6,
-      "goalsAgainst": 11,
-      "goalDiff": -5,
-      "points": 4,
-      "winRate": 20
     }
   },
   {
