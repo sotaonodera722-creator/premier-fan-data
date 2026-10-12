@@ -338,6 +338,19 @@
     "appearances": null
   },
   {
+    "id": 204460,
+    "name": "James Wright",
+    "teamId": 58,
+    "position": "GK",
+    "dateOfBirth": "2004-12-02",
+    "age": 21,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 3492,
     "name": "Victor Nilsson-Lindelöf",
     "teamId": 58,
@@ -923,13 +936,13 @@
     "appearances": 6
   },
   {
-    "id": 205684,
-    "name": "Ray Paez",
+    "id": 301113,
+    "name": "Mahdi Nicoll-Jazuli",
     "teamId": 61,
     "position": "MF",
-    "dateOfBirth": "2007-05-04",
-    "age": 19,
-    "nationality": "Ecuador",
+    "dateOfBirth": "2010-01-06",
+    "age": 16,
+    "nationality": "England",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -1021,19 +1034,6 @@
     "dateOfBirth": "2007-04-24",
     "age": 19,
     "nationality": "Brazil",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 301113,
-    "name": "Mahdi Nicoll-Jazuli",
-    "teamId": 61,
-    "position": "MF",
-    "dateOfBirth": "2010-01-06",
-    "age": 16,
-    "nationality": "England",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -1300,6 +1300,19 @@
     "appearances": null
   },
   {
+    "id": 244747,
+    "name": "Briaden Graham",
+    "teamId": 62,
+    "position": "FW",
+    "dateOfBirth": "2007-11-07",
+    "age": 18,
+    "nationality": "Northern Ireland",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 250436,
     "name": "Tyrique George",
     "teamId": 62,
@@ -1456,13 +1469,13 @@
     "appearances": null
   },
   {
-    "id": 217596,
-    "name": "Luc De Fougerolles",
+    "id": 3392,
+    "name": "Alex Iwobi",
     "teamId": 63,
-    "position": "DF",
-    "dateOfBirth": "2005-10-12",
-    "age": 20,
-    "nationality": "Canada",
+    "position": "MF",
+    "dateOfBirth": "1996-05-03",
+    "age": 30,
+    "nationality": "Nigeria",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -1580,19 +1593,6 @@
     "dateOfBirth": "2004-03-15",
     "age": 22,
     "nationality": "Spain",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 3392,
-    "name": "Alex Iwobi",
-    "teamId": 63,
-    "position": "FW",
-    "dateOfBirth": "1996-05-03",
-    "age": 30,
-    "nationality": "Nigeria",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -1911,6 +1911,19 @@
     "appearances": null
   },
   {
+    "id": 214502,
+    "name": "James McConnell",
+    "teamId": 64,
+    "position": "MF",
+    "dateOfBirth": "2004-09-13",
+    "age": 22,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 230517,
     "name": "Trey Nyoni",
     "teamId": 64,
@@ -1983,6 +1996,19 @@
     "dateOfBirth": "2002-09-02",
     "age": 24,
     "nationality": "France",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
+    "id": 244989,
+    "name": "Lewis Koumas",
+    "teamId": 64,
+    "position": "FW",
+    "dateOfBirth": "2005-09-19",
+    "age": 21,
+    "nationality": "Wales",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -2117,19 +2143,6 @@
     "goals": 1,
     "assists": 3,
     "appearances": 6
-  },
-  {
-    "id": 172791,
-    "name": "Josh Wilson-Esbrand",
-    "teamId": 65,
-    "position": "DF",
-    "dateOfBirth": "2002-12-26",
-    "age": 23,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
   },
   {
     "id": 187202,
@@ -2600,19 +2613,6 @@
     "appearances": null
   },
   {
-    "id": 271941,
-    "name": "Jack Fletcher",
-    "teamId": 66,
-    "position": "MF",
-    "dateOfBirth": "2007-03-19",
-    "age": 19,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 290139,
     "name": "Tyler Fletcher",
     "teamId": 66,
@@ -2873,19 +2873,6 @@
     "appearances": 5
   },
   {
-    "id": 277574,
-    "name": "Leo Shahar",
-    "teamId": 67,
-    "position": "DF",
-    "dateOfBirth": "2007-03-18",
-    "age": 19,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 7798,
     "name": "Joe Willock",
     "teamId": 67,
@@ -3066,45 +3053,6 @@
     "goals": 1,
     "assists": 0,
     "appearances": 5
-  },
-  {
-    "id": 301125,
-    "name": "Kyran Thompson",
-    "teamId": 67,
-    "position": "MF",
-    "dateOfBirth": "2009-09-06",
-    "age": 17,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 301124,
-    "name": "Michael Mills",
-    "teamId": 67,
-    "position": "MF",
-    "dateOfBirth": "2009-02-18",
-    "age": 17,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 301059,
-    "name": "Mason Miley",
-    "teamId": 67,
-    "position": "MF",
-    "dateOfBirth": "2008-09-29",
-    "age": 18,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
   },
   {
     "id": 4292,
@@ -3315,19 +3263,6 @@
     "appearances": 6
   },
   {
-    "id": 165311,
-    "name": "Abdoullah Ba",
-    "teamId": 71,
-    "position": "MF",
-    "dateOfBirth": "2003-07-31",
-    "age": 23,
-    "nationality": "France",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 171876,
     "name": "Habib Diarra",
     "teamId": 71,
@@ -3406,6 +3341,19 @@
     "appearances": 5
   },
   {
+    "id": 165311,
+    "name": "Abdoullah Ba",
+    "teamId": 71,
+    "position": "FW",
+    "dateOfBirth": "2003-07-31",
+    "age": 23,
+    "nationality": "France",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 172275,
     "name": "Romaine Mundle",
     "teamId": 71,
@@ -3452,19 +3400,6 @@
     "dateOfBirth": "2005-05-09",
     "age": 21,
     "nationality": "Morocco",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 288921,
-    "name": "Juan Angulo",
-    "teamId": 71,
-    "position": "FW",
-    "dateOfBirth": "2008-01-12",
-    "age": 18,
-    "nationality": "Ecuador",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -4030,19 +3965,6 @@
     "appearances": null
   },
   {
-    "id": 6357,
-    "name": "Matty Crooks",
-    "teamId": 322,
-    "position": "MF",
-    "dateOfBirth": "1994-01-20",
-    "age": 32,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 11306,
     "name": "Kieran Dowell",
     "teamId": 322,
@@ -4050,19 +3972,6 @@
     "dateOfBirth": "1997-10-10",
     "age": 29,
     "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 30298,
-    "name": "Abdülkadir Ömür",
-    "teamId": 322,
-    "position": "MF",
-    "dateOfBirth": "1999-06-25",
-    "age": 27,
-    "nationality": "Turkey",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -4199,6 +4108,19 @@
     "appearances": null
   },
   {
+    "id": 30298,
+    "name": "Abdülkadir Ömür",
+    "teamId": 322,
+    "position": "FW",
+    "dateOfBirth": "1999-06-25",
+    "age": 27,
+    "nationality": "Turkey",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 80761,
     "name": "Joe Gelhardt",
     "teamId": 322,
@@ -4219,19 +4141,6 @@
     "dateOfBirth": "2004-01-19",
     "age": 22,
     "nationality": "France",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 170777,
-    "name": "David Akintola",
-    "teamId": 322,
-    "position": "FW",
-    "dateOfBirth": "1996-01-13",
-    "age": 30,
-    "nationality": "Nigeria",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -4849,19 +4758,6 @@
     "appearances": null
   },
   {
-    "id": 176777,
-    "name": "Kasey McAteer",
-    "teamId": 349,
-    "position": "MF",
-    "dateOfBirth": "2001-11-22",
-    "age": 24,
-    "nationality": "Ireland",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 4158,
     "name": "Jack Clarke",
     "teamId": 349,
@@ -4940,6 +4836,19 @@
     "appearances": 6
   },
   {
+    "id": 176777,
+    "name": "Kasey McAteer",
+    "teamId": 349,
+    "position": "FW",
+    "dateOfBirth": "2001-11-22",
+    "age": 24,
+    "nationality": "Ireland",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 187162,
     "name": "Abdul Issahaku",
     "teamId": 349,
@@ -5010,7 +4919,7 @@
     "teamId": 351,
     "position": "DF",
     "dateOfBirth": "1997-10-12",
-    "age": 28,
+    "age": 29,
     "nationality": "Serbia",
     "isJapanese": false,
     "goals": null,
@@ -5408,6 +5317,19 @@
     "appearances": null
   },
   {
+    "id": 213425,
+    "name": "Anan Khalaili",
+    "teamId": 354,
+    "position": "DF",
+    "dateOfBirth": "2004-09-03",
+    "age": 22,
+    "nationality": "Israel",
+    "isJapanese": false,
+    "goals": 1,
+    "assists": 0,
+    "appearances": 6
+  },
+  {
     "id": 260271,
     "name": "Jaydee Canvot",
     "teamId": 354,
@@ -5512,19 +5434,6 @@
     "appearances": null
   },
   {
-    "id": 213425,
-    "name": "Anan Khalaili",
-    "teamId": 354,
-    "position": "MF",
-    "dateOfBirth": "2004-09-03",
-    "age": 22,
-    "nationality": "Israel",
-    "isJapanese": false,
-    "goals": 1,
-    "assists": 0,
-    "appearances": 6
-  },
-  {
     "id": 641,
     "name": "Jean-Philippe Mateta",
     "teamId": 354,
@@ -5603,19 +5512,6 @@
     "appearances": null
   },
   {
-    "id": 176241,
-    "name": "Matheus Franca",
-    "teamId": 354,
-    "position": "FW",
-    "dateOfBirth": "2004-04-01",
-    "age": 22,
-    "nationality": "Brazil",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 179319,
     "name": "Darío Osorio",
     "teamId": 354,
@@ -5623,19 +5519,6 @@
     "dateOfBirth": "2004-01-24",
     "age": 22,
     "nationality": "Chile",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 179712,
-    "name": "Jesurun Rak-Sakyi",
-    "teamId": 354,
-    "position": "FW",
-    "dateOfBirth": "2002-10-05",
-    "age": 24,
-    "nationality": "England",
     "isJapanese": false,
     "goals": null,
     "assists": null,
@@ -5863,19 +5746,6 @@
     "appearances": 6
   },
   {
-    "id": 29319,
-    "name": "Femi Azeez",
-    "teamId": 397,
-    "position": "MF",
-    "dateOfBirth": "2001-06-05",
-    "age": 25,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 145613,
     "name": "Yasin Ayari",
     "teamId": 397,
@@ -5939,6 +5809,19 @@
     "goals": 1,
     "assists": 1,
     "appearances": 4
+  },
+  {
+    "id": 29319,
+    "name": "Femi Azeez",
+    "teamId": 397,
+    "position": "FW",
+    "dateOfBirth": "2001-06-05",
+    "age": 25,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 81189,
@@ -6058,19 +5941,6 @@
     "appearances": null
   },
   {
-    "id": 301031,
-    "name": "Younes Ibrahim",
-    "teamId": 397,
-    "position": "MF",
-    "dateOfBirth": "2008-02-16",
-    "age": 18,
-    "nationality": "Australia",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 4419,
     "name": "Ellery Balcombe",
     "teamId": 402,
@@ -6160,6 +6030,19 @@
     "goals": null,
     "assists": null,
     "appearances": null
+  },
+  {
+    "id": 101910,
+    "name": "Keane Lewis-Potter",
+    "teamId": 402,
+    "position": "DF",
+    "dateOfBirth": "2001-02-22",
+    "age": 25,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": 1,
+    "assists": 1,
+    "appearances": 6
   },
   {
     "id": 115642,
@@ -6290,19 +6173,6 @@
     "goals": null,
     "assists": null,
     "appearances": null
-  },
-  {
-    "id": 101910,
-    "name": "Keane Lewis-Potter",
-    "teamId": 402,
-    "position": "MF",
-    "dateOfBirth": "2001-02-22",
-    "age": 25,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": 1,
-    "assists": 1,
-    "appearances": 6
   },
   {
     "id": 150964,
@@ -6630,19 +6500,6 @@
     "appearances": null
   },
   {
-    "id": 6396,
-    "name": "Marcus Tavernier",
-    "teamId": 1044,
-    "position": "MF",
-    "dateOfBirth": "1999-03-22",
-    "age": 27,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": 3,
-    "assists": 0,
-    "appearances": 6
-  },
-  {
     "id": 7561,
     "name": "Justin Kluivert",
     "teamId": 1044,
@@ -6708,19 +6565,6 @@
     "appearances": null
   },
   {
-    "id": 273152,
-    "name": "Ben Winterburn",
-    "teamId": 1044,
-    "position": "MF",
-    "dateOfBirth": "2004-09-04",
-    "age": 22,
-    "nationality": "England",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
     "id": 4321,
     "name": "David Brooks",
     "teamId": 1044,
@@ -6732,6 +6576,19 @@
     "goals": null,
     "assists": null,
     "appearances": null
+  },
+  {
+    "id": 6396,
+    "name": "Marcus Tavernier",
+    "teamId": 1044,
+    "position": "FW",
+    "dateOfBirth": "1999-03-22",
+    "age": 27,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": 3,
+    "assists": 0,
+    "appearances": 6
   },
   {
     "id": 131260,
@@ -7131,6 +6988,19 @@
     "dateOfBirth": "1998-03-27",
     "age": 28,
     "nationality": "USA",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
+    "id": 80175,
+    "name": "Yann Gboho",
+    "teamId": 1076,
+    "position": "FW",
+    "dateOfBirth": "2001-01-14",
+    "age": 25,
+    "nationality": "France",
     "isJapanese": false,
     "goals": null,
     "assists": null,

@@ -8,7 +8,7 @@
     "clubColors": "Sky Blue / White",
     "venue": "Etihad Stadium",
     "founded": 1880,
-    "coach": null,
+    "coach": "Enzo Maresca",
     "record": {
       "position": 1,
       "played": 6,
@@ -31,7 +31,7 @@
     "clubColors": "Red / White",
     "venue": "Emirates Stadium",
     "founded": 1886,
-    "coach": null,
+    "coach": "Mikel Arteta",
     "record": {
       "position": 2,
       "played": 6,
@@ -54,7 +54,7 @@
     "clubColors": "Blue / White",
     "venue": "The American Express Community Stadium",
     "founded": 1898,
-    "coach": null,
+    "coach": "Fabian Hürzeler",
     "record": {
       "position": 3,
       "played": 6,
@@ -77,7 +77,7 @@
     "clubColors": "Red / White / Black",
     "venue": "Griffin Park",
     "founded": 1889,
-    "coach": null,
+    "coach": "Keith Andrews",
     "record": {
       "position": 4,
       "played": 6,
@@ -100,7 +100,7 @@
     "clubColors": "Blue / White",
     "venue": "Goodison Park",
     "founded": 1878,
-    "coach": null,
+    "coach": "David Moyes",
     "record": {
       "position": 5,
       "played": 6,
@@ -123,7 +123,7 @@
     "clubColors": "Royal Blue / White",
     "venue": "Stamford Bridge",
     "founded": 1905,
-    "coach": null,
+    "coach": "Xabi Alonso",
     "record": {
       "position": 6,
       "played": 6,
@@ -146,7 +146,7 @@
     "clubColors": "White / Blue",
     "venue": "Elland Road",
     "founded": 1904,
-    "coach": null,
+    "coach": "Daniel Farke",
     "record": {
       "position": 7,
       "played": 6,
@@ -169,7 +169,7 @@
     "clubColors": "Orange / Black",
     "venue": "Kingston Communications Stadium",
     "founded": 1904,
-    "coach": null,
+    "coach": "Sergej Jakirović",
     "record": {
       "position": 8,
       "played": 6,
@@ -192,7 +192,7 @@
     "clubColors": "Red / White",
     "venue": "Anfield",
     "founded": 1892,
-    "coach": null,
+    "coach": "Andoni Iraola",
     "record": {
       "position": 9,
       "played": 6,
@@ -215,7 +215,7 @@
     "clubColors": "Blue / White",
     "venue": "Portman Road Stadium",
     "founded": 1887,
-    "coach": null,
+    "coach": "Gary O'Neil",
     "record": {
       "position": 10,
       "played": 6,
@@ -238,7 +238,7 @@
     "clubColors": "Black / White",
     "venue": "St. James' Park",
     "founded": 1881,
-    "coach": null,
+    "coach": "Matthias Jaissle",
     "record": {
       "position": 11,
       "played": 5,
@@ -261,7 +261,7 @@
     "clubColors": "Red / Blue",
     "venue": "Selhurst Park",
     "founded": 1905,
-    "coach": null,
+    "coach": "Pierre Sage",
     "record": {
       "position": 12,
       "played": 6,
@@ -284,7 +284,7 @@
     "clubColors": "Red / White",
     "venue": "Old Trafford",
     "founded": 1878,
-    "coach": null,
+    "coach": "Michael Carrick",
     "record": {
       "position": 13,
       "played": 6,
@@ -307,7 +307,7 @@
     "clubColors": "Red / White",
     "venue": "The City Ground",
     "founded": 1865,
-    "coach": null,
+    "coach": "Oliver Glasner",
     "record": {
       "position": 14,
       "played": 6,
@@ -330,7 +330,7 @@
     "clubColors": "Claret / Sky Blue",
     "venue": "Villa Park",
     "founded": 1872,
-    "coach": null,
+    "coach": "Unai Emery",
     "record": {
       "position": 15,
       "played": 6,
@@ -353,7 +353,7 @@
     "clubColors": "Red / White",
     "venue": "Stadium of Light",
     "founded": 1879,
-    "coach": null,
+    "coach": "Regis Le Bris",
     "record": {
       "position": 16,
       "played": 6,
@@ -376,7 +376,7 @@
     "clubColors": "Red / Black",
     "venue": "Vitality Stadium",
     "founded": 1890,
-    "coach": null,
+    "coach": "Marco Rose",
     "record": {
       "position": 17,
       "played": 6,
@@ -399,7 +399,7 @@
     "clubColors": "Navy Blue / White",
     "venue": "Tottenham Hotspur Stadium",
     "founded": 1882,
-    "coach": null,
+    "coach": "Roberto De Zerbi",
     "record": {
       "position": 18,
       "played": 6,
@@ -422,7 +422,7 @@
     "clubColors": "Sky Blue / White",
     "venue": "Coventry Building Society Arena",
     "founded": 1883,
-    "coach": null,
+    "coach": "Frank Lampard",
     "record": {
       "position": 19,
       "played": 5,
@@ -445,7 +445,7 @@
     "clubColors": "White / Black",
     "venue": "Craven Cottage",
     "founded": 1879,
-    "coach": null,
+    "coach": "Arbeloa",
     "record": {
       "position": 20,
       "played": 6,
