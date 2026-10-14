@@ -2054,6 +2054,19 @@
     "appearances": null
   },
   {
+    "id": 302268,
+    "name": "Joshua Sonni-Lambie",
+    "teamId": 64,
+    "position": "MF",
+    "dateOfBirth": "2007-11-16",
+    "age": 18,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 6,
     "name": "Géronimo Rulli",
     "teamId": 65,
@@ -3892,7 +3905,7 @@
     "teamId": 322,
     "position": "DF",
     "dateOfBirth": "1995-10-15",
-    "age": 30,
+    "age": 31,
     "nationality": "England",
     "isJapanese": false,
     "goals": null,
@@ -5972,7 +5985,7 @@
     "teamId": 402,
     "position": "GK",
     "dateOfBirth": "1999-10-15",
-    "age": 26,
+    "age": 27,
     "nationality": "England",
     "isJapanese": false,
     "goals": null,
