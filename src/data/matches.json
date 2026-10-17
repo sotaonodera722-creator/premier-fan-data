@@ -3,7 +3,7 @@
     "competition": "Premier League",
     "season": "2026/27",
     "currentMatchday": 7,
-    "lastUpdated": "2026-10-17T18:15:23.567Z",
+    "lastUpdated": "2026-10-17T22:00:09.862Z",
     "source": "football-data.org"
   },
   "matches": [
@@ -715,8 +715,8 @@
       "id": 560607,
       "matchday": 7,
       "utcDate": "2026-10-17T16:30:00Z",
-      "status": "IN_PLAY",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 67,
       "awayTeamId": 58,
       "homeGoals": 0,
