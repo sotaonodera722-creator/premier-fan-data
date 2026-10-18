@@ -23,29 +23,6 @@
     }
   },
   {
-    "id": 57,
-    "name": "Arsenal FC",
-    "shortName": "Arsenal",
-    "tla": "ARS",
-    "crest": "https://crests.football-data.org/57.png",
-    "clubColors": "Red / White",
-    "venue": "Emirates Stadium",
-    "founded": 1886,
-    "coach": "Mikel Arteta",
-    "record": {
-      "position": 2,
-      "played": 6,
-      "wins": 5,
-      "draws": 0,
-      "losses": 1,
-      "goalsFor": 10,
-      "goalsAgainst": 5,
-      "goalDiff": 5,
-      "points": 15,
-      "winRate": 83.3
-    }
-  },
-  {
     "id": 397,
     "name": "Brighton & Hove Albion FC",
     "shortName": "Brighton Hove",
@@ -56,16 +33,39 @@
     "founded": 1898,
     "coach": "Fabian Hürzeler",
     "record": {
-      "position": 3,
-      "played": 6,
-      "wins": 4,
+      "position": 2,
+      "played": 7,
+      "wins": 5,
       "draws": 1,
       "losses": 1,
-      "goalsFor": 18,
+      "goalsFor": 23,
       "goalsAgainst": 5,
-      "goalDiff": 13,
-      "points": 13,
-      "winRate": 66.7
+      "goalDiff": 18,
+      "points": 16,
+      "winRate": 71.4
+    }
+  },
+  {
+    "id": 57,
+    "name": "Arsenal FC",
+    "shortName": "Arsenal",
+    "tla": "ARS",
+    "crest": "https://crests.football-data.org/57.png",
+    "clubColors": "Red / White",
+    "venue": "Emirates Stadium",
+    "founded": 1886,
+    "coach": "Mikel Arteta",
+    "record": {
+      "position": 3,
+      "played": 7,
+      "wins": 5,
+      "draws": 1,
+      "losses": 1,
+      "goalsFor": 10,
+      "goalsAgainst": 5,
+      "goalDiff": 5,
+      "points": 16,
+      "winRate": 71.4
     }
   },
   {
@@ -138,29 +138,6 @@
     }
   },
   {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": "David Moyes",
-    "record": {
-      "position": 7,
-      "played": 7,
-      "wins": 2,
-      "draws": 4,
-      "losses": 1,
-      "goalsFor": 8,
-      "goalsAgainst": 7,
-      "goalDiff": 1,
-      "points": 10,
-      "winRate": 28.6
-    }
-  },
-  {
     "id": 341,
     "name": "Leeds United FC",
     "shortName": "Leeds United",
@@ -171,16 +148,39 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 8,
-      "played": 6,
+      "position": 7,
+      "played": 7,
       "wins": 2,
-      "draws": 3,
+      "draws": 4,
+      "losses": 1,
+      "goalsFor": 9,
+      "goalsAgainst": 6,
+      "goalDiff": 3,
+      "points": 10,
+      "winRate": 28.6
+    }
+  },
+  {
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": "David Moyes",
+    "record": {
+      "position": 8,
+      "played": 7,
+      "wins": 2,
+      "draws": 4,
       "losses": 1,
       "goalsFor": 8,
-      "goalsAgainst": 5,
-      "goalDiff": 3,
-      "points": 9,
-      "winRate": 33.3
+      "goalsAgainst": 7,
+      "goalDiff": 1,
+      "points": 10,
+      "winRate": 28.6
     }
   },
   {
@@ -276,29 +276,6 @@
     }
   },
   {
-    "id": 354,
-    "name": "Crystal Palace FC",
-    "shortName": "Crystal Palace",
-    "tla": "CRY",
-    "crest": "https://crests.football-data.org/354.png",
-    "clubColors": "Red / Blue",
-    "venue": "Selhurst Park",
-    "founded": 1905,
-    "coach": "Pierre Sage",
-    "record": {
-      "position": 13,
-      "played": 6,
-      "wins": 2,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 9,
-      "goalsAgainst": 12,
-      "goalDiff": -3,
-      "points": 7,
-      "winRate": 33.3
-    }
-  },
-  {
     "id": 66,
     "name": "Manchester United FC",
     "shortName": "Man United",
@@ -309,16 +286,85 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
+      "position": 13,
+      "played": 7,
+      "wins": 1,
+      "draws": 4,
+      "losses": 2,
+      "goalsFor": 10,
+      "goalsAgainst": 10,
+      "goalDiff": 0,
+      "points": 7,
+      "winRate": 14.3
+    }
+  },
+  {
+    "id": 354,
+    "name": "Crystal Palace FC",
+    "shortName": "Crystal Palace",
+    "tla": "CRY",
+    "crest": "https://crests.football-data.org/354.png",
+    "clubColors": "Red / Blue",
+    "venue": "Selhurst Park",
+    "founded": 1905,
+    "coach": "Pierre Sage",
+    "record": {
       "position": 14,
-      "played": 6,
+      "played": 7,
+      "wins": 2,
+      "draws": 1,
+      "losses": 4,
+      "goalsFor": 9,
+      "goalsAgainst": 17,
+      "goalDiff": -8,
+      "points": 7,
+      "winRate": 28.6
+    }
+  },
+  {
+    "id": 351,
+    "name": "Nottingham Forest FC",
+    "shortName": "Nottingham",
+    "tla": "NOT",
+    "crest": "https://crests.football-data.org/351.png",
+    "clubColors": "Red / White",
+    "venue": "The City Ground",
+    "founded": 1865,
+    "coach": "Oliver Glasner",
+    "record": {
+      "position": 15,
+      "played": 7,
       "wins": 1,
       "draws": 3,
-      "losses": 2,
-      "goalsFor": 9,
-      "goalsAgainst": 9,
-      "goalDiff": 0,
+      "losses": 3,
+      "goalsFor": 5,
+      "goalsAgainst": 8,
+      "goalDiff": -3,
       "points": 6,
-      "winRate": 16.7
+      "winRate": 14.3
+    }
+  },
+  {
+    "id": 1044,
+    "name": "AFC Bournemouth",
+    "shortName": "Bournemouth",
+    "tla": "BOU",
+    "crest": "https://crests.football-data.org/bournemouth.png",
+    "clubColors": "Red / Black",
+    "venue": "Vitality Stadium",
+    "founded": 1890,
+    "coach": "Marco Rose",
+    "record": {
+      "position": 16,
+      "played": 7,
+      "wins": 1,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 13,
+      "goalDiff": -4,
+      "points": 6,
+      "winRate": 14.3
     }
   },
   {
@@ -332,7 +378,7 @@
     "founded": 1883,
     "coach": "Frank Lampard",
     "record": {
-      "position": 15,
+      "position": 17,
       "played": 6,
       "wins": 2,
       "draws": 0,
@@ -355,7 +401,7 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 16,
+      "position": 18,
       "played": 7,
       "wins": 1,
       "draws": 2,
@@ -365,29 +411,6 @@
       "goalDiff": -3,
       "points": 5,
       "winRate": 14.3
-    }
-  },
-  {
-    "id": 351,
-    "name": "Nottingham Forest FC",
-    "shortName": "Nottingham",
-    "tla": "NOT",
-    "crest": "https://crests.football-data.org/351.png",
-    "clubColors": "Red / White",
-    "venue": "The City Ground",
-    "founded": 1865,
-    "coach": "Oliver Glasner",
-    "record": {
-      "position": 17,
-      "played": 6,
-      "wins": 1,
-      "draws": 2,
-      "losses": 3,
-      "goalsFor": 5,
-      "goalsAgainst": 8,
-      "goalDiff": -3,
-      "points": 5,
-      "winRate": 16.7
     }
   },
   {
@@ -401,39 +424,16 @@
     "founded": 1879,
     "coach": "Regis Le Bris",
     "record": {
-      "position": 18,
-      "played": 6,
+      "position": 19,
+      "played": 7,
       "wins": 1,
       "draws": 1,
-      "losses": 4,
+      "losses": 5,
       "goalsFor": 6,
-      "goalsAgainst": 12,
-      "goalDiff": -6,
+      "goalsAgainst": 14,
+      "goalDiff": -8,
       "points": 4,
-      "winRate": 16.7
-    }
-  },
-  {
-    "id": 1044,
-    "name": "AFC Bournemouth",
-    "shortName": "Bournemouth",
-    "tla": "BOU",
-    "crest": "https://crests.football-data.org/bournemouth.png",
-    "clubColors": "Red / Black",
-    "venue": "Vitality Stadium",
-    "founded": 1890,
-    "coach": "Marco Rose",
-    "record": {
-      "position": 19,
-      "played": 6,
-      "wins": 0,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 7,
-      "goalsAgainst": 13,
-      "goalDiff": -6,
-      "points": 3,
-      "winRate": 0
+      "winRate": 14.3
     }
   },
   {
