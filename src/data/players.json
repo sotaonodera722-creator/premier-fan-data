@@ -541,9 +541,9 @@
     "age": 32,
     "nationality": "Scotland",
     "isJapanese": false,
-    "goals": 1,
-    "assists": 2,
-    "appearances": 7
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 114024,
@@ -6950,9 +6950,9 @@
     "age": 25,
     "nationality": "England",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 2,
+    "assists": 0,
+    "appearances": 7
   },
   {
     "id": 262187,
