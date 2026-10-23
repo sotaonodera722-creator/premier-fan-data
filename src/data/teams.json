@@ -184,29 +184,6 @@
     }
   },
   {
-    "id": 322,
-    "name": "Hull City AFC",
-    "shortName": "Hull City",
-    "tla": "HUL",
-    "crest": "https://crests.football-data.org/322.png",
-    "clubColors": "Orange / Black",
-    "venue": "Kingston Communications Stadium",
-    "founded": 1904,
-    "coach": "Sergej Jakirović",
-    "record": {
-      "position": 9,
-      "played": 7,
-      "wins": 2,
-      "draws": 3,
-      "losses": 2,
-      "goalsFor": 8,
-      "goalsAgainst": 7,
-      "goalDiff": 1,
-      "points": 9,
-      "winRate": 28.6
-    }
-  },
-  {
     "id": 349,
     "name": "Ipswich Town FC",
     "shortName": "Ipswich Town",
@@ -217,16 +194,39 @@
     "founded": 1887,
     "coach": "Gary O'Neil",
     "record": {
+      "position": 9,
+      "played": 8,
+      "wins": 3,
+      "draws": 1,
+      "losses": 4,
+      "goalsFor": 12,
+      "goalsAgainst": 16,
+      "goalDiff": -4,
+      "points": 10,
+      "winRate": 37.5
+    }
+  },
+  {
+    "id": 322,
+    "name": "Hull City AFC",
+    "shortName": "Hull City",
+    "tla": "HUL",
+    "crest": "https://crests.football-data.org/322.png",
+    "clubColors": "Orange / Black",
+    "venue": "Kingston Communications Stadium",
+    "founded": 1904,
+    "coach": "Sergej Jakirović",
+    "record": {
       "position": 10,
       "played": 7,
-      "wins": 3,
-      "draws": 0,
-      "losses": 4,
-      "goalsFor": 11,
-      "goalsAgainst": 15,
-      "goalDiff": -4,
+      "wins": 2,
+      "draws": 3,
+      "losses": 2,
+      "goalsFor": 8,
+      "goalsAgainst": 7,
+      "goalDiff": 1,
       "points": 9,
-      "winRate": 42.9
+      "winRate": 28.6
     }
   },
   {
@@ -368,6 +368,29 @@
     }
   },
   {
+    "id": 351,
+    "name": "Nottingham Forest FC",
+    "shortName": "Nottingham",
+    "tla": "NOT",
+    "crest": "https://crests.football-data.org/351.png",
+    "clubColors": "Red / White",
+    "venue": "The City Ground",
+    "founded": 1865,
+    "coach": "Oliver Glasner",
+    "record": {
+      "position": 16,
+      "played": 8,
+      "wins": 1,
+      "draws": 3,
+      "losses": 4,
+      "goalsFor": 6,
+      "goalsAgainst": 10,
+      "goalDiff": -4,
+      "points": 6,
+      "winRate": 12.5
+    }
+  },
+  {
     "id": 1076,
     "name": "Coventry City FC",
     "shortName": "Coventry City",
@@ -378,7 +401,7 @@
     "founded": 1883,
     "coach": "Frank Lampard",
     "record": {
-      "position": 17,
+      "position": 18,
       "played": 7,
       "wins": 2,
       "draws": 0,
@@ -401,7 +424,7 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 18,
+      "position": 19,
       "played": 7,
       "wins": 1,
       "draws": 2,
@@ -409,29 +432,6 @@
       "goalsFor": 7,
       "goalsAgainst": 10,
       "goalDiff": -3,
-      "points": 5,
-      "winRate": 14.3
-    }
-  },
-  {
-    "id": 351,
-    "name": "Nottingham Forest FC",
-    "shortName": "Nottingham",
-    "tla": "NOT",
-    "crest": "https://crests.football-data.org/351.png",
-    "clubColors": "Red / White",
-    "venue": "The City Ground",
-    "founded": 1865,
-    "coach": "Oliver Glasner",
-    "record": {
-      "position": 19,
-      "played": 7,
-      "wins": 1,
-      "draws": 2,
-      "losses": 4,
-      "goalsFor": 5,
-      "goalsAgainst": 9,
-      "goalDiff": -4,
       "points": 5,
       "winRate": 14.3
     }
