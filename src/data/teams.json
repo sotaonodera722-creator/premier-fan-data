@@ -80,15 +80,15 @@
     "coach": "Xabi Alonso",
     "record": {
       "position": 4,
-      "played": 7,
+      "played": 8,
       "wins": 4,
       "draws": 1,
-      "losses": 2,
+      "losses": 3,
       "goalsFor": 17,
-      "goalsAgainst": 13,
-      "goalDiff": 4,
+      "goalsAgainst": 15,
+      "goalDiff": 2,
       "points": 13,
-      "winRate": 57.1
+      "winRate": 50
     }
   },
   {
@@ -253,6 +253,52 @@
     }
   },
   {
+    "id": 73,
+    "name": "Tottenham Hotspur FC",
+    "shortName": "Tottenham",
+    "tla": "TOT",
+    "crest": "https://crests.football-data.org/73.png",
+    "clubColors": "Navy Blue / White",
+    "venue": "Tottenham Hotspur Stadium",
+    "founded": 1882,
+    "coach": "Roberto De Zerbi",
+    "record": {
+      "position": 12,
+      "played": 8,
+      "wins": 2,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 8,
+      "goalsAgainst": 10,
+      "goalDiff": -2,
+      "points": 9,
+      "winRate": 25
+    }
+  },
+  {
+    "id": 63,
+    "name": "Fulham FC",
+    "shortName": "Fulham",
+    "tla": "FUL",
+    "crest": "https://crests.football-data.org/63.png",
+    "clubColors": "White / Black",
+    "venue": "Craven Cottage",
+    "founded": 1879,
+    "coach": "Arbeloa",
+    "record": {
+      "position": 13,
+      "played": 8,
+      "wins": 2,
+      "draws": 2,
+      "losses": 4,
+      "goalsFor": 8,
+      "goalsAgainst": 10,
+      "goalDiff": -2,
+      "points": 8,
+      "winRate": 25
+    }
+  },
+  {
     "id": 67,
     "name": "Newcastle United FC",
     "shortName": "Newcastle",
@@ -263,7 +309,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 12,
+      "position": 14,
       "played": 7,
       "wins": 2,
       "draws": 2,
@@ -286,7 +332,7 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
-      "position": 13,
+      "position": 15,
       "played": 7,
       "wins": 1,
       "draws": 4,
@@ -309,7 +355,7 @@
     "founded": 1905,
     "coach": "Pierre Sage",
     "record": {
-      "position": 14,
+      "position": 16,
       "played": 7,
       "wins": 2,
       "draws": 1,
@@ -319,52 +365,6 @@
       "goalDiff": -8,
       "points": 7,
       "winRate": 28.6
-    }
-  },
-  {
-    "id": 1076,
-    "name": "Coventry City FC",
-    "shortName": "Coventry City",
-    "tla": "COV",
-    "crest": "https://crests.football-data.org/1076.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Coventry Building Society Arena",
-    "founded": 1883,
-    "coach": "Frank Lampard",
-    "record": {
-      "position": 15,
-      "played": 8,
-      "wins": 2,
-      "draws": 1,
-      "losses": 5,
-      "goalsFor": 6,
-      "goalsAgainst": 14,
-      "goalDiff": -8,
-      "points": 7,
-      "winRate": 25
-    }
-  },
-  {
-    "id": 63,
-    "name": "Fulham FC",
-    "shortName": "Fulham",
-    "tla": "FUL",
-    "crest": "https://crests.football-data.org/63.png",
-    "clubColors": "White / Black",
-    "venue": "Craven Cottage",
-    "founded": 1879,
-    "coach": "Arbeloa",
-    "record": {
-      "position": 16,
-      "played": 8,
-      "wins": 1,
-      "draws": 3,
-      "losses": 4,
-      "goalsFor": 7,
-      "goalsAgainst": 10,
-      "goalDiff": -3,
-      "points": 6,
-      "winRate": 12.5
     }
   },
   {
@@ -391,29 +391,6 @@
     }
   },
   {
-    "id": 73,
-    "name": "Tottenham Hotspur FC",
-    "shortName": "Tottenham",
-    "tla": "TOT",
-    "crest": "https://crests.football-data.org/73.png",
-    "clubColors": "Navy Blue / White",
-    "venue": "Tottenham Hotspur Stadium",
-    "founded": 1882,
-    "coach": "Roberto De Zerbi",
-    "record": {
-      "position": 18,
-      "played": 7,
-      "wins": 1,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 6,
-      "goalsAgainst": 10,
-      "goalDiff": -4,
-      "points": 6,
-      "winRate": 14.3
-    }
-  },
-  {
     "id": 351,
     "name": "Nottingham Forest FC",
     "shortName": "Nottingham",
@@ -434,6 +411,29 @@
       "goalDiff": -4,
       "points": 6,
       "winRate": 12.5
+    }
+  },
+  {
+    "id": 1076,
+    "name": "Coventry City FC",
+    "shortName": "Coventry City",
+    "tla": "COV",
+    "crest": "https://crests.football-data.org/1076.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Coventry Building Society Arena",
+    "founded": 1883,
+    "coach": "Frank Lampard",
+    "record": {
+      "position": 19,
+      "played": 8,
+      "wins": 2,
+      "draws": 0,
+      "losses": 6,
+      "goalsFor": 6,
+      "goalsAgainst": 15,
+      "goalDiff": -9,
+      "points": 6,
+      "winRate": 25
     }
   },
   {
