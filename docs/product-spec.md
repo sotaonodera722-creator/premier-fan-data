@@ -7,6 +7,7 @@
 - 40機能 / 13スプリント（S13 は計画外の差し込み）
 - 閲覧用ページ: https://claude.ai/code/artifact/ae7b14dd-99f2-41c1-b0f4-5b179c2cbf7c
 - 収益化の状況と、外部サービスの利用条件: [monetization.md](monetization.md)
+- 競合調査（**検索で勝てる見込みの実地確認**）: [competitors.md](competitors.md)
 
 ---
 
