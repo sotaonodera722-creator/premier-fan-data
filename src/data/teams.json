@@ -11,15 +11,15 @@
     "coach": "Enzo Maresca",
     "record": {
       "position": 1,
-      "played": 7,
+      "played": 8,
       "wins": 7,
       "draws": 0,
-      "losses": 0,
-      "goalsFor": 19,
-      "goalsAgainst": 7,
-      "goalDiff": 12,
+      "losses": 1,
+      "goalsFor": 20,
+      "goalsAgainst": 9,
+      "goalDiff": 11,
       "points": 21,
-      "winRate": 100
+      "winRate": 87.5
     }
   },
   {
@@ -34,15 +34,15 @@
     "coach": "Mikel Arteta",
     "record": {
       "position": 2,
-      "played": 7,
-      "wins": 6,
+      "played": 8,
+      "wins": 7,
       "draws": 0,
       "losses": 1,
-      "goalsFor": 11,
+      "goalsFor": 13,
       "goalsAgainst": 5,
-      "goalDiff": 6,
-      "points": 18,
-      "winRate": 85.7
+      "goalDiff": 8,
+      "points": 21,
+      "winRate": 87.5
     }
   },
   {
@@ -115,6 +115,29 @@
     }
   },
   {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": "Unai Emery",
+    "record": {
+      "position": 6,
+      "played": 8,
+      "wins": 3,
+      "draws": 2,
+      "losses": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 12,
+      "goalDiff": -3,
+      "points": 11,
+      "winRate": 37.5
+    }
+  },
+  {
     "id": 402,
     "name": "Brentford FC",
     "shortName": "Brentford",
@@ -125,7 +148,7 @@
     "founded": 1889,
     "coach": "Keith Andrews",
     "record": {
-      "position": 6,
+      "position": 7,
       "played": 7,
       "wins": 2,
       "draws": 4,
@@ -148,7 +171,7 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 7,
+      "position": 8,
       "played": 7,
       "wins": 2,
       "draws": 4,
@@ -171,16 +194,16 @@
     "founded": 1878,
     "coach": "David Moyes",
     "record": {
-      "position": 8,
-      "played": 7,
+      "position": 9,
+      "played": 8,
       "wins": 2,
       "draws": 4,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 8,
-      "goalsAgainst": 7,
-      "goalDiff": 1,
+      "goalsAgainst": 9,
+      "goalDiff": -1,
       "points": 10,
-      "winRate": 28.6
+      "winRate": 25
     }
   },
   {
@@ -194,7 +217,7 @@
     "founded": 1887,
     "coach": "Gary O'Neil",
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 8,
       "wins": 3,
       "draws": 1,
@@ -217,7 +240,7 @@
     "founded": 1904,
     "coach": "Sergej Jakirović",
     "record": {
-      "position": 10,
+      "position": 11,
       "played": 7,
       "wins": 2,
       "draws": 3,
@@ -240,36 +263,13 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 11,
+      "position": 12,
       "played": 7,
       "wins": 2,
       "draws": 2,
       "losses": 3,
       "goalsFor": 10,
       "goalsAgainst": 14,
-      "goalDiff": -4,
-      "points": 8,
-      "winRate": 28.6
-    }
-  },
-  {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": "Unai Emery",
-    "record": {
-      "position": 12,
-      "played": 7,
-      "wins": 2,
-      "draws": 2,
-      "losses": 3,
-      "goalsFor": 7,
-      "goalsAgainst": 11,
       "goalDiff": -4,
       "points": 8,
       "winRate": 28.6
@@ -322,6 +322,52 @@
     }
   },
   {
+    "id": 1076,
+    "name": "Coventry City FC",
+    "shortName": "Coventry City",
+    "tla": "COV",
+    "crest": "https://crests.football-data.org/1076.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Coventry Building Society Arena",
+    "founded": 1883,
+    "coach": "Frank Lampard",
+    "record": {
+      "position": 15,
+      "played": 8,
+      "wins": 2,
+      "draws": 1,
+      "losses": 5,
+      "goalsFor": 6,
+      "goalsAgainst": 14,
+      "goalDiff": -8,
+      "points": 7,
+      "winRate": 25
+    }
+  },
+  {
+    "id": 63,
+    "name": "Fulham FC",
+    "shortName": "Fulham",
+    "tla": "FUL",
+    "crest": "https://crests.football-data.org/63.png",
+    "clubColors": "White / Black",
+    "venue": "Craven Cottage",
+    "founded": 1879,
+    "coach": "Arbeloa",
+    "record": {
+      "position": 16,
+      "played": 8,
+      "wins": 1,
+      "draws": 3,
+      "losses": 4,
+      "goalsFor": 7,
+      "goalsAgainst": 10,
+      "goalDiff": -3,
+      "points": 6,
+      "winRate": 12.5
+    }
+  },
+  {
     "id": 1044,
     "name": "AFC Bournemouth",
     "shortName": "Bournemouth",
@@ -332,7 +378,7 @@
     "founded": 1890,
     "coach": "Marco Rose",
     "record": {
-      "position": 15,
+      "position": 17,
       "played": 7,
       "wins": 1,
       "draws": 3,
@@ -355,7 +401,7 @@
     "founded": 1882,
     "coach": "Roberto De Zerbi",
     "record": {
-      "position": 16,
+      "position": 18,
       "played": 7,
       "wins": 1,
       "draws": 3,
@@ -378,7 +424,7 @@
     "founded": 1865,
     "coach": "Oliver Glasner",
     "record": {
-      "position": 16,
+      "position": 18,
       "played": 8,
       "wins": 1,
       "draws": 3,
@@ -388,52 +434,6 @@
       "goalDiff": -4,
       "points": 6,
       "winRate": 12.5
-    }
-  },
-  {
-    "id": 1076,
-    "name": "Coventry City FC",
-    "shortName": "Coventry City",
-    "tla": "COV",
-    "crest": "https://crests.football-data.org/1076.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Coventry Building Society Arena",
-    "founded": 1883,
-    "coach": "Frank Lampard",
-    "record": {
-      "position": 18,
-      "played": 7,
-      "wins": 2,
-      "draws": 0,
-      "losses": 5,
-      "goalsFor": 6,
-      "goalsAgainst": 14,
-      "goalDiff": -8,
-      "points": 6,
-      "winRate": 28.6
-    }
-  },
-  {
-    "id": 63,
-    "name": "Fulham FC",
-    "shortName": "Fulham",
-    "tla": "FUL",
-    "crest": "https://crests.football-data.org/63.png",
-    "clubColors": "White / Black",
-    "venue": "Craven Cottage",
-    "founded": 1879,
-    "coach": "Arbeloa",
-    "record": {
-      "position": 19,
-      "played": 7,
-      "wins": 1,
-      "draws": 2,
-      "losses": 4,
-      "goalsFor": 7,
-      "goalsAgainst": 10,
-      "goalDiff": -3,
-      "points": 5,
-      "winRate": 14.3
     }
   },
   {
