@@ -138,6 +138,29 @@
     }
   },
   {
+    "id": 341,
+    "name": "Leeds United FC",
+    "shortName": "Leeds United",
+    "tla": "LEE",
+    "crest": "https://crests.football-data.org/341.png",
+    "clubColors": "White / Blue",
+    "venue": "Elland Road",
+    "founded": 1904,
+    "coach": "Daniel Farke",
+    "record": {
+      "position": 7,
+      "played": 8,
+      "wins": 2,
+      "draws": 5,
+      "losses": 1,
+      "goalsFor": 9,
+      "goalsAgainst": 6,
+      "goalDiff": 3,
+      "points": 11,
+      "winRate": 25
+    }
+  },
+  {
     "id": 67,
     "name": "Newcastle United FC",
     "shortName": "Newcastle",
@@ -148,7 +171,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 7,
+      "position": 8,
       "played": 8,
       "wins": 3,
       "draws": 2,
@@ -171,7 +194,7 @@
     "founded": 1872,
     "coach": "Unai Emery",
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 8,
       "wins": 3,
       "draws": 2,
@@ -181,29 +204,6 @@
       "goalDiff": -3,
       "points": 11,
       "winRate": 37.5
-    }
-  },
-  {
-    "id": 341,
-    "name": "Leeds United FC",
-    "shortName": "Leeds United",
-    "tla": "LEE",
-    "crest": "https://crests.football-data.org/341.png",
-    "clubColors": "White / Blue",
-    "venue": "Elland Road",
-    "founded": 1904,
-    "coach": "Daniel Farke",
-    "record": {
-      "position": 9,
-      "played": 7,
-      "wins": 2,
-      "draws": 4,
-      "losses": 1,
-      "goalsFor": 9,
-      "goalsAgainst": 6,
-      "goalDiff": 3,
-      "points": 10,
-      "winRate": 28.6
     }
   },
   {
@@ -448,15 +448,15 @@
     "coach": "Regis Le Bris",
     "record": {
       "position": 20,
-      "played": 7,
+      "played": 8,
       "wins": 1,
-      "draws": 1,
+      "draws": 2,
       "losses": 5,
       "goalsFor": 6,
       "goalsAgainst": 14,
       "goalDiff": -8,
-      "points": 4,
-      "winRate": 14.3
+      "points": 5,
+      "winRate": 12.5
     }
   }
 ]
