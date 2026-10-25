@@ -57,38 +57,15 @@
     "coach": "Fabian Hürzeler",
     "record": {
       "position": 3,
-      "played": 7,
+      "played": 8,
       "wins": 5,
       "draws": 1,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 23,
-      "goalsAgainst": 5,
-      "goalDiff": 18,
+      "goalsAgainst": 7,
+      "goalDiff": 16,
       "points": 16,
-      "winRate": 71.4
-    }
-  },
-  {
-    "id": 61,
-    "name": "Chelsea FC",
-    "shortName": "Chelsea",
-    "tla": "CHE",
-    "crest": "https://crests.football-data.org/61.png",
-    "clubColors": "Royal Blue / White",
-    "venue": "Stamford Bridge",
-    "founded": 1905,
-    "coach": "Xabi Alonso",
-    "record": {
-      "position": 4,
-      "played": 8,
-      "wins": 4,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 17,
-      "goalsAgainst": 15,
-      "goalDiff": 2,
-      "points": 13,
-      "winRate": 50
+      "winRate": 62.5
     }
   },
   {
@@ -102,39 +79,39 @@
     "founded": 1892,
     "coach": "Andoni Iraola",
     "record": {
-      "position": 5,
-      "played": 7,
-      "wins": 3,
+      "position": 4,
+      "played": 8,
+      "wins": 4,
       "draws": 3,
       "losses": 1,
-      "goalsFor": 9,
+      "goalsFor": 11,
       "goalsAgainst": 8,
-      "goalDiff": 1,
-      "points": 12,
-      "winRate": 42.9
+      "goalDiff": 3,
+      "points": 15,
+      "winRate": 50
     }
   },
   {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": "Unai Emery",
+    "id": 61,
+    "name": "Chelsea FC",
+    "shortName": "Chelsea",
+    "tla": "CHE",
+    "crest": "https://crests.football-data.org/61.png",
+    "clubColors": "Royal Blue / White",
+    "venue": "Stamford Bridge",
+    "founded": 1905,
+    "coach": "Xabi Alonso",
     "record": {
-      "position": 6,
+      "position": 5,
       "played": 8,
-      "wins": 3,
-      "draws": 2,
+      "wins": 4,
+      "draws": 1,
       "losses": 3,
-      "goalsFor": 9,
-      "goalsAgainst": 12,
-      "goalDiff": -3,
-      "points": 11,
-      "winRate": 37.5
+      "goalsFor": 17,
+      "goalsAgainst": 15,
+      "goalDiff": 2,
+      "points": 13,
+      "winRate": 50
     }
   },
   {
@@ -148,16 +125,62 @@
     "founded": 1889,
     "coach": "Keith Andrews",
     "record": {
-      "position": 7,
-      "played": 7,
+      "position": 6,
+      "played": 8,
       "wins": 2,
-      "draws": 4,
+      "draws": 5,
       "losses": 1,
-      "goalsFor": 13,
-      "goalsAgainst": 8,
+      "goalsFor": 14,
+      "goalsAgainst": 9,
       "goalDiff": 5,
-      "points": 10,
-      "winRate": 28.6
+      "points": 11,
+      "winRate": 25
+    }
+  },
+  {
+    "id": 67,
+    "name": "Newcastle United FC",
+    "shortName": "Newcastle",
+    "tla": "NEW",
+    "crest": "https://crests.football-data.org/67.png",
+    "clubColors": "Black / White",
+    "venue": "St. James' Park",
+    "founded": 1881,
+    "coach": "Matthias Jaissle",
+    "record": {
+      "position": 7,
+      "played": 8,
+      "wins": 3,
+      "draws": 2,
+      "losses": 3,
+      "goalsFor": 12,
+      "goalsAgainst": 14,
+      "goalDiff": -2,
+      "points": 11,
+      "winRate": 37.5
+    }
+  },
+  {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": "Unai Emery",
+    "record": {
+      "position": 8,
+      "played": 8,
+      "wins": 3,
+      "draws": 2,
+      "losses": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 12,
+      "goalDiff": -3,
+      "points": 11,
+      "winRate": 37.5
     }
   },
   {
@@ -171,7 +194,7 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 8,
+      "position": 9,
       "played": 7,
       "wins": 2,
       "draws": 4,
@@ -181,6 +204,29 @@
       "goalDiff": 3,
       "points": 10,
       "winRate": 28.6
+    }
+  },
+  {
+    "id": 322,
+    "name": "Hull City AFC",
+    "shortName": "Hull City",
+    "tla": "HUL",
+    "crest": "https://crests.football-data.org/322.png",
+    "clubColors": "Orange / Black",
+    "venue": "Kingston Communications Stadium",
+    "founded": 1904,
+    "coach": "Sergej Jakirović",
+    "record": {
+      "position": 10,
+      "played": 8,
+      "wins": 2,
+      "draws": 4,
+      "losses": 2,
+      "goalsFor": 9,
+      "goalsAgainst": 8,
+      "goalDiff": 1,
+      "points": 10,
+      "winRate": 25
     }
   },
   {
@@ -194,7 +240,7 @@
     "founded": 1878,
     "coach": "David Moyes",
     "record": {
-      "position": 9,
+      "position": 11,
       "played": 8,
       "wins": 2,
       "draws": 4,
@@ -217,7 +263,7 @@
     "founded": 1887,
     "coach": "Gary O'Neil",
     "record": {
-      "position": 10,
+      "position": 12,
       "played": 8,
       "wins": 3,
       "draws": 1,
@@ -230,26 +276,26 @@
     }
   },
   {
-    "id": 322,
-    "name": "Hull City AFC",
-    "shortName": "Hull City",
-    "tla": "HUL",
-    "crest": "https://crests.football-data.org/322.png",
-    "clubColors": "Orange / Black",
-    "venue": "Kingston Communications Stadium",
-    "founded": 1904,
-    "coach": "Sergej Jakirović",
+    "id": 1044,
+    "name": "AFC Bournemouth",
+    "shortName": "Bournemouth",
+    "tla": "BOU",
+    "crest": "https://crests.football-data.org/bournemouth.png",
+    "clubColors": "Red / Black",
+    "venue": "Vitality Stadium",
+    "founded": 1890,
+    "coach": "Marco Rose",
     "record": {
-      "position": 11,
-      "played": 7,
+      "position": 13,
+      "played": 8,
       "wins": 2,
       "draws": 3,
-      "losses": 2,
-      "goalsFor": 8,
-      "goalsAgainst": 7,
-      "goalDiff": 1,
+      "losses": 3,
+      "goalsFor": 12,
+      "goalsAgainst": 13,
+      "goalDiff": -1,
       "points": 9,
-      "winRate": 28.6
+      "winRate": 25
     }
   },
   {
@@ -263,7 +309,7 @@
     "founded": 1882,
     "coach": "Roberto De Zerbi",
     "record": {
-      "position": 12,
+      "position": 14,
       "played": 8,
       "wins": 2,
       "draws": 3,
@@ -286,7 +332,7 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 13,
+      "position": 15,
       "played": 8,
       "wins": 2,
       "draws": 2,
@@ -296,29 +342,6 @@
       "goalDiff": -2,
       "points": 8,
       "winRate": 25
-    }
-  },
-  {
-    "id": 67,
-    "name": "Newcastle United FC",
-    "shortName": "Newcastle",
-    "tla": "NEW",
-    "crest": "https://crests.football-data.org/67.png",
-    "clubColors": "Black / White",
-    "venue": "St. James' Park",
-    "founded": 1881,
-    "coach": "Matthias Jaissle",
-    "record": {
-      "position": 14,
-      "played": 7,
-      "wins": 2,
-      "draws": 2,
-      "losses": 3,
-      "goalsFor": 10,
-      "goalsAgainst": 14,
-      "goalDiff": -4,
-      "points": 8,
-      "winRate": 28.6
     }
   },
   {
@@ -332,16 +355,16 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
-      "position": 15,
-      "played": 7,
+      "position": 16,
+      "played": 8,
       "wins": 1,
       "draws": 4,
-      "losses": 2,
+      "losses": 3,
       "goalsFor": 10,
-      "goalsAgainst": 10,
-      "goalDiff": 0,
+      "goalsAgainst": 13,
+      "goalDiff": -3,
       "points": 7,
-      "winRate": 14.3
+      "winRate": 12.5
     }
   },
   {
@@ -355,39 +378,16 @@
     "founded": 1905,
     "coach": "Pierre Sage",
     "record": {
-      "position": 16,
-      "played": 7,
+      "position": 17,
+      "played": 8,
       "wins": 2,
       "draws": 1,
-      "losses": 4,
+      "losses": 5,
       "goalsFor": 9,
-      "goalsAgainst": 17,
-      "goalDiff": -8,
+      "goalsAgainst": 19,
+      "goalDiff": -10,
       "points": 7,
-      "winRate": 28.6
-    }
-  },
-  {
-    "id": 1044,
-    "name": "AFC Bournemouth",
-    "shortName": "Bournemouth",
-    "tla": "BOU",
-    "crest": "https://crests.football-data.org/bournemouth.png",
-    "clubColors": "Red / Black",
-    "venue": "Vitality Stadium",
-    "founded": 1890,
-    "coach": "Marco Rose",
-    "record": {
-      "position": 17,
-      "played": 7,
-      "wins": 1,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 9,
-      "goalsAgainst": 13,
-      "goalDiff": -4,
-      "points": 6,
-      "winRate": 14.3
+      "winRate": 25
     }
   },
   {
