@@ -3,7 +3,7 @@
     "competition": "Premier League",
     "season": "2026/27",
     "currentMatchday": 8,
-    "lastUpdated": "2026-10-26T09:51:44.278Z",
+    "lastUpdated": "2026-10-26T18:25:04.863Z",
     "source": "football-data.org"
   },
   "matches": [
@@ -836,56 +836,56 @@
       "id": 560612,
       "matchday": 8,
       "utcDate": "2026-10-25T14:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 64,
       "awayTeamId": 397,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 2,
+      "awayGoals": 0
     },
     {
       "id": 560613,
       "matchday": 8,
       "utcDate": "2026-10-25T14:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 354,
       "awayTeamId": 67,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 2
     },
     {
       "id": 560615,
       "matchday": 8,
       "utcDate": "2026-10-25T14:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 66,
       "awayTeamId": 1044,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 3
     },
     {
       "id": 560619,
       "matchday": 8,
       "utcDate": "2026-10-25T14:00:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 322,
       "awayTeamId": 402,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 1,
+      "awayGoals": 1
     },
     {
       "id": 560621,
       "matchday": 8,
       "utcDate": "2026-10-25T16:30:00Z",
-      "status": "TIMED",
-      "played": false,
+      "status": "FINISHED",
+      "played": true,
       "homeTeamId": 71,
       "awayTeamId": 341,
-      "homeGoals": null,
-      "awayGoals": null
+      "homeGoals": 0,
+      "awayGoals": 0
     },
     {
       "id": 560626,
