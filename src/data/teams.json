@@ -11,15 +11,15 @@
     "coach": "Enzo Maresca",
     "record": {
       "position": 1,
-      "played": 8,
+      "played": 9,
       "wins": 7,
       "draws": 0,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 20,
-      "goalsAgainst": 9,
-      "goalDiff": 11,
+      "goalsAgainst": 10,
+      "goalDiff": 10,
       "points": 21,
-      "winRate": 87.5
+      "winRate": 77.8
     }
   },
   {
@@ -57,15 +57,15 @@
     "coach": "Fabian Hürzeler",
     "record": {
       "position": 3,
-      "played": 8,
-      "wins": 5,
+      "played": 9,
+      "wins": 6,
       "draws": 1,
       "losses": 2,
-      "goalsFor": 23,
+      "goalsFor": 24,
       "goalsAgainst": 7,
-      "goalDiff": 16,
-      "points": 16,
-      "winRate": 62.5
+      "goalDiff": 17,
+      "points": 19,
+      "winRate": 66.7
     }
   },
   {
@@ -126,15 +126,84 @@
     "coach": "Keith Andrews",
     "record": {
       "position": 6,
-      "played": 8,
-      "wins": 2,
+      "played": 9,
+      "wins": 3,
       "draws": 5,
       "losses": 1,
-      "goalsFor": 14,
+      "goalsFor": 16,
       "goalsAgainst": 9,
-      "goalDiff": 5,
+      "goalDiff": 7,
+      "points": 14,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 1044,
+    "name": "AFC Bournemouth",
+    "shortName": "Bournemouth",
+    "tla": "BOU",
+    "crest": "https://crests.football-data.org/bournemouth.png",
+    "clubColors": "Red / Black",
+    "venue": "Vitality Stadium",
+    "founded": 1890,
+    "coach": "Marco Rose",
+    "record": {
+      "position": 7,
+      "played": 9,
+      "wins": 3,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 14,
+      "goalsAgainst": 13,
+      "goalDiff": 1,
+      "points": 12,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 73,
+    "name": "Tottenham Hotspur FC",
+    "shortName": "Tottenham",
+    "tla": "TOT",
+    "crest": "https://crests.football-data.org/73.png",
+    "clubColors": "Navy Blue / White",
+    "venue": "Tottenham Hotspur Stadium",
+    "founded": 1882,
+    "coach": "Roberto De Zerbi",
+    "record": {
+      "position": 8,
+      "played": 9,
+      "wins": 3,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 10,
+      "goalsAgainst": 10,
+      "goalDiff": 0,
+      "points": 12,
+      "winRate": 33.3
+    }
+  },
+  {
+    "id": 322,
+    "name": "Hull City AFC",
+    "shortName": "Hull City",
+    "tla": "HUL",
+    "crest": "https://crests.football-data.org/322.png",
+    "clubColors": "Orange / Black",
+    "venue": "Kingston Communications Stadium",
+    "founded": 1904,
+    "coach": "Sergej Jakirović",
+    "record": {
+      "position": 9,
+      "played": 9,
+      "wins": 2,
+      "draws": 5,
+      "losses": 2,
+      "goalsFor": 11,
+      "goalsAgainst": 10,
+      "goalDiff": 1,
       "points": 11,
-      "winRate": 25
+      "winRate": 22.2
     }
   },
   {
@@ -148,16 +217,16 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 7,
-      "played": 8,
+      "position": 10,
+      "played": 9,
       "wins": 2,
       "draws": 5,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 9,
-      "goalsAgainst": 6,
-      "goalDiff": 3,
+      "goalsAgainst": 8,
+      "goalDiff": 1,
       "points": 11,
-      "winRate": 25
+      "winRate": 22.2
     }
   },
   {
@@ -171,7 +240,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 8,
+      "position": 11,
       "played": 8,
       "wins": 3,
       "draws": 2,
@@ -194,7 +263,7 @@
     "founded": 1872,
     "coach": "Unai Emery",
     "record": {
-      "position": 9,
+      "position": 12,
       "played": 8,
       "wins": 3,
       "draws": 2,
@@ -204,52 +273,6 @@
       "goalDiff": -3,
       "points": 11,
       "winRate": 37.5
-    }
-  },
-  {
-    "id": 322,
-    "name": "Hull City AFC",
-    "shortName": "Hull City",
-    "tla": "HUL",
-    "crest": "https://crests.football-data.org/322.png",
-    "clubColors": "Orange / Black",
-    "venue": "Kingston Communications Stadium",
-    "founded": 1904,
-    "coach": "Sergej Jakirović",
-    "record": {
-      "position": 10,
-      "played": 8,
-      "wins": 2,
-      "draws": 4,
-      "losses": 2,
-      "goalsFor": 9,
-      "goalsAgainst": 8,
-      "goalDiff": 1,
-      "points": 10,
-      "winRate": 25
-    }
-  },
-  {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": "David Moyes",
-    "record": {
-      "position": 11,
-      "played": 8,
-      "wins": 2,
-      "draws": 4,
-      "losses": 2,
-      "goalsFor": 8,
-      "goalsAgainst": 9,
-      "goalDiff": -1,
-      "points": 10,
-      "winRate": 25
     }
   },
   {
@@ -263,62 +286,62 @@
     "founded": 1887,
     "coach": "Gary O'Neil",
     "record": {
-      "position": 12,
-      "played": 8,
-      "wins": 3,
-      "draws": 1,
-      "losses": 4,
-      "goalsFor": 12,
-      "goalsAgainst": 16,
-      "goalDiff": -4,
-      "points": 10,
-      "winRate": 37.5
-    }
-  },
-  {
-    "id": 1044,
-    "name": "AFC Bournemouth",
-    "shortName": "Bournemouth",
-    "tla": "BOU",
-    "crest": "https://crests.football-data.org/bournemouth.png",
-    "clubColors": "Red / Black",
-    "venue": "Vitality Stadium",
-    "founded": 1890,
-    "coach": "Marco Rose",
-    "record": {
       "position": 13,
-      "played": 8,
-      "wins": 2,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 12,
-      "goalsAgainst": 13,
-      "goalDiff": -1,
-      "points": 9,
-      "winRate": 25
+      "played": 9,
+      "wins": 3,
+      "draws": 2,
+      "losses": 4,
+      "goalsFor": 14,
+      "goalsAgainst": 18,
+      "goalDiff": -4,
+      "points": 11,
+      "winRate": 33.3
     }
   },
   {
-    "id": 73,
-    "name": "Tottenham Hotspur FC",
-    "shortName": "Tottenham",
-    "tla": "TOT",
-    "crest": "https://crests.football-data.org/73.png",
-    "clubColors": "Navy Blue / White",
-    "venue": "Tottenham Hotspur Stadium",
-    "founded": 1882,
-    "coach": "Roberto De Zerbi",
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": "David Moyes",
     "record": {
       "position": 14,
       "played": 8,
       "wins": 2,
-      "draws": 3,
-      "losses": 3,
+      "draws": 4,
+      "losses": 2,
       "goalsFor": 8,
-      "goalsAgainst": 10,
-      "goalDiff": -2,
-      "points": 9,
+      "goalsAgainst": 9,
+      "goalDiff": -1,
+      "points": 10,
       "winRate": 25
+    }
+  },
+  {
+    "id": 1076,
+    "name": "Coventry City FC",
+    "shortName": "Coventry City",
+    "tla": "COV",
+    "crest": "https://crests.football-data.org/1076.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Coventry Building Society Arena",
+    "founded": 1883,
+    "coach": "Frank Lampard",
+    "record": {
+      "position": 15,
+      "played": 9,
+      "wins": 3,
+      "draws": 0,
+      "losses": 6,
+      "goalsFor": 9,
+      "goalsAgainst": 16,
+      "goalDiff": -7,
+      "points": 9,
+      "winRate": 33.3
     }
   },
   {
@@ -332,7 +355,7 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 15,
+      "position": 16,
       "played": 8,
       "wins": 2,
       "draws": 2,
@@ -355,7 +378,7 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
-      "position": 16,
+      "position": 17,
       "played": 9,
       "wins": 1,
       "draws": 4,
@@ -378,16 +401,16 @@
     "founded": 1905,
     "coach": "Pierre Sage",
     "record": {
-      "position": 17,
-      "played": 8,
+      "position": 18,
+      "played": 9,
       "wins": 2,
       "draws": 1,
-      "losses": 5,
+      "losses": 6,
       "goalsFor": 9,
-      "goalsAgainst": 19,
-      "goalDiff": -10,
+      "goalsAgainst": 21,
+      "goalDiff": -12,
       "points": 7,
-      "winRate": 25
+      "winRate": 22.2
     }
   },
   {
@@ -401,39 +424,16 @@
     "founded": 1865,
     "coach": "Oliver Glasner",
     "record": {
-      "position": 18,
-      "played": 8,
+      "position": 19,
+      "played": 9,
       "wins": 1,
       "draws": 3,
-      "losses": 4,
+      "losses": 5,
       "goalsFor": 6,
-      "goalsAgainst": 10,
-      "goalDiff": -4,
+      "goalsAgainst": 12,
+      "goalDiff": -6,
       "points": 6,
-      "winRate": 12.5
-    }
-  },
-  {
-    "id": 1076,
-    "name": "Coventry City FC",
-    "shortName": "Coventry City",
-    "tla": "COV",
-    "crest": "https://crests.football-data.org/1076.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Coventry Building Society Arena",
-    "founded": 1883,
-    "coach": "Frank Lampard",
-    "record": {
-      "position": 19,
-      "played": 8,
-      "wins": 2,
-      "draws": 0,
-      "losses": 6,
-      "goalsFor": 6,
-      "goalsAgainst": 15,
-      "goalDiff": -9,
-      "points": 6,
-      "winRate": 25
+      "winRate": 11.1
     }
   },
   {
@@ -448,15 +448,15 @@
     "coach": "Regis Le Bris",
     "record": {
       "position": 20,
-      "played": 8,
+      "played": 9,
       "wins": 1,
       "draws": 2,
-      "losses": 5,
-      "goalsFor": 6,
-      "goalsAgainst": 14,
-      "goalDiff": -8,
+      "losses": 6,
+      "goalsFor": 7,
+      "goalsAgainst": 17,
+      "goalDiff": -10,
       "points": 5,
-      "winRate": 12.5
+      "winRate": 11.1
     }
   }
 ]

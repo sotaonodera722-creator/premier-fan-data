@@ -530,7 +530,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 34646,
@@ -595,7 +595,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 2,
-    "appearances": 5
+    "appearances": 6
   },
   {
     "id": 7985,
@@ -621,7 +621,7 @@
     "isJapanese": false,
     "goals": 4,
     "assists": 0,
-    "appearances": 7
+    "appearances": 8
   },
   {
     "id": 181901,
@@ -647,7 +647,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 7
+    "appearances": 8
   },
   {
     "id": 265040,
@@ -1583,7 +1583,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 1,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 290848,
@@ -1596,7 +1596,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 291727,
@@ -1674,7 +1674,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 1795,
@@ -3297,7 +3297,7 @@
     "age": 26,
     "nationality": "France",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 1,
     "appearances": 9
   },
@@ -3570,9 +3570,9 @@
     "age": 26,
     "nationality": "Netherlands",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 131177,
@@ -3676,7 +3676,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 148289,
@@ -4129,9 +4129,9 @@
     "age": 30,
     "nationality": "Scotland",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 2,
+    "assists": 2,
+    "appearances": 9
   },
   {
     "id": 26444,
@@ -4636,9 +4636,9 @@
     "age": 27,
     "nationality": "Ireland",
     "isJapanese": false,
-    "goals": 1,
-    "assists": 0,
-    "appearances": 9
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 34871,
@@ -4689,7 +4689,7 @@
     "nationality": "Ivory Coast",
     "isJapanese": false,
     "goals": 1,
-    "assists": 1,
+    "assists": 2,
     "appearances": 9
   },
   {
@@ -4792,9 +4792,9 @@
     "age": 22,
     "nationality": "Paraguay",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 2,
+    "assists": 2,
+    "appearances": 9
   },
   {
     "id": 4158,
@@ -5275,7 +5275,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 4
+    "appearances": 5
   },
   {
     "id": 9034,
@@ -5314,7 +5314,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 146986,
@@ -5353,7 +5353,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 260271,
@@ -5703,7 +5703,7 @@
     "nationality": "Belgium",
     "isJapanese": false,
     "goals": 2,
-    "assists": 2,
+    "assists": 3,
     "appearances": 9
   },
   {
@@ -5780,7 +5780,7 @@
     "age": 23,
     "nationality": "Sweden",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 3,
     "assists": 1,
     "appearances": 8
   },
@@ -6248,9 +6248,9 @@
     "age": 22,
     "nationality": "Ukraine",
     "isJapanese": false,
-    "goals": 1,
-    "assists": 1,
-    "appearances": 7
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 8251,
@@ -6287,7 +6287,7 @@
     "age": 25,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 2,
     "appearances": 9
   },
@@ -6301,7 +6301,7 @@
     "nationality": "England",
     "isJapanese": false,
     "goals": 1,
-    "assists": 1,
+    "assists": 2,
     "appearances": 9
   },
   {
@@ -6535,7 +6535,7 @@
     "nationality": "Netherlands",
     "isJapanese": false,
     "goals": 1,
-    "assists": 1,
+    "assists": 2,
     "appearances": 7
   },
   {
@@ -6625,7 +6625,7 @@
     "age": 27,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": 3,
+    "goals": 4,
     "assists": 4,
     "appearances": 9
   },
@@ -6950,7 +6950,7 @@
     "age": 25,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 3,
     "assists": 0,
     "appearances": 9
   },
