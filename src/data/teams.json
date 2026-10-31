@@ -184,6 +184,29 @@
     }
   },
   {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": "Unai Emery",
+    "record": {
+      "position": 9,
+      "played": 9,
+      "wins": 3,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 10,
+      "goalsAgainst": 13,
+      "goalDiff": -3,
+      "points": 12,
+      "winRate": 33.3
+    }
+  },
+  {
     "id": 322,
     "name": "Hull City AFC",
     "shortName": "Hull City",
@@ -194,7 +217,7 @@
     "founded": 1904,
     "coach": "Sergej Jakirović",
     "record": {
-      "position": 9,
+      "position": 10,
       "played": 9,
       "wins": 2,
       "draws": 5,
@@ -217,7 +240,7 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 10,
+      "position": 11,
       "played": 9,
       "wins": 2,
       "draws": 5,
@@ -240,7 +263,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 11,
+      "position": 12,
       "played": 8,
       "wins": 3,
       "draws": 2,
@@ -248,29 +271,6 @@
       "goalsFor": 12,
       "goalsAgainst": 14,
       "goalDiff": -2,
-      "points": 11,
-      "winRate": 37.5
-    }
-  },
-  {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": "Unai Emery",
-    "record": {
-      "position": 12,
-      "played": 8,
-      "wins": 3,
-      "draws": 2,
-      "losses": 3,
-      "goalsFor": 9,
-      "goalsAgainst": 12,
-      "goalDiff": -3,
       "points": 11,
       "winRate": 37.5
     }
@@ -322,29 +322,6 @@
     }
   },
   {
-    "id": 1076,
-    "name": "Coventry City FC",
-    "shortName": "Coventry City",
-    "tla": "COV",
-    "crest": "https://crests.football-data.org/1076.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Coventry Building Society Arena",
-    "founded": 1883,
-    "coach": "Frank Lampard",
-    "record": {
-      "position": 15,
-      "played": 9,
-      "wins": 3,
-      "draws": 0,
-      "losses": 6,
-      "goalsFor": 9,
-      "goalsAgainst": 16,
-      "goalDiff": -7,
-      "points": 9,
-      "winRate": 33.3
-    }
-  },
-  {
     "id": 63,
     "name": "Fulham FC",
     "shortName": "Fulham",
@@ -355,16 +332,39 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 16,
-      "played": 8,
+      "position": 15,
+      "played": 9,
       "wins": 2,
-      "draws": 2,
+      "draws": 3,
       "losses": 4,
-      "goalsFor": 8,
-      "goalsAgainst": 10,
+      "goalsFor": 9,
+      "goalsAgainst": 11,
       "goalDiff": -2,
-      "points": 8,
-      "winRate": 25
+      "points": 9,
+      "winRate": 22.2
+    }
+  },
+  {
+    "id": 1076,
+    "name": "Coventry City FC",
+    "shortName": "Coventry City",
+    "tla": "COV",
+    "crest": "https://crests.football-data.org/1076.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Coventry Building Society Arena",
+    "founded": 1883,
+    "coach": "Frank Lampard",
+    "record": {
+      "position": 16,
+      "played": 9,
+      "wins": 3,
+      "draws": 0,
+      "losses": 6,
+      "goalsFor": 9,
+      "goalsAgainst": 16,
+      "goalDiff": -7,
+      "points": 9,
+      "winRate": 33.3
     }
   },
   {
