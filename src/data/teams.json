@@ -69,29 +69,6 @@
     }
   },
   {
-    "id": 64,
-    "name": "Liverpool FC",
-    "shortName": "Liverpool",
-    "tla": "LIV",
-    "crest": "https://crests.football-data.org/64.png",
-    "clubColors": "Red / White",
-    "venue": "Anfield",
-    "founded": 1892,
-    "coach": "Andoni Iraola",
-    "record": {
-      "position": 4,
-      "played": 8,
-      "wins": 4,
-      "draws": 3,
-      "losses": 1,
-      "goalsFor": 11,
-      "goalsAgainst": 8,
-      "goalDiff": 3,
-      "points": 15,
-      "winRate": 50
-    }
-  },
-  {
     "id": 61,
     "name": "Chelsea FC",
     "shortName": "Chelsea",
@@ -102,15 +79,38 @@
     "founded": 1905,
     "coach": "Xabi Alonso",
     "record": {
+      "position": 4,
+      "played": 9,
+      "wins": 5,
+      "draws": 1,
+      "losses": 3,
+      "goalsFor": 19,
+      "goalsAgainst": 15,
+      "goalDiff": 4,
+      "points": 16,
+      "winRate": 55.6
+    }
+  },
+  {
+    "id": 64,
+    "name": "Liverpool FC",
+    "shortName": "Liverpool",
+    "tla": "LIV",
+    "crest": "https://crests.football-data.org/64.png",
+    "clubColors": "Red / White",
+    "venue": "Anfield",
+    "founded": 1892,
+    "coach": "Andoni Iraola",
+    "record": {
       "position": 5,
       "played": 8,
       "wins": 4,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 17,
-      "goalsAgainst": 15,
-      "goalDiff": 2,
-      "points": 13,
+      "draws": 3,
+      "losses": 1,
+      "goalsFor": 11,
+      "goalsAgainst": 8,
+      "goalDiff": 3,
+      "points": 15,
       "winRate": 50
     }
   },
@@ -356,15 +356,15 @@
     "coach": "Michael Carrick",
     "record": {
       "position": 16,
-      "played": 8,
+      "played": 9,
       "wins": 1,
       "draws": 4,
-      "losses": 3,
+      "losses": 4,
       "goalsFor": 10,
-      "goalsAgainst": 13,
-      "goalDiff": -3,
+      "goalsAgainst": 15,
+      "goalDiff": -5,
       "points": 7,
-      "winRate": 12.5
+      "winRate": 11.1
     }
   },
   {
