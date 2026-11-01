@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "highlightly.net",
-    "lastUpdated": "2026-10-31T23:09:52.456Z"
+    "lastUpdated": "2026-11-01T20:19:45.665Z"
   },
   "lineups": {
     "560542": {
@@ -64009,6 +64009,747 @@
             {
               "displayName": "Shots outside penalty area",
               "value": 6
+            }
+          ]
+        }
+      }
+    },
+    "560631": {
+      "matchId": 560631,
+      "homeTeam": {
+        "teamId": 64,
+        "formation": "4-2-3-1",
+        "startXI": [
+          [
+            {
+              "name": "Alisson Becker",
+              "number": 1,
+              "position": "Goalkeeper",
+              "id": 45234
+            }
+          ],
+          [
+            {
+              "name": "M. Kerkez",
+              "number": 6,
+              "position": "Defender",
+              "id": 33207048
+            },
+            {
+              "name": "V. van Dijk",
+              "number": 4,
+              "position": "Defender",
+              "id": 46844
+            },
+            {
+              "name": "J. Jacquet",
+              "number": 5,
+              "position": "Defender",
+              "id": 59189550
+            },
+            {
+              "name": "R. Araújo",
+              "number": 33,
+              "position": "Defender",
+              "id": 16392208
+            }
+          ],
+          [
+            {
+              "name": "T. Nyoni",
+              "number": 42,
+              "position": "Midfielder",
+              "id": 64077671
+            },
+            {
+              "name": "A. Mac Allister",
+              "number": 10,
+              "position": "Midfielder",
+              "id": 1081430
+            }
+          ],
+          [
+            {
+              "name": "C. Gakpo",
+              "number": 18,
+              "position": "Midfielder",
+              "id": 39921
+            },
+            {
+              "name": "F. Wirtz",
+              "number": 7,
+              "position": "Midfielder",
+              "id": 32719218
+            },
+            {
+              "name": "B. Barcola",
+              "number": 29,
+              "position": "Midfielder",
+              "id": 26066698
+            }
+          ],
+          [
+            {
+              "name": "A. Isak",
+              "number": 9,
+              "position": "Forward",
+              "id": 461258
+            }
+          ]
+        ],
+        "substitutes": [
+          {
+            "name": "R. Ngumoha",
+            "number": 73,
+            "position": "Forward",
+            "id": 72882439
+          },
+          {
+            "name": "L. Koumas",
+            "number": 67,
+            "position": "Forward",
+            "id": 52825381
+          },
+          {
+            "name": "Víctor Muñoz",
+            "number": 23,
+            "position": "Forward",
+            "id": 54539065
+          },
+          {
+            "name": "D. Szoboszlai",
+            "number": 8,
+            "position": "Midfielder",
+            "id": 176610
+          },
+          {
+            "name": "R. Gravenberch",
+            "number": 38,
+            "position": "Midfielder",
+            "id": 87416
+          },
+          {
+            "name": "W. Endo",
+            "number": 3,
+            "position": "Midfielder",
+            "id": 1368654
+          },
+          {
+            "name": "K. Tsimikas",
+            "number": 21,
+            "position": "Defender",
+            "id": 257754
+          },
+          {
+            "name": "J. Gomez",
+            "number": 2,
+            "position": "Defender",
+            "id": 45878
+          },
+          {
+            "name": "G. Mamardashvili",
+            "number": 25,
+            "position": "Goalkeeper",
+            "id": 3986514
+          }
+        ]
+      },
+      "awayTeam": {
+        "teamId": 57,
+        "formation": "4-2-3-1",
+        "startXI": [
+          [
+            {
+              "name": "David Raya",
+              "number": 1,
+              "position": "Goalkeeper",
+              "id": 3134019
+            }
+          ],
+          [
+            {
+              "name": "R. Calafiori",
+              "number": 33,
+              "position": "Defender",
+              "id": 25285526
+            },
+            {
+              "name": "Gabriel Magalhães",
+              "number": 6,
+              "position": "Defender",
+              "id": 3578218
+            },
+            {
+              "name": "E. Konsa",
+              "number": 15,
+              "position": "Defender",
+              "id": 3116148
+            },
+            {
+              "name": "J. Timber",
+              "number": 12,
+              "position": "Defender",
+              "id": 6238260
+            }
+          ],
+          [
+            {
+              "name": "Bruno Guimarães",
+              "number": 39,
+              "position": "Midfielder",
+              "id": 1631889
+            },
+            {
+              "name": "D. Rice",
+              "number": 41,
+              "position": "Midfielder",
+              "id": 473011
+            }
+          ],
+          [
+            {
+              "name": "C. Tzolis",
+              "number": 17,
+              "position": "Midfielder",
+              "id": 26049954
+            },
+            {
+              "name": "M. Ødegaard",
+              "number": 8,
+              "position": "Midfielder",
+              "id": 5977601
+            },
+            {
+              "name": "N. Madueke",
+              "number": 20,
+              "position": "Midfielder",
+              "id": 22012557
+            }
+          ],
+          [
+            {
+              "name": "K. Havertz",
+              "number": 29,
+              "position": "Forward",
+              "id": 157612
+            }
+          ]
+        ],
+        "substitutes": [
+          {
+            "name": "Martín Zubimendi",
+            "number": 36,
+            "position": "Midfielder",
+            "id": 7617869
+          },
+          {
+            "name": "V. Gyökeres",
+            "number": 14,
+            "position": "Forward",
+            "id": 3055773
+          },
+          {
+            "name": "Kepa",
+            "number": 13,
+            "position": "Goalkeeper",
+            "id": 366107
+          },
+          {
+            "name": "Cristhian Mosquera",
+            "number": 3,
+            "position": "Defender",
+            "id": 53722956
+          },
+          {
+            "name": "B. White",
+            "number": 4,
+            "position": "Defender",
+            "id": 3213553
+          },
+          {
+            "name": "P. Hincapié",
+            "number": 5,
+            "position": "Defender",
+            "id": 20578691
+          },
+          {
+            "name": "M. Lewis-Skelly",
+            "number": 49,
+            "position": "Defender",
+            "id": 50432599
+          },
+          {
+            "name": "E. Eze",
+            "number": 10,
+            "position": "Midfielder",
+            "id": 3153500
+          },
+          {
+            "name": "Mikel Merino",
+            "number": 23,
+            "position": "Midfielder",
+            "id": 7617225
+          }
+        ]
+      },
+      "events": [
+        {
+          "minute": "16",
+          "type": "Goal",
+          "teamId": 57,
+          "player": "Kai Havertz",
+          "assist": "Declan Rice",
+          "substitutedFor": null
+        },
+        {
+          "minute": "45+2",
+          "type": "Yellow Card",
+          "teamId": 64,
+          "player": "Bradley Barcola",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "55",
+          "type": "Yellow Card",
+          "teamId": 57,
+          "player": "Noni Madueke",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "59",
+          "type": "Substitution",
+          "teamId": 64,
+          "player": "Treymaurice Nyoni",
+          "assist": null,
+          "substitutedFor": "Dominik Szoboszlai"
+        },
+        {
+          "minute": "62",
+          "type": "Substitution",
+          "teamId": 57,
+          "player": "Bruno Guimarães",
+          "assist": null,
+          "substitutedFor": "Myles Lewis-Skelly"
+        },
+        {
+          "minute": "67",
+          "type": "Yellow Card",
+          "teamId": 64,
+          "player": "Milos Kerkez",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "67",
+          "type": "Substitution",
+          "teamId": 64,
+          "player": "Cody Gakpo",
+          "assist": null,
+          "substitutedFor": "Rio Ngumoha"
+        },
+        {
+          "minute": "72",
+          "type": "Yellow Card",
+          "teamId": 57,
+          "player": "Myles Lewis-Skelly",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "80",
+          "type": "Yellow Card",
+          "teamId": 57,
+          "player": "Jurriën Timber",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "80",
+          "type": "Yellow Card",
+          "teamId": 64,
+          "player": "Alexis Mac Allister",
+          "assist": null,
+          "substitutedFor": null
+        },
+        {
+          "minute": "81",
+          "type": "Substitution",
+          "teamId": 64,
+          "player": "Milos Kerkez",
+          "assist": null,
+          "substitutedFor": "Konstantinos Tsimikas"
+        },
+        {
+          "minute": "81",
+          "type": "Substitution",
+          "teamId": 64,
+          "player": "Ronald Araujo",
+          "assist": null,
+          "substitutedFor": "Víctor Muñoz"
+        },
+        {
+          "minute": "81",
+          "type": "Substitution",
+          "teamId": 64,
+          "player": "Florian Wirtz",
+          "assist": null,
+          "substitutedFor": "Lewis Koumas"
+        },
+        {
+          "minute": "84",
+          "type": "Substitution",
+          "teamId": 57,
+          "player": "Christos Tzolis",
+          "assist": null,
+          "substitutedFor": "Piero Hincapié"
+        },
+        {
+          "minute": "84",
+          "type": "Substitution",
+          "teamId": 57,
+          "player": "Kai Havertz",
+          "assist": null,
+          "substitutedFor": "Viktor Gyökeres"
+        },
+        {
+          "minute": "88",
+          "type": "Substitution",
+          "teamId": 57,
+          "player": "Martin Odegaard",
+          "assist": null,
+          "substitutedFor": "Mikel Merino"
+        },
+        {
+          "minute": "90+3",
+          "type": "Yellow Card",
+          "teamId": 57,
+          "player": "David Raya",
+          "assist": null,
+          "substitutedFor": null
+        }
+      ],
+      "statistics": {
+        "homeTeam": {
+          "teamId": 64,
+          "statistics": [
+            {
+              "displayName": "Expected Goals",
+              "value": 1.15
+            },
+            {
+              "displayName": "Big Chances Created",
+              "value": 1
+            },
+            {
+              "displayName": "Free Kicks",
+              "value": 10
+            },
+            {
+              "displayName": "Expected Assists",
+              "value": 1.25
+            },
+            {
+              "displayName": "Successful Crosses",
+              "value": 5
+            },
+            {
+              "displayName": "Crosses",
+              "value": 33
+            },
+            {
+              "displayName": "Passes Own Half",
+              "value": 143
+            },
+            {
+              "displayName": "Passes Opposition Half",
+              "value": 351
+            },
+            {
+              "displayName": "Successful Long Passes",
+              "value": 14
+            },
+            {
+              "displayName": "Long Passes",
+              "value": 46
+            },
+            {
+              "displayName": "Throw-Ins",
+              "value": 25
+            },
+            {
+              "displayName": "Key Passes",
+              "value": 12
+            },
+            {
+              "displayName": "Passes Into Final Third",
+              "value": 150
+            },
+            {
+              "displayName": "Backward Passes",
+              "value": 58
+            },
+            {
+              "displayName": "Goal Kicks",
+              "value": 4
+            },
+            {
+              "displayName": "Interceptions",
+              "value": 10
+            },
+            {
+              "displayName": "Successful Tackles",
+              "value": 11
+            },
+            {
+              "displayName": "Tackles",
+              "value": 17
+            },
+            {
+              "displayName": "Clearances",
+              "value": 22
+            },
+            {
+              "displayName": "Successful Aerial Duels",
+              "value": 25
+            },
+            {
+              "displayName": "Aerial Duels",
+              "value": 42
+            },
+            {
+              "displayName": "Successful Dribbles",
+              "value": 6
+            },
+            {
+              "displayName": "Dribbles",
+              "value": 17
+            },
+            {
+              "displayName": "Shots accuracy",
+              "value": 0
+            },
+            {
+              "displayName": "Failed passes",
+              "value": 84
+            },
+            {
+              "displayName": "Possession",
+              "value": 0.56
+            },
+            {
+              "displayName": "Shots on target",
+              "value": 0
+            },
+            {
+              "displayName": "Corners",
+              "value": 7
+            },
+            {
+              "displayName": "Offsides",
+              "value": 2
+            },
+            {
+              "displayName": "Successful passes",
+              "value": 377
+            },
+            {
+              "displayName": "Red cards",
+              "value": 0
+            },
+            {
+              "displayName": "Shots off target",
+              "value": 8
+            },
+            {
+              "displayName": "Blocked shots",
+              "value": 9
+            },
+            {
+              "displayName": "Shots within penalty area",
+              "value": 14
+            },
+            {
+              "displayName": "Total passes",
+              "value": 461
+            },
+            {
+              "displayName": "Goalkeeper saves",
+              "value": 2
+            },
+            {
+              "displayName": "Fouls",
+              "value": 18
+            },
+            {
+              "displayName": "Yellow cards",
+              "value": 4
+            },
+            {
+              "displayName": "Shots outside penalty area",
+              "value": 3
+            }
+          ]
+        },
+        "awayTeam": {
+          "teamId": 57,
+          "statistics": [
+            {
+              "displayName": "Expected Goals",
+              "value": 0.96
+            },
+            {
+              "displayName": "Big Chances Created",
+              "value": 1
+            },
+            {
+              "displayName": "Free Kicks",
+              "value": 17
+            },
+            {
+              "displayName": "Expected Assists",
+              "value": 1.54
+            },
+            {
+              "displayName": "Successful Crosses",
+              "value": 4
+            },
+            {
+              "displayName": "Crosses",
+              "value": 10
+            },
+            {
+              "displayName": "Passes Own Half",
+              "value": 157
+            },
+            {
+              "displayName": "Passes Opposition Half",
+              "value": 223
+            },
+            {
+              "displayName": "Successful Long Passes",
+              "value": 22
+            },
+            {
+              "displayName": "Long Passes",
+              "value": 67
+            },
+            {
+              "displayName": "Throw-Ins",
+              "value": 18
+            },
+            {
+              "displayName": "Key Passes",
+              "value": 10
+            },
+            {
+              "displayName": "Passes Into Final Third",
+              "value": 86
+            },
+            {
+              "displayName": "Backward Passes",
+              "value": 57
+            },
+            {
+              "displayName": "Goal Kicks",
+              "value": 11
+            },
+            {
+              "displayName": "Interceptions",
+              "value": 6
+            },
+            {
+              "displayName": "Successful Tackles",
+              "value": 16
+            },
+            {
+              "displayName": "Tackles",
+              "value": 23
+            },
+            {
+              "displayName": "Clearances",
+              "value": 36
+            },
+            {
+              "displayName": "Successful Aerial Duels",
+              "value": 17
+            },
+            {
+              "displayName": "Aerial Duels",
+              "value": 42
+            },
+            {
+              "displayName": "Successful Dribbles",
+              "value": 6
+            },
+            {
+              "displayName": "Dribbles",
+              "value": 14
+            },
+            {
+              "displayName": "Shots accuracy",
+              "value": 0.3
+            },
+            {
+              "displayName": "Failed passes",
+              "value": 101
+            },
+            {
+              "displayName": "Possession",
+              "value": 0.44
+            },
+            {
+              "displayName": "Shots on target",
+              "value": 3
+            },
+            {
+              "displayName": "Corners",
+              "value": 4
+            },
+            {
+              "displayName": "Offsides",
+              "value": 3
+            },
+            {
+              "displayName": "Successful passes",
+              "value": 269
+            },
+            {
+              "displayName": "Red cards",
+              "value": 0
+            },
+            {
+              "displayName": "Shots off target",
+              "value": 4
+            },
+            {
+              "displayName": "Blocked shots",
+              "value": 3
+            },
+            {
+              "displayName": "Shots within penalty area",
+              "value": 6
+            },
+            {
+              "displayName": "Total passes",
+              "value": 370
+            },
+            {
+              "displayName": "Goalkeeper saves",
+              "value": 0
+            },
+            {
+              "displayName": "Fouls",
+              "value": 10
+            },
+            {
+              "displayName": "Yellow cards",
+              "value": 4
+            },
+            {
+              "displayName": "Shots outside penalty area",
+              "value": 4
             }
           ]
         }

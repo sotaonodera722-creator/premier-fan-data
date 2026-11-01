@@ -1,28 +1,5 @@
 [
   {
-    "id": 65,
-    "name": "Manchester City FC",
-    "shortName": "Man City",
-    "tla": "MCI",
-    "crest": "https://crests.football-data.org/65.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Etihad Stadium",
-    "founded": 1880,
-    "coach": "Enzo Maresca",
-    "record": {
-      "position": 1,
-      "played": 9,
-      "wins": 7,
-      "draws": 0,
-      "losses": 2,
-      "goalsFor": 20,
-      "goalsAgainst": 10,
-      "goalDiff": 10,
-      "points": 21,
-      "winRate": 77.8
-    }
-  },
-  {
     "id": 57,
     "name": "Arsenal FC",
     "shortName": "Arsenal",
@@ -33,16 +10,39 @@
     "founded": 1886,
     "coach": "Mikel Arteta",
     "record": {
-      "position": 2,
-      "played": 8,
-      "wins": 7,
+      "position": 1,
+      "played": 9,
+      "wins": 8,
       "draws": 0,
       "losses": 1,
-      "goalsFor": 13,
+      "goalsFor": 14,
       "goalsAgainst": 5,
-      "goalDiff": 8,
+      "goalDiff": 9,
+      "points": 24,
+      "winRate": 88.9
+    }
+  },
+  {
+    "id": 65,
+    "name": "Manchester City FC",
+    "shortName": "Man City",
+    "tla": "MCI",
+    "crest": "https://crests.football-data.org/65.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Etihad Stadium",
+    "founded": 1880,
+    "coach": "Enzo Maresca",
+    "record": {
+      "position": 2,
+      "played": 9,
+      "wins": 7,
+      "draws": 0,
+      "losses": 2,
+      "goalsFor": 20,
+      "goalsAgainst": 10,
+      "goalDiff": 10,
       "points": 21,
-      "winRate": 87.5
+      "winRate": 77.8
     }
   },
   {
@@ -103,15 +103,15 @@
     "coach": "Andoni Iraola",
     "record": {
       "position": 5,
-      "played": 8,
+      "played": 9,
       "wins": 4,
       "draws": 3,
-      "losses": 1,
+      "losses": 2,
       "goalsFor": 11,
-      "goalsAgainst": 8,
-      "goalDiff": 3,
+      "goalsAgainst": 9,
+      "goalDiff": 2,
       "points": 15,
-      "winRate": 50
+      "winRate": 44.4
     }
   },
   {
