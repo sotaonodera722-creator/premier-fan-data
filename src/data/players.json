@@ -5460,6 +5460,19 @@
     "appearances": null
   },
   {
+    "id": 303053,
+    "name": "Nathanael Kalembo",
+    "teamId": 354,
+    "position": "MF",
+    "dateOfBirth": "2010-10-28",
+    "age": 16,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 641,
     "name": "Jean-Philippe Mateta",
     "teamId": 354,
@@ -5571,19 +5584,6 @@
     "dateOfBirth": "2007-03-22",
     "age": 19,
     "nationality": "USA",
-    "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
-  },
-  {
-    "id": 303053,
-    "name": "Nathanael Kalembo",
-    "teamId": 354,
-    "position": "MF",
-    "dateOfBirth": "2010-10-28",
-    "age": 16,
-    "nationality": "England",
     "isJapanese": false,
     "goals": null,
     "assists": null,
