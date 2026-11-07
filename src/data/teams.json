@@ -92,6 +92,29 @@
     }
   },
   {
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": "David Moyes",
+    "record": {
+      "position": 5,
+      "played": 10,
+      "wins": 4,
+      "draws": 4,
+      "losses": 2,
+      "goalsFor": 12,
+      "goalsAgainst": 10,
+      "goalDiff": 2,
+      "points": 16,
+      "winRate": 40
+    }
+  },
+  {
     "id": 64,
     "name": "Liverpool FC",
     "shortName": "Liverpool",
@@ -102,7 +125,7 @@
     "founded": 1892,
     "coach": "Andoni Iraola",
     "record": {
-      "position": 5,
+      "position": 6,
       "played": 9,
       "wins": 4,
       "draws": 3,
@@ -125,7 +148,7 @@
     "founded": 1889,
     "coach": "Keith Andrews",
     "record": {
-      "position": 6,
+      "position": 7,
       "played": 9,
       "wins": 3,
       "draws": 5,
@@ -134,29 +157,6 @@
       "goalsAgainst": 9,
       "goalDiff": 7,
       "points": 14,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": "David Moyes",
-    "record": {
-      "position": 7,
-      "played": 9,
-      "wins": 3,
-      "draws": 4,
-      "losses": 2,
-      "goalsFor": 9,
-      "goalsAgainst": 9,
-      "goalDiff": 0,
-      "points": 13,
       "winRate": 33.3
     }
   },
@@ -356,15 +356,15 @@
     "coach": "Frank Lampard",
     "record": {
       "position": 16,
-      "played": 9,
+      "played": 10,
       "wins": 3,
       "draws": 0,
-      "losses": 6,
-      "goalsFor": 9,
-      "goalsAgainst": 16,
-      "goalDiff": -7,
+      "losses": 7,
+      "goalsFor": 10,
+      "goalsAgainst": 19,
+      "goalDiff": -9,
       "points": 9,
-      "winRate": 33.3
+      "winRate": 30
     }
   },
   {
