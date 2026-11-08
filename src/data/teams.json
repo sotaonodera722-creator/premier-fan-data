@@ -23,29 +23,6 @@
     }
   },
   {
-    "id": 65,
-    "name": "Manchester City FC",
-    "shortName": "Man City",
-    "tla": "MCI",
-    "crest": "https://crests.football-data.org/65.png",
-    "clubColors": "Sky Blue / White",
-    "venue": "Etihad Stadium",
-    "founded": 1880,
-    "coach": "Enzo Maresca",
-    "record": {
-      "position": 2,
-      "played": 10,
-      "wins": 7,
-      "draws": 0,
-      "losses": 3,
-      "goalsFor": 21,
-      "goalsAgainst": 13,
-      "goalDiff": 8,
-      "points": 21,
-      "winRate": 70
-    }
-  },
-  {
     "id": 397,
     "name": "Brighton & Hove Albion FC",
     "shortName": "Brighton Hove",
@@ -56,62 +33,39 @@
     "founded": 1898,
     "coach": "Fabian Hürzeler",
     "record": {
-      "position": 3,
-      "played": 9,
-      "wins": 6,
-      "draws": 1,
-      "losses": 2,
-      "goalsFor": 24,
-      "goalsAgainst": 7,
-      "goalDiff": 17,
-      "points": 19,
-      "winRate": 66.7
-    }
-  },
-  {
-    "id": 61,
-    "name": "Chelsea FC",
-    "shortName": "Chelsea",
-    "tla": "CHE",
-    "crest": "https://crests.football-data.org/61.png",
-    "clubColors": "Royal Blue / White",
-    "venue": "Stamford Bridge",
-    "founded": 1905,
-    "coach": "Xabi Alonso",
-    "record": {
-      "position": 4,
-      "played": 9,
-      "wins": 5,
-      "draws": 1,
-      "losses": 3,
-      "goalsFor": 19,
-      "goalsAgainst": 15,
-      "goalDiff": 4,
-      "points": 16,
-      "winRate": 55.6
-    }
-  },
-  {
-    "id": 62,
-    "name": "Everton FC",
-    "shortName": "Everton",
-    "tla": "EVE",
-    "crest": "https://crests.football-data.org/62.png",
-    "clubColors": "Blue / White",
-    "venue": "Goodison Park",
-    "founded": 1878,
-    "coach": "David Moyes",
-    "record": {
-      "position": 5,
+      "position": 2,
       "played": 10,
-      "wins": 4,
-      "draws": 4,
+      "wins": 7,
+      "draws": 1,
       "losses": 2,
-      "goalsFor": 12,
-      "goalsAgainst": 10,
-      "goalDiff": 2,
-      "points": 16,
-      "winRate": 40
+      "goalsFor": 26,
+      "goalsAgainst": 7,
+      "goalDiff": 19,
+      "points": 22,
+      "winRate": 70
+    }
+  },
+  {
+    "id": 65,
+    "name": "Manchester City FC",
+    "shortName": "Man City",
+    "tla": "MCI",
+    "crest": "https://crests.football-data.org/65.png",
+    "clubColors": "Sky Blue / White",
+    "venue": "Etihad Stadium",
+    "founded": 1880,
+    "coach": "Enzo Maresca",
+    "record": {
+      "position": 3,
+      "played": 10,
+      "wins": 7,
+      "draws": 0,
+      "losses": 3,
+      "goalsFor": 21,
+      "goalsAgainst": 13,
+      "goalDiff": 8,
+      "points": 21,
+      "winRate": 70
     }
   },
   {
@@ -125,62 +79,62 @@
     "founded": 1892,
     "coach": "Andoni Iraola",
     "record": {
-      "position": 6,
-      "played": 9,
-      "wins": 4,
+      "position": 4,
+      "played": 10,
+      "wins": 5,
       "draws": 3,
       "losses": 2,
-      "goalsFor": 11,
+      "goalsFor": 12,
       "goalsAgainst": 9,
-      "goalDiff": 2,
-      "points": 15,
-      "winRate": 44.4
+      "goalDiff": 3,
+      "points": 18,
+      "winRate": 50
     }
   },
   {
-    "id": 402,
-    "name": "Brentford FC",
-    "shortName": "Brentford",
-    "tla": "BRE",
-    "crest": "https://crests.football-data.org/402.png",
-    "clubColors": "Red / White / Black",
-    "venue": "Griffin Park",
-    "founded": 1889,
-    "coach": "Keith Andrews",
+    "id": 61,
+    "name": "Chelsea FC",
+    "shortName": "Chelsea",
+    "tla": "CHE",
+    "crest": "https://crests.football-data.org/61.png",
+    "clubColors": "Royal Blue / White",
+    "venue": "Stamford Bridge",
+    "founded": 1905,
+    "coach": "Xabi Alonso",
     "record": {
-      "position": 7,
-      "played": 9,
-      "wins": 3,
-      "draws": 5,
-      "losses": 1,
-      "goalsFor": 16,
-      "goalsAgainst": 9,
-      "goalDiff": 7,
-      "points": 14,
-      "winRate": 33.3
-    }
-  },
-  {
-    "id": 341,
-    "name": "Leeds United FC",
-    "shortName": "Leeds United",
-    "tla": "LEE",
-    "crest": "https://crests.football-data.org/341.png",
-    "clubColors": "White / Blue",
-    "venue": "Elland Road",
-    "founded": 1904,
-    "coach": "Daniel Farke",
-    "record": {
-      "position": 8,
+      "position": 5,
       "played": 10,
-      "wins": 3,
-      "draws": 5,
+      "wins": 5,
+      "draws": 1,
+      "losses": 4,
+      "goalsFor": 19,
+      "goalsAgainst": 16,
+      "goalDiff": 3,
+      "points": 16,
+      "winRate": 50
+    }
+  },
+  {
+    "id": 62,
+    "name": "Everton FC",
+    "shortName": "Everton",
+    "tla": "EVE",
+    "crest": "https://crests.football-data.org/62.png",
+    "clubColors": "Blue / White",
+    "venue": "Goodison Park",
+    "founded": 1878,
+    "coach": "David Moyes",
+    "record": {
+      "position": 6,
+      "played": 10,
+      "wins": 4,
+      "draws": 4,
       "losses": 2,
-      "goalsFor": 10,
-      "goalsAgainst": 8,
+      "goalsFor": 12,
+      "goalsAgainst": 10,
       "goalDiff": 2,
-      "points": 14,
-      "winRate": 30
+      "points": 16,
+      "winRate": 40
     }
   },
   {
@@ -194,16 +148,62 @@
     "founded": 1890,
     "coach": "Marco Rose",
     "record": {
-      "position": 9,
-      "played": 9,
-      "wins": 3,
+      "position": 7,
+      "played": 10,
+      "wins": 4,
       "draws": 3,
       "losses": 3,
-      "goalsFor": 14,
+      "goalsFor": 15,
       "goalsAgainst": 13,
-      "goalDiff": 1,
-      "points": 12,
-      "winRate": 33.3
+      "goalDiff": 2,
+      "points": 15,
+      "winRate": 40
+    }
+  },
+  {
+    "id": 402,
+    "name": "Brentford FC",
+    "shortName": "Brentford",
+    "tla": "BRE",
+    "crest": "https://crests.football-data.org/402.png",
+    "clubColors": "Red / White / Black",
+    "venue": "Griffin Park",
+    "founded": 1889,
+    "coach": "Keith Andrews",
+    "record": {
+      "position": 8,
+      "played": 10,
+      "wins": 3,
+      "draws": 5,
+      "losses": 2,
+      "goalsFor": 16,
+      "goalsAgainst": 11,
+      "goalDiff": 5,
+      "points": 14,
+      "winRate": 30
+    }
+  },
+  {
+    "id": 341,
+    "name": "Leeds United FC",
+    "shortName": "Leeds United",
+    "tla": "LEE",
+    "crest": "https://crests.football-data.org/341.png",
+    "clubColors": "White / Blue",
+    "venue": "Elland Road",
+    "founded": 1904,
+    "coach": "Daniel Farke",
+    "record": {
+      "position": 9,
+      "played": 10,
+      "wins": 3,
+      "draws": 5,
+      "losses": 2,
+      "goalsFor": 10,
+      "goalsAgainst": 8,
+      "goalDiff": 2,
+      "points": 14,
+      "winRate": 30
     }
   },
   {
@@ -310,15 +310,15 @@
     "coach": "Gary O'Neil",
     "record": {
       "position": 14,
-      "played": 9,
+      "played": 10,
       "wins": 3,
       "draws": 2,
-      "losses": 4,
+      "losses": 5,
       "goalsFor": 14,
-      "goalsAgainst": 18,
-      "goalDiff": -4,
+      "goalsAgainst": 19,
+      "goalDiff": -5,
       "points": 11,
-      "winRate": 33.3
+      "winRate": 30
     }
   },
   {
@@ -391,6 +391,29 @@
     }
   },
   {
+    "id": 71,
+    "name": "Sunderland AFC",
+    "shortName": "Sunderland",
+    "tla": "SUN",
+    "crest": "https://crests.football-data.org/71.png",
+    "clubColors": "Red / White",
+    "venue": "Stadium of Light",
+    "founded": 1879,
+    "coach": "Regis Le Bris",
+    "record": {
+      "position": 18,
+      "played": 10,
+      "wins": 2,
+      "draws": 2,
+      "losses": 6,
+      "goalsFor": 8,
+      "goalsAgainst": 17,
+      "goalDiff": -9,
+      "points": 8,
+      "winRate": 20
+    }
+  },
+  {
     "id": 66,
     "name": "Manchester United FC",
     "shortName": "Man United",
@@ -401,7 +424,7 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
-      "position": 18,
+      "position": 19,
       "played": 9,
       "wins": 1,
       "draws": 4,
@@ -424,39 +447,16 @@
     "founded": 1905,
     "coach": "Pierre Sage",
     "record": {
-      "position": 19,
-      "played": 9,
+      "position": 20,
+      "played": 10,
       "wins": 2,
       "draws": 1,
-      "losses": 6,
+      "losses": 7,
       "goalsFor": 9,
-      "goalsAgainst": 21,
-      "goalDiff": -12,
+      "goalsAgainst": 22,
+      "goalDiff": -13,
       "points": 7,
-      "winRate": 22.2
-    }
-  },
-  {
-    "id": 71,
-    "name": "Sunderland AFC",
-    "shortName": "Sunderland",
-    "tla": "SUN",
-    "crest": "https://crests.football-data.org/71.png",
-    "clubColors": "Red / White",
-    "venue": "Stadium of Light",
-    "founded": 1879,
-    "coach": "Regis Le Bris",
-    "record": {
-      "position": 20,
-      "played": 9,
-      "wins": 1,
-      "draws": 2,
-      "losses": 6,
-      "goalsFor": 7,
-      "goalsAgainst": 17,
-      "goalDiff": -10,
-      "points": 5,
-      "winRate": 11.1
+      "winRate": 20
     }
   }
 ]
