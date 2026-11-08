@@ -530,7 +530,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 9
+    "appearances": 10
   },
   {
     "id": 34646,
@@ -541,9 +541,9 @@
     "age": 32,
     "nationality": "Scotland",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 2,
+    "assists": 4,
+    "appearances": 10
   },
   {
     "id": 114024,
@@ -595,7 +595,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 3,
-    "appearances": 6
+    "appearances": 7
   },
   {
     "id": 7985,
@@ -619,9 +619,9 @@
     "age": 25,
     "nationality": "Senegal",
     "isJapanese": false,
-    "goals": 5,
-    "assists": 0,
-    "appearances": 8
+    "goals": 6,
+    "assists": 1,
+    "appearances": 9
   },
   {
     "id": 181901,
@@ -645,9 +645,9 @@
     "age": 20,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
-    "appearances": 8
+    "appearances": 9
   },
   {
     "id": 265040,
@@ -1425,9 +1425,9 @@
     "age": 26,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 1,
-    "assists": 0,
-    "appearances": 7
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 8460,
@@ -1971,7 +1971,7 @@
     "age": 27,
     "nationality": "Sweden",
     "isJapanese": false,
-    "goals": 6,
+    "goals": 7,
     "assists": 0,
     "appearances": 9
   },
@@ -2556,9 +2556,9 @@
     "age": 32,
     "nationality": "Portugal",
     "isJapanese": false,
-    "goals": 3,
-    "assists": 1,
-    "appearances": 9
+    "goals": 4,
+    "assists": 2,
+    "appearances": 10
   },
   {
     "id": 3658,
@@ -2675,7 +2675,7 @@
     "isJapanese": false,
     "goals": 4,
     "assists": 0,
-    "appearances": 9
+    "appearances": 10
   },
   {
     "id": 30842,
@@ -2688,7 +2688,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 2,
-    "appearances": 9
+    "appearances": 10
   },
   {
     "id": 99731,
@@ -4568,7 +4568,7 @@
     "teamId": 349,
     "position": "GK",
     "dateOfBirth": "1995-11-09",
-    "age": 30,
+    "age": 31,
     "nationality": "England",
     "isJapanese": false,
     "goals": null,
@@ -4805,7 +4805,7 @@
     "age": 25,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 1,
     "appearances": 10
   },

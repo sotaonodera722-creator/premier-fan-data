@@ -84,9 +84,9 @@
       "wins": 5,
       "draws": 3,
       "losses": 2,
-      "goalsFor": 12,
-      "goalsAgainst": 9,
-      "goalDiff": 3,
+      "goalsFor": 14,
+      "goalsAgainst": 10,
+      "goalDiff": 4,
       "points": 18,
       "winRate": 50
     }
@@ -153,8 +153,8 @@
       "wins": 4,
       "draws": 3,
       "losses": 3,
-      "goalsFor": 15,
-      "goalsAgainst": 13,
+      "goalsFor": 16,
+      "goalsAgainst": 14,
       "goalDiff": 2,
       "points": 15,
       "winRate": 40
@@ -207,6 +207,29 @@
     }
   },
   {
+    "id": 58,
+    "name": "Aston Villa FC",
+    "shortName": "Aston Villa",
+    "tla": "AVL",
+    "crest": "https://crests.football-data.org/58.png",
+    "clubColors": "Claret / Sky Blue",
+    "venue": "Villa Park",
+    "founded": 1872,
+    "coach": "Unai Emery",
+    "record": {
+      "position": 10,
+      "played": 10,
+      "wins": 3,
+      "draws": 4,
+      "losses": 3,
+      "goalsFor": 14,
+      "goalsAgainst": 17,
+      "goalDiff": -3,
+      "points": 13,
+      "winRate": 30
+    }
+  },
+  {
     "id": 73,
     "name": "Tottenham Hotspur FC",
     "shortName": "Tottenham",
@@ -217,7 +240,7 @@
     "founded": 1882,
     "coach": "Roberto De Zerbi",
     "record": {
-      "position": 10,
+      "position": 11,
       "played": 10,
       "wins": 3,
       "draws": 3,
@@ -240,7 +263,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 11,
+      "position": 12,
       "played": 10,
       "wins": 3,
       "draws": 3,
@@ -250,29 +273,6 @@
       "goalDiff": -3,
       "points": 12,
       "winRate": 30
-    }
-  },
-  {
-    "id": 58,
-    "name": "Aston Villa FC",
-    "shortName": "Aston Villa",
-    "tla": "AVL",
-    "crest": "https://crests.football-data.org/58.png",
-    "clubColors": "Claret / Sky Blue",
-    "venue": "Villa Park",
-    "founded": 1872,
-    "coach": "Unai Emery",
-    "record": {
-      "position": 12,
-      "played": 9,
-      "wins": 3,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 10,
-      "goalsAgainst": 13,
-      "goalDiff": -3,
-      "points": 12,
-      "winRate": 33.3
     }
   },
   {
@@ -314,8 +314,8 @@
       "wins": 3,
       "draws": 2,
       "losses": 5,
-      "goalsFor": 14,
-      "goalsAgainst": 19,
+      "goalsFor": 15,
+      "goalsAgainst": 20,
       "goalDiff": -5,
       "points": 11,
       "winRate": 30
@@ -391,29 +391,6 @@
     }
   },
   {
-    "id": 71,
-    "name": "Sunderland AFC",
-    "shortName": "Sunderland",
-    "tla": "SUN",
-    "crest": "https://crests.football-data.org/71.png",
-    "clubColors": "Red / White",
-    "venue": "Stadium of Light",
-    "founded": 1879,
-    "coach": "Regis Le Bris",
-    "record": {
-      "position": 18,
-      "played": 10,
-      "wins": 2,
-      "draws": 2,
-      "losses": 6,
-      "goalsFor": 8,
-      "goalsAgainst": 17,
-      "goalDiff": -9,
-      "points": 8,
-      "winRate": 20
-    }
-  },
-  {
     "id": 66,
     "name": "Manchester United FC",
     "shortName": "Man United",
@@ -424,16 +401,39 @@
     "founded": 1878,
     "coach": "Michael Carrick",
     "record": {
-      "position": 19,
-      "played": 9,
+      "position": 18,
+      "played": 10,
       "wins": 1,
-      "draws": 4,
+      "draws": 5,
       "losses": 4,
-      "goalsFor": 10,
-      "goalsAgainst": 15,
+      "goalsFor": 14,
+      "goalsAgainst": 19,
       "goalDiff": -5,
-      "points": 7,
-      "winRate": 11.1
+      "points": 8,
+      "winRate": 10
+    }
+  },
+  {
+    "id": 71,
+    "name": "Sunderland AFC",
+    "shortName": "Sunderland",
+    "tla": "SUN",
+    "crest": "https://crests.football-data.org/71.png",
+    "clubColors": "Red / White",
+    "venue": "Stadium of Light",
+    "founded": 1879,
+    "coach": "Regis Le Bris",
+    "record": {
+      "position": 19,
+      "played": 10,
+      "wins": 2,
+      "draws": 2,
+      "losses": 6,
+      "goalsFor": 8,
+      "goalsAgainst": 17,
+      "goalDiff": -9,
+      "points": 8,
+      "winRate": 20
     }
   },
   {
@@ -452,9 +452,9 @@
       "wins": 2,
       "draws": 1,
       "losses": 7,
-      "goalsFor": 9,
-      "goalsAgainst": 22,
-      "goalDiff": -13,
+      "goalsFor": 10,
+      "goalsAgainst": 24,
+      "goalDiff": -14,
       "points": 7,
       "winRate": 20
     }
