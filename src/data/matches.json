@@ -3,7 +3,7 @@
     "competition": "Premier League",
     "season": "2026/27",
     "currentMatchday": 11,
-    "lastUpdated": "2026-11-19T12:35:59.075Z",
+    "lastUpdated": "2026-11-19T22:56:40.574Z",
     "source": "football-data.org"
   },
   "matches": [
@@ -2208,13 +2208,13 @@
       "awayGoals": null
     },
     {
-      "id": 560742,
+      "id": 560748,
       "matchday": 21,
-      "utcDate": "2027-01-16T15:00:00Z",
+      "utcDate": "2027-01-16T12:30:00Z",
       "status": "TIMED",
       "played": false,
-      "homeTeamId": 1044,
-      "awayTeamId": 349,
+      "homeTeamId": 1076,
+      "awayTeamId": 62,
       "homeGoals": null,
       "awayGoals": null
     },
@@ -2237,50 +2237,6 @@
       "played": false,
       "homeTeamId": 61,
       "awayTeamId": 71,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560745,
-      "matchday": 21,
-      "utcDate": "2027-01-16T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 402,
-      "awayTeamId": 397,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560746,
-      "matchday": 21,
-      "utcDate": "2027-01-16T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 58,
-      "awayTeamId": 66,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560747,
-      "matchday": 21,
-      "utcDate": "2027-01-16T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 73,
-      "awayTeamId": 341,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560748,
-      "matchday": 21,
-      "utcDate": "2027-01-16T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 1076,
-      "awayTeamId": 62,
       "homeGoals": null,
       "awayGoals": null
     },
@@ -2318,6 +2274,50 @@
       "awayGoals": null
     },
     {
+      "id": 560746,
+      "matchday": 21,
+      "utcDate": "2027-01-16T17:30:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 58,
+      "awayTeamId": 66,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560742,
+      "matchday": 21,
+      "utcDate": "2027-01-17T14:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 1044,
+      "awayTeamId": 349,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560747,
+      "matchday": 21,
+      "utcDate": "2027-01-17T16:30:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 73,
+      "awayTeamId": 341,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560745,
+      "matchday": 21,
+      "utcDate": "2027-01-18T20:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 402,
+      "awayTeamId": 397,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
       "id": 560752,
       "matchday": 22,
       "utcDate": "2027-01-23T15:00:00Z",
@@ -2325,61 +2325,6 @@
       "played": false,
       "homeTeamId": 349,
       "awayTeamId": 322,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560753,
-      "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 62,
-      "awayTeamId": 402,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560754,
-      "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 71,
-      "awayTeamId": 1076,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560755,
-      "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 351,
-      "awayTeamId": 1044,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560756,
-      "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 57,
-      "awayTeamId": 67,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560757,
-      "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 341,
-      "awayTeamId": 61,
       "homeGoals": null,
       "awayGoals": null
     },
@@ -2395,20 +2340,20 @@
       "awayGoals": null
     },
     {
-      "id": 560759,
+      "id": 560756,
       "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
+      "utcDate": "2027-01-23T17:30:00Z",
       "status": "TIMED",
       "played": false,
-      "homeTeamId": 66,
-      "awayTeamId": 64,
+      "homeTeamId": 57,
+      "awayTeamId": 67,
       "homeGoals": null,
       "awayGoals": null
     },
     {
       "id": 560760,
       "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
+      "utcDate": "2027-01-23T20:00:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 397,
@@ -2417,9 +2362,42 @@
       "awayGoals": null
     },
     {
+      "id": 560753,
+      "matchday": 22,
+      "utcDate": "2027-01-24T14:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 62,
+      "awayTeamId": 402,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560754,
+      "matchday": 22,
+      "utcDate": "2027-01-24T14:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 71,
+      "awayTeamId": 1076,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560755,
+      "matchday": 22,
+      "utcDate": "2027-01-24T14:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 351,
+      "awayTeamId": 1044,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
       "id": 560761,
       "matchday": 22,
-      "utcDate": "2027-01-23T15:00:00Z",
+      "utcDate": "2027-01-24T14:00:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 354,
@@ -2428,24 +2406,35 @@
       "awayGoals": null
     },
     {
-      "id": 560762,
-      "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "id": 560759,
+      "matchday": 22,
+      "utcDate": "2027-01-24T16:30:00Z",
       "status": "TIMED",
       "played": false,
-      "homeTeamId": 73,
-      "awayTeamId": 71,
+      "homeTeamId": 66,
+      "awayTeamId": 64,
       "homeGoals": null,
       "awayGoals": null
     },
     {
-      "id": 560763,
-      "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "id": 560757,
+      "matchday": 22,
+      "utcDate": "2027-01-25T20:00:00Z",
       "status": "TIMED",
       "played": false,
-      "homeTeamId": 402,
-      "awayTeamId": 66,
+      "homeTeamId": 341,
+      "awayTeamId": 61,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560769,
+      "matchday": 23,
+      "utcDate": "2027-01-30T12:30:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 64,
+      "awayTeamId": 62,
       "homeGoals": null,
       "awayGoals": null
     },
@@ -2461,9 +2450,42 @@
       "awayGoals": null
     },
     {
-      "id": 560765,
+      "id": 560771,
       "matchday": 23,
       "utcDate": "2027-01-30T15:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 58,
+      "awayTeamId": 349,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560768,
+      "matchday": 23,
+      "utcDate": "2027-01-30T17:30:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 61,
+      "awayTeamId": 351,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560762,
+      "matchday": 23,
+      "utcDate": "2027-01-31T14:00:00Z",
+      "status": "TIMED",
+      "played": false,
+      "homeTeamId": 73,
+      "awayTeamId": 71,
+      "homeGoals": null,
+      "awayGoals": null
+    },
+    {
+      "id": 560765,
+      "matchday": 23,
+      "utcDate": "2027-01-31T14:00:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 322,
@@ -2474,7 +2496,7 @@
     {
       "id": 560766,
       "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "utcDate": "2027-01-31T14:00:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 1076,
@@ -2485,7 +2507,7 @@
     {
       "id": 560767,
       "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "utcDate": "2027-01-31T14:00:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 1044,
@@ -2494,31 +2516,9 @@
       "awayGoals": null
     },
     {
-      "id": 560768,
-      "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 61,
-      "awayTeamId": 351,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
-      "id": 560769,
-      "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
-      "status": "TIMED",
-      "played": false,
-      "homeTeamId": 64,
-      "awayTeamId": 62,
-      "homeGoals": null,
-      "awayGoals": null
-    },
-    {
       "id": 560770,
       "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "utcDate": "2027-01-31T16:30:00Z",
       "status": "TIMED",
       "played": false,
       "homeTeamId": 65,
@@ -2527,13 +2527,13 @@
       "awayGoals": null
     },
     {
-      "id": 560771,
+      "id": 560763,
       "matchday": 23,
-      "utcDate": "2027-01-30T15:00:00Z",
+      "utcDate": "2027-02-01T20:00:00Z",
       "status": "TIMED",
       "played": false,
-      "homeTeamId": 58,
-      "awayTeamId": 349,
+      "homeTeamId": 402,
+      "awayTeamId": 66,
       "homeGoals": null,
       "awayGoals": null
     },
