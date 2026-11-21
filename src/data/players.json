@@ -1583,7 +1583,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 1,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 290848,
@@ -1596,7 +1596,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 291727,
@@ -1674,7 +1674,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 1795,
@@ -2155,7 +2155,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 1,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 122266,
@@ -2168,7 +2168,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 3,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 187202,
@@ -2176,7 +2176,7 @@
     "teamId": 65,
     "position": "DF",
     "dateOfBirth": "2004-11-21",
-    "age": 21,
+    "age": 22,
     "nationality": "England",
     "isJapanese": false,
     "goals": null,
@@ -2259,7 +2259,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 0,
-    "appearances": 9
+    "appearances": 10
   },
   {
     "id": 107330,
@@ -2285,7 +2285,7 @@
     "isJapanese": false,
     "goals": 5,
     "assists": 2,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 221819,
@@ -2324,7 +2324,7 @@
     "isJapanese": false,
     "goals": 9,
     "assists": 0,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 94091,
@@ -5075,7 +5075,7 @@
     "teamId": 351,
     "position": "MF",
     "dateOfBirth": "1997-11-21",
-    "age": 28,
+    "age": 29,
     "nationality": "England",
     "isJapanese": false,
     "goals": null,
@@ -5764,7 +5764,7 @@
     "teamId": 397,
     "position": "MF",
     "dateOfBirth": "2000-11-21",
-    "age": 25,
+    "age": 26,
     "nationality": "Denmark",
     "isJapanese": false,
     "goals": null,
