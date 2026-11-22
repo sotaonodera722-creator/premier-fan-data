@@ -34,15 +34,15 @@
     "coach": "Fabian Hürzeler",
     "record": {
       "position": 2,
-      "played": 10,
+      "played": 11,
       "wins": 7,
       "draws": 1,
-      "losses": 2,
+      "losses": 3,
       "goalsFor": 26,
-      "goalsAgainst": 7,
-      "goalDiff": 19,
+      "goalsAgainst": 9,
+      "goalDiff": 17,
       "points": 22,
-      "winRate": 70
+      "winRate": 63.6
     }
   },
   {
@@ -230,6 +230,29 @@
     }
   },
   {
+    "id": 322,
+    "name": "Hull City AFC",
+    "shortName": "Hull City",
+    "tla": "HUL",
+    "crest": "https://crests.football-data.org/322.png",
+    "clubColors": "Orange / Black",
+    "venue": "Kingston Communications Stadium",
+    "founded": 1904,
+    "coach": "Sergej Jakirović",
+    "record": {
+      "position": 11,
+      "played": 11,
+      "wins": 3,
+      "draws": 5,
+      "losses": 3,
+      "goalsFor": 13,
+      "goalsAgainst": 11,
+      "goalDiff": 2,
+      "points": 14,
+      "winRate": 27.3
+    }
+  },
+  {
     "id": 58,
     "name": "Aston Villa FC",
     "shortName": "Aston Villa",
@@ -240,7 +263,7 @@
     "founded": 1872,
     "coach": "Unai Emery",
     "record": {
-      "position": 11,
+      "position": 12,
       "played": 11,
       "wins": 3,
       "draws": 5,
@@ -263,7 +286,7 @@
     "founded": 1881,
     "coach": "Matthias Jaissle",
     "record": {
-      "position": 12,
+      "position": 13,
       "played": 11,
       "wins": 3,
       "draws": 4,
@@ -286,7 +309,7 @@
     "founded": 1883,
     "coach": "Frank Lampard",
     "record": {
-      "position": 13,
+      "position": 14,
       "played": 11,
       "wins": 4,
       "draws": 0,
@@ -296,29 +319,6 @@
       "goalDiff": -8,
       "points": 12,
       "winRate": 36.4
-    }
-  },
-  {
-    "id": 322,
-    "name": "Hull City AFC",
-    "shortName": "Hull City",
-    "tla": "HUL",
-    "crest": "https://crests.football-data.org/322.png",
-    "clubColors": "Orange / Black",
-    "venue": "Kingston Communications Stadium",
-    "founded": 1904,
-    "coach": "Sergej Jakirović",
-    "record": {
-      "position": 14,
-      "played": 10,
-      "wins": 2,
-      "draws": 5,
-      "losses": 3,
-      "goalsFor": 11,
-      "goalsAgainst": 11,
-      "goalDiff": 0,
-      "points": 11,
-      "winRate": 20
     }
   },
   {
