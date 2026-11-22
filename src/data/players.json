@@ -512,7 +512,7 @@
     "teamId": 58,
     "position": "MF",
     "dateOfBirth": "1999-11-23",
-    "age": 26,
+    "age": 27,
     "nationality": "France",
     "isJapanese": false,
     "goals": null,
@@ -1893,7 +1893,7 @@
     "age": 26,
     "nationality": "Hungary",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 1,
     "appearances": 9
   },
@@ -1906,9 +1906,9 @@
     "age": 23,
     "nationality": "Germany",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 2,
+    "assists": 4,
+    "appearances": 11
   },
   {
     "id": 45681,
@@ -2049,7 +2049,7 @@
     "age": 23,
     "nationality": "Spain",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 3,
     "assists": 0,
     "appearances": 10
   },
