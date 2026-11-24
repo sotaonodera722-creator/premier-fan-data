@@ -6092,7 +6092,7 @@
     "age": 25,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 4,
     "assists": 1,
     "appearances": 11
   },
@@ -6196,7 +6196,7 @@
     "age": 28,
     "nationality": "Germany",
     "isJapanese": false,
-    "goals": 2,
+    "goals": 3,
     "assists": 0,
     "appearances": 10
   },
@@ -6248,7 +6248,7 @@
     "age": 24,
     "nationality": "Portugal",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
     "appearances": 7
   },
@@ -6327,7 +6327,7 @@
     "nationality": "England",
     "isJapanese": false,
     "goals": 1,
-    "assists": 2,
+    "assists": 4,
     "appearances": 11
   },
   {
