@@ -3471,6 +3471,19 @@
     "appearances": null
   },
   {
+    "id": 304337,
+    "name": "Joe Cowan",
+    "teamId": 71,
+    "position": "MF",
+    "dateOfBirth": "2008-09-12",
+    "age": 18,
+    "nationality": "England",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
     "id": 7914,
     "name": "Martin Dúbravka",
     "teamId": 73,
@@ -5610,6 +5623,19 @@
     "dateOfBirth": "2007-03-22",
     "age": 19,
     "nationality": "USA",
+    "isJapanese": false,
+    "goals": null,
+    "assists": null,
+    "appearances": null
+  },
+  {
+    "id": 304343,
+    "name": "Charlie Walker-Smith",
+    "teamId": 354,
+    "position": "MF",
+    "dateOfBirth": "2007-09-19",
+    "age": 19,
+    "nationality": "Wales",
     "isJapanese": false,
     "goals": null,
     "assists": null,
