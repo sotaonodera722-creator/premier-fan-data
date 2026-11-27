@@ -172,15 +172,15 @@
     "coach": "Xabi Alonso",
     "record": {
       "position": 8,
-      "played": 11,
+      "played": 12,
       "wins": 5,
       "draws": 1,
-      "losses": 5,
-      "goalsFor": 20,
-      "goalsAgainst": 20,
-      "goalDiff": 0,
+      "losses": 6,
+      "goalsFor": 22,
+      "goalsAgainst": 23,
+      "goalDiff": -1,
       "points": 16,
-      "winRate": 45.5
+      "winRate": 41.7
     }
   },
   {
@@ -299,6 +299,29 @@
     }
   },
   {
+    "id": 351,
+    "name": "Nottingham Forest FC",
+    "shortName": "Nottingham",
+    "tla": "NOT",
+    "crest": "https://crests.football-data.org/351.png",
+    "clubColors": "Red / White",
+    "venue": "The City Ground",
+    "founded": 1865,
+    "coach": "Oliver Glasner",
+    "record": {
+      "position": 14,
+      "played": 12,
+      "wins": 3,
+      "draws": 3,
+      "losses": 6,
+      "goalsFor": 12,
+      "goalsAgainst": 17,
+      "goalDiff": -5,
+      "points": 12,
+      "winRate": 25
+    }
+  },
+  {
     "id": 1076,
     "name": "Coventry City FC",
     "shortName": "Coventry City",
@@ -309,7 +332,7 @@
     "founded": 1883,
     "coach": "Frank Lampard",
     "record": {
-      "position": 14,
+      "position": 15,
       "played": 11,
       "wins": 4,
       "draws": 0,
@@ -332,7 +355,7 @@
     "founded": 1879,
     "coach": "Arbeloa",
     "record": {
-      "position": 15,
+      "position": 16,
       "played": 11,
       "wins": 2,
       "draws": 5,
@@ -355,7 +378,7 @@
     "founded": 1887,
     "coach": "Gary O'Neil",
     "record": {
-      "position": 16,
+      "position": 17,
       "played": 11,
       "wins": 3,
       "draws": 2,
@@ -365,29 +388,6 @@
       "goalDiff": -7,
       "points": 11,
       "winRate": 27.3
-    }
-  },
-  {
-    "id": 351,
-    "name": "Nottingham Forest FC",
-    "shortName": "Nottingham",
-    "tla": "NOT",
-    "crest": "https://crests.football-data.org/351.png",
-    "clubColors": "Red / White",
-    "venue": "The City Ground",
-    "founded": 1865,
-    "coach": "Oliver Glasner",
-    "record": {
-      "position": 17,
-      "played": 11,
-      "wins": 2,
-      "draws": 3,
-      "losses": 6,
-      "goalsFor": 9,
-      "goalsAgainst": 15,
-      "goalDiff": -6,
-      "points": 9,
-      "winRate": 18.2
     }
   },
   {

@@ -881,7 +881,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 1,
-    "appearances": 6
+    "appearances": 7
   },
   {
     "id": 82140,
@@ -894,7 +894,7 @@
     "isJapanese": false,
     "goals": 5,
     "assists": 2,
-    "appearances": 11
+    "appearances": 12
   },
   {
     "id": 121103,
@@ -920,7 +920,7 @@
     "isJapanese": false,
     "goals": 3,
     "assists": 3,
-    "appearances": 11
+    "appearances": 12
   },
   {
     "id": 170261,
@@ -946,7 +946,7 @@
     "isJapanese": false,
     "goals": 1,
     "assists": 1,
-    "appearances": 11
+    "appearances": 12
   },
   {
     "id": 301113,
@@ -971,8 +971,8 @@
     "nationality": "Portugal",
     "isJapanese": false,
     "goals": 3,
-    "assists": 1,
-    "appearances": 11
+    "assists": 2,
+    "appearances": 12
   },
   {
     "id": 3328,
@@ -1009,9 +1009,9 @@
     "age": 23,
     "nationality": "Netherlands",
     "isJapanese": false,
-    "goals": null,
-    "assists": null,
-    "appearances": null
+    "goals": 3,
+    "assists": 0,
+    "appearances": 4
   },
   {
     "id": 179460,
@@ -2920,9 +2920,9 @@
     "age": 22,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 1,
-    "assists": 1,
-    "appearances": 11
+    "goals": null,
+    "assists": null,
+    "appearances": null
   },
   {
     "id": 7798,
@@ -5104,9 +5104,9 @@
     "age": 26,
     "nationality": "England",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 3,
     "assists": 3,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 5435,
@@ -5210,7 +5210,7 @@
     "isJapanese": false,
     "goals": 2,
     "assists": 0,
-    "appearances": 11
+    "appearances": 12
   },
   {
     "id": 130668,
@@ -5236,7 +5236,7 @@
     "isJapanese": false,
     "goals": 3,
     "assists": 0,
-    "appearances": 10
+    "appearances": 11
   },
   {
     "id": 256339,
@@ -5247,9 +5247,9 @@
     "age": 25,
     "nationality": "Brazil",
     "isJapanese": false,
-    "goals": 1,
+    "goals": 2,
     "assists": 0,
-    "appearances": 7
+    "appearances": 8
   },
   {
     "id": 5457,
