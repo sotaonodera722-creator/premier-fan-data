@@ -92,29 +92,6 @@
     }
   },
   {
-    "id": 1044,
-    "name": "AFC Bournemouth",
-    "shortName": "Bournemouth",
-    "tla": "BOU",
-    "crest": "https://crests.football-data.org/bournemouth.png",
-    "clubColors": "Red / Black",
-    "venue": "Vitality Stadium",
-    "founded": 1890,
-    "coach": "Marco Rose",
-    "record": {
-      "position": 5,
-      "played": 11,
-      "wins": 5,
-      "draws": 3,
-      "losses": 3,
-      "goalsFor": 18,
-      "goalsAgainst": 14,
-      "goalDiff": 4,
-      "points": 18,
-      "winRate": 45.5
-    }
-  },
-  {
     "id": 402,
     "name": "Brentford FC",
     "shortName": "Brentford",
@@ -125,16 +102,16 @@
     "founded": 1889,
     "coach": "Keith Andrews",
     "record": {
-      "position": 6,
-      "played": 11,
-      "wins": 4,
+      "position": 5,
+      "played": 12,
+      "wins": 5,
       "draws": 5,
       "losses": 2,
-      "goalsFor": 20,
+      "goalsFor": 22,
       "goalsAgainst": 11,
-      "goalDiff": 9,
-      "points": 17,
-      "winRate": 36.4
+      "goalDiff": 11,
+      "points": 20,
+      "winRate": 41.7
     }
   },
   {
@@ -148,16 +125,39 @@
     "founded": 1904,
     "coach": "Daniel Farke",
     "record": {
-      "position": 7,
-      "played": 11,
-      "wins": 4,
+      "position": 6,
+      "played": 12,
+      "wins": 5,
       "draws": 5,
       "losses": 2,
-      "goalsFor": 14,
+      "goalsFor": 17,
       "goalsAgainst": 9,
-      "goalDiff": 5,
-      "points": 17,
-      "winRate": 36.4
+      "goalDiff": 8,
+      "points": 20,
+      "winRate": 41.7
+    }
+  },
+  {
+    "id": 1044,
+    "name": "AFC Bournemouth",
+    "shortName": "Bournemouth",
+    "tla": "BOU",
+    "crest": "https://crests.football-data.org/bournemouth.png",
+    "clubColors": "Red / Black",
+    "venue": "Vitality Stadium",
+    "founded": 1890,
+    "coach": "Marco Rose",
+    "record": {
+      "position": 7,
+      "played": 11,
+      "wins": 5,
+      "draws": 3,
+      "losses": 3,
+      "goalsFor": 18,
+      "goalsAgainst": 14,
+      "goalDiff": 4,
+      "points": 18,
+      "winRate": 45.5
     }
   },
   {
@@ -333,15 +333,15 @@
     "coach": "Frank Lampard",
     "record": {
       "position": 15,
-      "played": 11,
+      "played": 12,
       "wins": 4,
       "draws": 0,
-      "losses": 7,
+      "losses": 8,
       "goalsFor": 13,
-      "goalsAgainst": 21,
-      "goalDiff": -8,
+      "goalsAgainst": 24,
+      "goalDiff": -11,
       "points": 12,
-      "winRate": 36.4
+      "winRate": 33.3
     }
   },
   {
@@ -425,15 +425,15 @@
     "coach": "Michael Carrick",
     "record": {
       "position": 19,
-      "played": 11,
+      "played": 12,
       "wins": 1,
       "draws": 5,
-      "losses": 5,
+      "losses": 6,
       "goalsFor": 14,
-      "goalsAgainst": 23,
-      "goalDiff": -9,
+      "goalsAgainst": 25,
+      "goalDiff": -11,
       "points": 8,
-      "winRate": 9.1
+      "winRate": 8.3
     }
   },
   {
